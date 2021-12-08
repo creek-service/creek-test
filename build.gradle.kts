@@ -126,7 +126,7 @@ subprojects {
     }
 
     tasks.jar {
-        archiveBaseName.set("creek-${project.name}")
+        archiveBaseName.set("${rootProject.name}-${project.name}")
     }
 
     tasks.register("format") {
@@ -151,6 +151,7 @@ subprojects {
         publications {
             create<MavenPublication>("maven") {
                 from(components["java"])
+                artifactId = "${rootProject.name}-${project.name}"
 
                 pom {
                     url.set("https://github.com/creek-service/${rootProject.name}.git")
@@ -171,9 +172,8 @@ val coverage = tasks.register<JacocoReport>("coverage") {
         val subproject = this
         subproject.plugins.withType<JacocoPlugin>().configureEach {
             subproject.tasks.matching({ it.extensions.findByType<JacocoTaskExtension>() != null }).configureEach {
-                val coverageSubTask = this
                 sourceSets(subproject.sourceSets.main.get())
-                executionData(coverageSubTask)
+                executionData(files(subproject.tasks.withType<Test>()).filter { it.exists() && it.name.endsWith(".exec") })
             }
 
             subproject.tasks.matching({ it.extensions.findByType<JacocoTaskExtension>() != null }).forEach {
