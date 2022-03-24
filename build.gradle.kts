@@ -46,6 +46,7 @@ subprojects {
     project.version = project.parent?.version!!
 
     extra.apply {
+        set("creekVersion", "+")
         set("spotBugsVersion", "4.4.2")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
 
         set("guavaVersion", "31.0.1-jre")       // https://mvnrepository.com/artifact/com.google.guava/guava
