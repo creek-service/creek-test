@@ -7,6 +7,5 @@ var spotBugsVersion: String by extra
 
 dependencies {
     api("org.hamcrest:hamcrest-core:$hamcrestVersion")
-
-    testImplementation("com.github.spotbugs:spotbugs-annotations:$spotBugsVersion")
+    api("com.github.spotbugs:spotbugs-annotations:$spotBugsVersion")
 }

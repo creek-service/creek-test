@@ -1,0 +1,8 @@
+--add-modules
+  org.junitpioneer,org.hamcrest,creek.test.hamcrest
+
+--add-reads
+  creek.test.util=org.junitpioneer,org.hamcrest,creek.test.hamcrest
+
+--add-opens
+  org.junitpioneer/org.junitpioneer.jupiter=org.junit.platform.commons

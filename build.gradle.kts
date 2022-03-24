@@ -2,10 +2,11 @@ plugins {
     java
     jacoco
     `maven-publish`
-    id("com.github.spotbugs") version "4.7.0"                   // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-gradle-plugin
-    id("com.diffplug.spotless") version "6.0.0"                 // https://mvnrepository.com/artifact/com.diffplug.spotless/spotless-plugin-gradle
-    id("pl.allegro.tech.build.axion-release") version "1.13.5"  // https://mvnrepository.com/artifact/pl.allegro.tech.build.axion-release/pl.allegro.tech.build.axion-release.gradle.plugin?repo=gradle-plugins
-    id("com.github.kt3k.coveralls") version "2.12.0"            // https://plugins.gradle.org/plugin/com.github.kt3k.coveralls
+    id("com.github.spotbugs") version "5.0.6"                           // https://plugins.gradle.org/plugin/com.github.spotbugs
+    id("com.diffplug.spotless") version "6.0.0"                         // https://mvnrepository.com/artifact/com.diffplug.spotless/spotless-plugin-gradle
+    id("pl.allegro.tech.build.axion-release") version "1.13.6"          // https://mvnrepository.com/artifact/pl.allegro.tech.build.axion-release/pl.allegro.tech.build.axion-release.gradle.plugin?repo=gradle-plugins
+    id("com.github.kt3k.coveralls") version "2.12.0"                    // https://plugins.gradle.org/plugin/com.github.kt3k.coveralls
+    id("org.javamodularity.moduleplugin") version "1.8.10"   // https://plugins.gradle.org/plugin/org.javamodularity.moduleplugin
 }
 
 project.version = scmVersion.version
@@ -22,6 +23,8 @@ allprojects {
 
     java {
         withSourcesJar()
+
+        modularity.inferModulePath.set(false)
 
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -42,15 +45,16 @@ allprojects {
 
 subprojects {
     apply(plugin = "maven-publish")
+    apply(plugin = "org.javamodularity.moduleplugin")
 
     project.version = project.parent?.version!!
 
     extra.apply {
         set("creekVersion", "+")
-        set("spotBugsVersion", "4.4.2")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
+        set("spotBugsVersion", "4.6.0")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
 
-        set("guavaVersion", "31.0.1-jre")       // https://mvnrepository.com/artifact/com.google.guava/guava
         set("log4jVersion", "2.14.1")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+        set("guavaVersion", "31.0.1-jre")       // https://mvnrepository.com/artifact/com.google.guava/guava
 
         set("junitVersion", "5.8.2")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
         set("junitPioneerVersion", "1.5.0")     // https://mvnrepository.com/artifact/org.junit-pioneer/junit-pioneer
@@ -79,7 +83,7 @@ subprojects {
     }
 
     tasks.compileJava {
-        options.compilerArgs.add("-Xlint:all,-serial")
+        options.compilerArgs.add("-Xlint:all,-serial,-requires-automatic,-requires-transitive-automatic,-module")
         options.compilerArgs.add("-Werror")
     }
 
@@ -110,13 +114,13 @@ subprojects {
     spotbugs {
         tasks.spotbugsMain {
             reports.create("html") {
-                isEnabled = true
+                required.set(true)
                 setStylesheet("fancy-hist.xsl")
             }
         }
         tasks.spotbugsTest {
             reports.create("html") {
-                isEnabled = true
+                required.set(true)
                 setStylesheet("fancy-hist.xsl")
             }
         }
