@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.creek.api.test;
+package org.creek.api.test.util;
 
 
 import java.io.IOException;

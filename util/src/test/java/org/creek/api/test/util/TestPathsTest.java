@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.creek.api.test;
+package org.creek.api.test.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.creek.api.test.TestPaths.ensureDirectories;
-import static org.creek.api.test.TestPaths.listDirectory;
-import static org.creek.api.test.TestPaths.moduleRoot;
-import static org.creek.api.test.TestPaths.projectRoot;
-import static org.creek.api.test.TestPaths.readBytes;
-import static org.creek.api.test.TestPaths.readString;
-import static org.creek.api.test.TestPaths.write;
 import static org.creek.api.test.hamcrest.PathMatchers.directory;
+import static org.creek.api.test.util.TestPaths.ensureDirectories;
+import static org.creek.api.test.util.TestPaths.listDirectory;
+import static org.creek.api.test.util.TestPaths.moduleRoot;
+import static org.creek.api.test.util.TestPaths.projectRoot;
+import static org.creek.api.test.util.TestPaths.readBytes;
+import static org.creek.api.test.util.TestPaths.readString;
+import static org.creek.api.test.util.TestPaths.write;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;

@@ -1,0 +1,10 @@
+--add-modules
+  org.junitpioneer,org.hamcrest,guava.testlib
+
+--add-reads
+  creek.test.conformity=org.junitpioneer,org.hamcrest,guava.testlib
+
+--add-opens
+  org.junitpioneer/org.junitpioneer.jupiter=org.junit.platform.commons
+
+

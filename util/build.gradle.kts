@@ -8,4 +8,5 @@ dependencies {
     api("org.creek:creek-base-annotation:$creekVersion")
 
     testImplementation(project(":hamcrest"))
+    testImplementation(project(":conformity"))
 }
