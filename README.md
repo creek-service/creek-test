@@ -8,6 +8,7 @@ Test helper libraries used internally by Creek.
 
 * **[util](util)**: some Creek specific test utility classes.
 * **[hamcrest](hamcrest)**: some additional [Hamcrest][1] matchers and helpers.
+* **[conformity](conformity)**: tests helpers for checking projects conform to Creek standards.
 
 [1]: http://hamcrest.org/JavaHamcrest/index
 

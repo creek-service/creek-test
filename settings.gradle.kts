@@ -2,5 +2,6 @@ rootProject.name = "creek-test"
 
 include(
     "util",
-    "hamcrest"
+    "hamcrest",
+    "conformity"
 )

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.creek.api.test;
+package org.creek.api.test.util;
 
-import static org.creek.api.test.Temp.recursiveDelete;
-import static org.creek.api.test.TestPaths.write;
 import static org.creek.api.test.hamcrest.PathMatchers.directory;
 import static org.creek.api.test.hamcrest.PathMatchers.doesNotExist;
+import static org.creek.api.test.util.Temp.recursiveDelete;
+import static org.creek.api.test.util.TestPaths.write;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
