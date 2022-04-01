@@ -7,7 +7,7 @@ _Describe the testing strategy. Unit and integration tests are expected for any 
 
 ### Reviewer checklist
 - [ ] New Modules have `module-info.java` files.
-- [ ] Public types are well-designed:
+- Public types are well-designed:
     - [ ] no public constructors.
     - [ ] prefer interface or impl.
 - [ ] Ensure relevant issues are linked (description should include text like "Fixes #<issue number>")
