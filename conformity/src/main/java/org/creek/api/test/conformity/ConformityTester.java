@@ -33,11 +33,12 @@ import org.creek.internal.test.conformity.DefaultCheckContext;
  */
 public final class ConformityTester {
 
-    private static final List<ConformityCheck> DEFAULT_CHECKS =
-            List.of(CheckModule.builder().build(), CheckApiPackagesExposed.builder().build());
+    private static final List<ConformityCheck.Builder> DEFAULT_CHECKS =
+            List.of(CheckModule.builder(), CheckApiPackagesExposed.builder());
 
     private final Class<?> typeFromModuleToTest;
-    private final Map<Class<? extends ConformityCheck>, ConformityCheck> checks = new HashMap<>();
+    private final Map<Class<? extends ConformityCheck.Builder>, ConformityCheck.Builder> checks =
+            new HashMap<>();
 
     /**
      * Execute the standard set of conformity checks against the module containing the supplied
@@ -61,32 +62,47 @@ public final class ConformityTester {
 
     private ConformityTester(final Class<?> typeFromModuleToTest) {
         this.typeFromModuleToTest = requireNonNull(typeFromModuleToTest, "typeFromModuleToTest");
+
+        DEFAULT_CHECKS.forEach(check -> checks.put(check.getClass(), check));
     }
 
     /**
      * Add a customised check.
      *
      * <p>This can be either an entirely new check, or a customised version of an existing check. In
-     * the latter case, the existing check will be replaced.
+     * the latter case, the existing check builder will be replaced. Detection of existing checks is
+     * based on the {@link ConformityCheck.Builder builder type}.
      *
      * @param builder the check builder
      * @return self
      */
     public ConformityTester withCustom(final ConformityCheck.Builder builder) {
-        return withCustom(builder.build());
+        this.checks.put(builder.getClass(), builder);
+        return this;
     }
 
     /**
-     * Add a customised check.
+     * Disable one of the in-build checks.
      *
-     * <p>This can be either an entirely new check, or a customised version of an existing check. In
-     * the latter case, the existing check will be replaced.
+     * <p>For example:
      *
-     * @param check the check
-     * @return self
+     * <pre>{@code
+     * ConformityTester.builder(ModuleTest.class)
+     *                 .withDisabled(CheckModule.builder(), "Not using modularity due to ...")
+     *                 .check();
+     * }</pre>
+     *
+     * @param builder the builder of the check to disable
+     * @param justification the reason why its being disabled.
+     * @return self.
      */
-    public ConformityTester withCustom(final ConformityCheck check) {
-        this.checks.put(requireNonNull(check).getClass(), check);
+    public ConformityTester withDisabled(
+            final ConformityCheck.Builder builder, final String justification) {
+        if (justification.isBlank()) {
+            throw new IllegalArgumentException("justification can not be blank.");
+        }
+
+        this.checks.remove(builder.getClass());
         return this;
     }
 
@@ -96,12 +112,10 @@ public final class ConformityTester {
      * @throws AssertionError if any checks fail.
      */
     public void check() {
-        DEFAULT_CHECKS.forEach(check -> checks.putIfAbsent(check.getClass(), check));
-
         final CheckTarget ctx =
                 new DefaultCheckContext(
                         location(typeFromModuleToTest), typeFromModuleToTest.getModule());
-        checks.values().forEach(check -> invoke(check, ctx));
+        checks.values().forEach(check -> invoke(check.build(), ctx));
     }
 
     private void invoke(final ConformityCheck check, final CheckTarget ctx) {
