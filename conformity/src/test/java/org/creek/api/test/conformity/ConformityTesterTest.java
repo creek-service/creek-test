@@ -22,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.google.common.testing.EqualsTester;
 import org.creek.api.base.annotation.VisibleForTesting;
+import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
+import org.creek.api.test.conformity.check.CheckModule;
+import org.creek.api.test.conformity.empty.missing.NotExported;
 import org.junit.jupiter.api.Test;
 
 class ConformityTesterTest {
@@ -61,5 +64,48 @@ class ConformityTesterTest {
                 startsWith(
                         "Conformity check failed. check: CheckModule, reason: The module is automatic"));
         assertThat(e.getCause().getMessage(), startsWith("The module is automatic"));
+    }
+
+    @Test
+    void shouldCustomiseChecks() {
+        // Given:
+        final ConformityTester tester =
+                ConformityTester.builder(ConformityTester.class)
+                        .withCustom(
+                                CheckApiPackagesExposed.builder()
+                                        .excludedPackages(NotExported.class.getPackageName()));
+
+        // When:
+        tester.check();
+
+        // Then: did not throw
+    }
+
+    @Test
+    void shouldDisableChecks() {
+        // Given:
+        final ConformityTester tester =
+                ConformityTester.builder(EqualsTester.class)
+                        .withDisabled(CheckModule.builder(), "To allow testing!");
+
+        // When:
+        tester.check();
+
+        // Then: did not throw
+    }
+
+    @Test
+    void shouldThrownWhenDisablingIfNotJustification() {
+        // Given:
+        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> tester.withDisabled(CheckModule.builder(), " "));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
     }
 }
