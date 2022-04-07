@@ -63,10 +63,10 @@ class DefaultCheckApiPackagesExposedTest {
     }
 
     @Test
-    void shouldPassIfAllApiPackagesAreExported() {
+    void shouldPassIfAllApiPackagesAreExportedAndNonApiPackagesAreNot() {
         // Given:
-        givenPackages("org.creek.api", "org.creek.api.a", "org.creek.api.b");
-        givenExportedPackages("org.creek.api", "org.creek.api.a", "org.creek.api.b");
+        givenPackages("org.creek.api.a", "org.creek.api.b", "org.creek.internal.a");
+        givenExportedPackages("org.creek.api.a", "org.creek.api.b");
 
         // When:
         check.check(ctx);
@@ -87,11 +87,34 @@ class DefaultCheckApiPackagesExposedTest {
         assertThat(
                 e.getMessage(),
                 is(
-                        "Some API packages are not exposed in the module's module-info.java file. module=Bob, unexposed_packages=["
+                        "API packages are not exposed in the module's module-info.java file. module=Bob, unexposed_packages=["
                                 + System.lineSeparator()
                                 + "\torg.creek.api"
                                 + System.lineSeparator()
                                 + "\torg.creek.api.b"
+                                + System.lineSeparator()
+                                + "]"));
+    }
+
+    @Test
+    void shouldThrowOnNonApiPackageExported() {
+        // Given:
+        givenPackages("org.creek.internal", "org.creek.internal.a", "org.creek.internal.b");
+        givenExportedPackages("org.creek.internal.a", "org.creek.internal.b");
+
+        // When:
+        final Exception e = assertThrows(RuntimeException.class, () -> check.check(ctx));
+
+        // Then:
+        assertThat(
+                e.getMessage(),
+                is(
+                        "Non-API packages are exposed (without a 'to' clause) " +
+                                "in the module's module-info.java file. module=Bob, exposed_packages=["
+                                + System.lineSeparator()
+                                + "\torg.creek.internal.a"
+                                + System.lineSeparator()
+                                + "\torg.creek.internal.b"
                                 + System.lineSeparator()
                                 + "]"));
     }

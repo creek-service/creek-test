@@ -22,6 +22,8 @@ import static org.creek.internal.test.conformity.Constants.API_PACKAGE;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import org.creek.api.test.conformity.CheckTarget;
 import org.creek.api.test.conformity.ConformityCheck;
 import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
@@ -46,30 +48,44 @@ public final class DefaultCheckApiPackagesExposed implements ConformityCheck {
     public void check(final CheckTarget target) {
         final Module moduleUnderTest = target.moduleUnderTest();
 
-        final String notExposed =
-                moduleUnderTest.getPackages().stream()
+        checkApiPackagesExported(moduleUnderTest);
+        checkNonApiPackagesNotExported(moduleUnderTest);
+    }
+
+    private void checkApiPackagesExported(final Module moduleUnderTest) {
+        final String notExported =
+                sortedFilteredPackages(moduleUnderTest)
                         .filter(pkg -> pkg.startsWith(API_PACKAGE))
-                        .filter(packageFilter)
                         .filter(pkg -> !moduleUnderTest.isExported(pkg))
-                        .sorted()
                         .collect(joining(NL_INDENT));
 
-        if (!notExposed.isEmpty()) {
-            throw new ApiPackageNotExposedException(moduleUnderTest.getName(), notExposed);
+        if (!notExported.isEmpty()) {
+            throw new ApiPackageNotExposedException(moduleUnderTest.getName(), notExported);
         }
+    }
+
+    private void checkNonApiPackagesNotExported(final Module moduleUnderTest) {
+        final String exported =
+                sortedFilteredPackages(moduleUnderTest)
+                        .filter(pkg -> !pkg.startsWith(API_PACKAGE))
+                        .filter(moduleUnderTest::isExported)
+                        .collect(joining(NL_INDENT));
+
+        if (!exported.isEmpty()) {
+            throw new NonApiPackageExposedException(moduleUnderTest.getName(), exported);
+        }
+    }
+
+    private Stream<String> sortedFilteredPackages(final Module moduleUnderTest) {
+        return moduleUnderTest.getPackages().stream()
+                .filter(packageFilter)
+                .sorted();
     }
 
     public static final class Builder implements CheckApiPackagesExposed {
 
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
 
-        /**
-         * Exclude one or more packages from the test.
-         *
-         * @param packageNames packages to ignore. Any name ending in `.*` will ignore all
-         *     sub-packages too.
-         * @return self.
-         */
         @Override
         public Builder excludedPackages(final String... packageNames) {
             Arrays.stream(packageNames).forEach(packageFilter::addExclude);
@@ -86,11 +102,26 @@ public final class DefaultCheckApiPackagesExposed implements ConformityCheck {
 
         ApiPackageNotExposedException(final String moduleName, final String notExposed) {
             super(
-                    "Some API packages are not exposed in the module's module-info.java file. module="
+                    "API packages are not exposed in the module's module-info.java file. module="
                             + moduleName
                             + ", unexposed_packages=["
                             + NL_INDENT
                             + notExposed
+                            + System.lineSeparator()
+                            + "]");
+        }
+    }
+
+    private static final class NonApiPackageExposedException extends RuntimeException {
+
+        NonApiPackageExposedException(final String moduleName, final String exposed) {
+            super(
+                    "Non-API packages are exposed (without a 'to' clause) in the module's module-info.java file." +
+                            " module="
+                            + moduleName
+                            + ", exposed_packages=["
+                            + NL_INDENT
+                            + exposed
                             + System.lineSeparator()
                             + "]");
         }

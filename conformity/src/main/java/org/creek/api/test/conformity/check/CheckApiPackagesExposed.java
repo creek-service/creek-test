@@ -20,7 +20,7 @@ package org.creek.api.test.conformity.check;
 import org.creek.api.test.conformity.ConformityCheck;
 import org.creek.internal.test.conformity.check.DefaultCheckApiPackagesExposed;
 
-/** Check to ensure each api package is exposed in the {@code module-info.java} file. */
+/** All API packages should be exported in the {@code module-info.java} file. */
 public interface CheckApiPackagesExposed extends ConformityCheck.Builder {
 
     /** @return a builder used to customise the check */
@@ -29,9 +29,9 @@ public interface CheckApiPackagesExposed extends ConformityCheck.Builder {
     }
 
     /**
-     * Ignore one or more packages.
+     * Exclude one or more packages from the check
      *
-     * @param packageNames packages to ignore. Any name ending in `.*` will ignore all sub-packages
+     * @param packageNames packages to exclude. Any name ending in `.*` will ignore all sub-packages
      *     too.
      * @return self.
      */
