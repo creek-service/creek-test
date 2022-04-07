@@ -22,7 +22,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
+import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.api.test.conformity.check.CheckModule;
 import org.creek.internal.test.conformity.DefaultCheckContext;
 
@@ -34,7 +34,7 @@ import org.creek.internal.test.conformity.DefaultCheckContext;
 public final class ConformityTester {
 
     private static final List<ConformityCheck.Builder> DEFAULT_CHECKS =
-            List.of(CheckModule.builder(), CheckApiPackagesExposed.builder());
+            List.of(CheckModule.builder(), CheckExportedPackages.builder());
 
     private final Class<?> typeFromModuleToTest;
     private final Map<Class<? extends ConformityCheck.Builder>, ConformityCheck.Builder> checks =

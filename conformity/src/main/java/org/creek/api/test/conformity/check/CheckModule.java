@@ -18,16 +18,16 @@ package org.creek.api.test.conformity.check;
 
 
 import org.creek.api.test.conformity.ConformityCheck;
-import org.creek.internal.test.conformity.check.DefaultCheckModule;
+import org.creek.internal.test.conformity.check.ModuleCheck;
 
 /**
- * Check that the module has a {@code module-info.java} file and the test itself is running with
- * modularity on.
+ * Module should have a {@code module-info.java} file, i.e. the module the test is running in should
+ * be named and not an automatic module.
  */
 public interface CheckModule extends ConformityCheck.Builder {
 
     /** @return a builder used to customise the check */
     static CheckModule builder() {
-        return new DefaultCheckModule.Builder();
+        return new ModuleCheck.Builder();
     }
 }

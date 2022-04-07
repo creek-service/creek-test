@@ -37,7 +37,7 @@ import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class DefaultCheckApiPackagesExposedTest {
+class ExportedPackagesCheckTest {
 
     @Mock private CheckTarget ctx;
     @Mock private Module moduleUnderTest;
@@ -45,7 +45,7 @@ class DefaultCheckApiPackagesExposedTest {
 
     @BeforeEach
     void setUp() {
-        check = new DefaultCheckApiPackagesExposed.Builder().build();
+        check = new ExportedPackagesCheck.Builder().build();
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
         when(moduleUnderTest.getName()).thenReturn("Bob");
@@ -109,8 +109,8 @@ class DefaultCheckApiPackagesExposedTest {
         assertThat(
                 e.getMessage(),
                 is(
-                        "Non-API packages are exposed (without a 'to' clause) " +
-                                "in the module's module-info.java file. module=Bob, exposed_packages=["
+                        "Non-API packages are exposed (without a 'to' clause) "
+                                + "in the module's module-info.java file. module=Bob, exposed_packages=["
                                 + System.lineSeparator()
                                 + "\torg.creek.internal.a"
                                 + System.lineSeparator()
@@ -125,7 +125,7 @@ class DefaultCheckApiPackagesExposedTest {
         givenPackages("org.creek.api.a", "org.creek.api.b.c");
 
         check =
-                new DefaultCheckApiPackagesExposed.Builder()
+                new ExportedPackagesCheck.Builder()
                         .excludedPackages("org.creek.api.a", "org.creek.api.b.*")
                         .build();
 

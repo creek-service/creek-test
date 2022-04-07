@@ -23,25 +23,24 @@ import static org.creek.internal.test.conformity.Constants.API_PACKAGE;
 import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
 import org.creek.api.test.conformity.CheckTarget;
 import org.creek.api.test.conformity.ConformityCheck;
-import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
+import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.internal.test.conformity.PackageFilter;
 
-public final class DefaultCheckApiPackagesExposed implements ConformityCheck {
+public final class ExportedPackagesCheck implements ConformityCheck {
 
     private static final String NL_INDENT = System.lineSeparator() + "\t";
 
     private final Predicate<String> packageFilter;
 
-    private DefaultCheckApiPackagesExposed(final Predicate<String> packageFilter) {
+    private ExportedPackagesCheck(final Predicate<String> packageFilter) {
         this.packageFilter = requireNonNull(packageFilter, "packageFilter");
     }
 
     @Override
     public String name() {
-        return CheckApiPackagesExposed.class.getSimpleName();
+        return CheckExportedPackages.class.getSimpleName();
     }
 
     @Override
@@ -77,12 +76,10 @@ public final class DefaultCheckApiPackagesExposed implements ConformityCheck {
     }
 
     private Stream<String> sortedFilteredPackages(final Module moduleUnderTest) {
-        return moduleUnderTest.getPackages().stream()
-                .filter(packageFilter)
-                .sorted();
+        return moduleUnderTest.getPackages().stream().filter(packageFilter).sorted();
     }
 
-    public static final class Builder implements CheckApiPackagesExposed {
+    public static final class Builder implements CheckExportedPackages {
 
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
 
@@ -93,8 +90,8 @@ public final class DefaultCheckApiPackagesExposed implements ConformityCheck {
         }
 
         @Override
-        public DefaultCheckApiPackagesExposed build() {
-            return new DefaultCheckApiPackagesExposed(packageFilter.build()::notExcluded);
+        public ExportedPackagesCheck build() {
+            return new ExportedPackagesCheck(packageFilter.build()::notExcluded);
         }
     }
 
@@ -116,8 +113,8 @@ public final class DefaultCheckApiPackagesExposed implements ConformityCheck {
 
         NonApiPackageExposedException(final String moduleName, final String exposed) {
             super(
-                    "Non-API packages are exposed (without a 'to' clause) in the module's module-info.java file." +
-                            " module="
+                    "Non-API packages are exposed (without a 'to' clause) in the module's module-info.java file."
+                            + " module="
                             + moduleName
                             + ", exposed_packages=["
                             + NL_INDENT

@@ -22,13 +22,9 @@ import org.creek.api.test.conformity.CheckTarget;
 import org.creek.api.test.conformity.ConformityCheck;
 import org.creek.api.test.conformity.check.CheckModule;
 
-/**
- * Check that the module has a {@code module-info.java} file and the test itself is running with
- * modularity on.
- */
-public final class DefaultCheckModule implements ConformityCheck {
+public final class ModuleCheck implements ConformityCheck {
 
-    private DefaultCheckModule() {}
+    private ModuleCheck() {}
 
     @Override
     public String name() {
@@ -54,7 +50,7 @@ public final class DefaultCheckModule implements ConformityCheck {
 
         @Override
         public ConformityCheck build() {
-            return new DefaultCheckModule();
+            return new ModuleCheck();
         }
     }
 
