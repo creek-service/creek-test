@@ -29,7 +29,7 @@ Some checks can be customised. See javadocs of [`ConformityCheck.Builder`][2] su
 package org.creek;
 
 import org.creek.api.test.conformity.ConformityTester;
-import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
+import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.junit.jupiter.api.Test;
 
 class ModuleTest {

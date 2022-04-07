@@ -18,7 +18,7 @@ package org.creek;
 
 
 import org.creek.api.test.conformity.ConformityTester;
-import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
+import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.api.test.conformity.empty.missing.NotExported;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +28,7 @@ class ModuleTest {
     void shouldConform() {
         ConformityTester.builder(ModuleTest.class)
                 .withCustom(
-                        CheckApiPackagesExposed.builder()
+                        CheckExportedPackages.builder()
                                 .excludedPackages(NotExported.class.getPackageName()))
                 .check();
     }

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.google.common.testing.EqualsTester;
 import org.creek.api.base.annotation.VisibleForTesting;
-import org.creek.api.test.conformity.check.CheckApiPackagesExposed;
+import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.api.test.conformity.check.CheckModule;
 import org.creek.api.test.conformity.empty.missing.NotExported;
 import org.junit.jupiter.api.Test;
@@ -46,14 +46,16 @@ class ConformityTesterTest {
         assertThat(
                 e.getMessage(),
                 startsWith(
-                        "Conformity check failed. check: CheckApiPackagesExposed, reason: Some API packages are not exposed"));
-        assertThat(e.getCause().getMessage(), startsWith("Some API packages are not exposed"));
+                        "Conformity check failed. check: CheckExportedPackages, reason: API packages are not exposed"));
+        assertThat(e.getCause().getMessage(), startsWith("API packages are not exposed"));
     }
 
     @Test
     void shouldDetectUnnamedModule() {
         // Given:
-        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
+        final ConformityTester tester =
+                ConformityTester.builder(EqualsTester.class)
+                        .withDisabled(CheckExportedPackages.builder(), "Not testing this one");
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
@@ -63,7 +65,6 @@ class ConformityTesterTest {
                 e.getMessage(),
                 startsWith(
                         "Conformity check failed. check: CheckModule, reason: The module is automatic"));
-        assertThat(e.getCause().getMessage(), startsWith("The module is automatic"));
     }
 
     @Test
@@ -72,7 +73,7 @@ class ConformityTesterTest {
         final ConformityTester tester =
                 ConformityTester.builder(ConformityTester.class)
                         .withCustom(
-                                CheckApiPackagesExposed.builder()
+                                CheckExportedPackages.builder()
                                         .excludedPackages(NotExported.class.getPackageName()));
 
         // When:
@@ -86,7 +87,8 @@ class ConformityTesterTest {
         // Given:
         final ConformityTester tester =
                 ConformityTester.builder(EqualsTester.class)
-                        .withDisabled(CheckModule.builder(), "To allow testing!");
+                        .withDisabled(CheckModule.builder(), "To allow testing!")
+                        .withDisabled(CheckExportedPackages.builder(), "To allow testing!");
 
         // When:
         tester.check();

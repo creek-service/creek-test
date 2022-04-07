@@ -35,7 +35,7 @@ import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class DefaultCheckModuleTest {
+class ModuleCheckTest {
 
     @Mock private CheckTarget ctx;
     @Mock private Module moduleUnderTest;
@@ -44,7 +44,7 @@ class DefaultCheckModuleTest {
 
     @BeforeEach
     void setUp() {
-        check = new DefaultCheckModule.Builder().build();
+        check = new ModuleCheck.Builder().build();
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
         when(ctx.moduleLocation()).thenReturn(URI.create("file://path/to/module"));
