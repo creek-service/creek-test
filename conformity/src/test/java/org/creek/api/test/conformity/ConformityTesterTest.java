@@ -53,8 +53,9 @@ class ConformityTesterTest {
     @Test
     void shouldDetectUnnamedModule() {
         // Given:
-        final ConformityTester tester = ConformityTester.builder(EqualsTester.class)
-                .withDisabled(CheckExportedPackages.builder(), "Not testing this one");
+        final ConformityTester tester =
+                ConformityTester.builder(EqualsTester.class)
+                        .withDisabled(CheckExportedPackages.builder(), "Not testing this one");
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
