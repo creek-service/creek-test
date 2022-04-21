@@ -18,13 +18,12 @@ package org.creek.internal.test.conformity.check;
 
 
 import java.net.URI;
-import org.creek.api.test.conformity.CheckTarget;
-import org.creek.api.test.conformity.ConformityCheck;
 import org.creek.api.test.conformity.check.CheckModule;
+import org.creek.internal.test.conformity.CheckTarget;
 
-public final class ModuleCheck implements ConformityCheck {
+public final class ModuleCheck implements CheckRunner {
 
-    private ModuleCheck() {}
+    public ModuleCheck(final Options ignored) {}
 
     @Override
     public String name() {
@@ -46,13 +45,7 @@ public final class ModuleCheck implements ConformityCheck {
         }
     }
 
-    public static final class Builder implements CheckModule {
-
-        @Override
-        public ConformityCheck build() {
-            return new ModuleCheck();
-        }
-    }
+    public static final class Options implements CheckModule {}
 
     private static final class ModuleCheckException extends RuntimeException {
 

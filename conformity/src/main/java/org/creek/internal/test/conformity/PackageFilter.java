@@ -44,7 +44,20 @@ public final class PackageFilter {
      * @return {@code true} if excluded.
      */
     public boolean isExcluded(final String packageName) {
-        return isExcluded(packageName, excluded);
+        boolean full = true;
+        String remaining = packageName;
+
+        while (!remaining.isEmpty()) {
+            final Boolean wildcard = excluded.get(remaining);
+            if (wildcard != null && (wildcard || full)) {
+                return true;
+            }
+
+            full = false;
+            remaining = removeTailPackage(remaining);
+        }
+
+        return false;
     }
 
     /**
@@ -79,24 +92,6 @@ public final class PackageFilter {
         return "PackageFilter{" + "excluded=" + excluded + '}';
     }
 
-    private static boolean isExcluded(
-            final String packageName, final Map<String, Boolean> excluded) {
-        boolean full = true;
-        String remaining = packageName;
-
-        while (!remaining.isEmpty()) {
-            final Boolean wildcard = excluded.get(remaining);
-            if (wildcard != null && (wildcard || full)) {
-                return true;
-            }
-
-            full = false;
-            remaining = removeTailPackage(remaining);
-        }
-
-        return false;
-    }
-
     private static String removeTailPackage(final String pkg) {
         final int i = pkg.lastIndexOf('.');
         return i == -1 ? "" : pkg.substring(0, i);
@@ -122,9 +117,7 @@ public final class PackageFilter {
          * @return self.
          */
         public Builder addExclude(final String packageName) {
-            if (!isExcluded(packageName, excluded)) {
-                excluded.put(trimWildcard(packageName), endsInWildcard(packageName));
-            }
+            excluded.put(trimWildcard(packageName), endsInWildcard(packageName));
             return this;
         }
 

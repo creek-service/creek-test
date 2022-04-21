@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package org.creek.api.test.conformity;
+package org.creek.api.test.conformity.test.types.bad;
 
-/** A single check */
-public interface ConformityCheck {
-
-    /** @return the name of the check, used in error messages. */
-    String name();
-
-    /**
-     * Run the check
-     *
-     * @param target check target.
-     */
-    void check(CheckTarget target);
-
-    interface Builder {
-        ConformityCheck build();
-    }
+/**
+ * An API type in a package that is not exported from {@code module-info.java}.
+ *
+ * <p>Hence, {@link org.creek.internal.test.conformity.check.ExportedPackagesCheck} should fail for
+ * this module.
+ *
+ * <p>It's parent package is empty. so ot should not be reported as needing to be exported.
+ */
+public final class NotExported {
+    private NotExported() {}
 }

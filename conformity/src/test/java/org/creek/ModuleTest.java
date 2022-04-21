@@ -19,7 +19,7 @@ package org.creek;
 
 import org.creek.api.test.conformity.ConformityTester;
 import org.creek.api.test.conformity.check.CheckExportedPackages;
-import org.creek.api.test.conformity.empty.missing.NotExported;
+import org.creek.api.test.conformity.test.types.bad.NotExported;
 import org.junit.jupiter.api.Test;
 
 class ModuleTest {
@@ -28,6 +28,7 @@ class ModuleTest {
     void shouldConform() {
         ConformityTester.builder(ModuleTest.class)
                 .withCustom(
+                        "Package contains test classes that intentionally break checks",
                         CheckExportedPackages.builder()
                                 .excludedPackages(NotExported.class.getPackageName()))
                 .check();

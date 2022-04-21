@@ -19,5 +19,6 @@ package org.creek.internal.test.conformity;
 public final class Constants {
     private Constants() {}
 
-    public static final String API_PACKAGE = "org.creek.api";
+    public static final String CREEK_PACKAGE = "org.creek";
+    public static final String API_PACKAGE = CREEK_PACKAGE + ".api";
 }

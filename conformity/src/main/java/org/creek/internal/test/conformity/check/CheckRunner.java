@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package org.creek.api.test.conformity.empty.missing;
+package org.creek.internal.test.conformity.check;
 
-/**
- * This type is spliced into the main module when testing, but is not exported in the {@code
- * module-info.java}. Hence it should be reported as an error when inspecting this module.
- *
- * <p>It's parent package is empty and should not be reported as needing to be exported.
- */
-public final class NotExported {}
+
+import org.creek.internal.test.conformity.CheckTarget;
+
+/** Runner of a single check */
+public interface CheckRunner {
+
+    /** @return the name of the check, used in error messages. */
+    String name();
+
+    /**
+     * Run the check
+     *
+     * @param target check target.
+     */
+    void check(CheckTarget target);
+}

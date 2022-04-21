@@ -79,22 +79,4 @@ class PackageFilterTest {
         assertThat(filter.isExcluded("some.package.deep.sub"), is(true));
         assertThat(filter.isExcluded("any.old.package"), is(false));
     }
-
-    @Test
-    void shouldIgnoreAlreadyExcluded() {
-        // Given:
-        final PackageFilter original = builder.addExclude("some.package.*").build();
-
-        // When:
-        final PackageFilter exact = builder.addExclude("some.package").build();
-        final PackageFilter wild = builder.addExclude("some.package.*").build();
-        final PackageFilter sub = builder.addExclude("some.package.sub").build();
-        final PackageFilter subSub = builder.addExclude("some.package.sub.sub").build();
-
-        // Then:
-        assertThat(exact, is(original));
-        assertThat(wild, is(original));
-        assertThat(sub, is(original));
-        assertThat(subSub, is(original));
-    }
 }

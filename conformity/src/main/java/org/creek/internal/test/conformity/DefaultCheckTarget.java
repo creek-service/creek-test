@@ -14,19 +14,29 @@
  * limitations under the License.
  */
 
-package org.creek.api.test.conformity.check;
+package org.creek.internal.test.conformity;
 
+import static java.util.Objects.requireNonNull;
 
-import org.creek.internal.test.conformity.check.ModuleCheck;
+import java.net.URI;
 
-/**
- * Module should have a {@code module-info.java} file, i.e. the module the test is running in should
- * be named and not an automatic module.
- */
-public interface CheckModule extends ConformityCheck {
+public final class DefaultCheckTarget implements CheckTarget {
 
-    /** @return a builder used to customise the check */
-    static CheckModule builder() {
-        return new ModuleCheck.Options();
+    private final URI location;
+    private final Module moduleUnderTest;
+
+    public DefaultCheckTarget(final URI location, final Module moduleUnderTest) {
+        this.location = requireNonNull(location, "location");
+        this.moduleUnderTest = requireNonNull(moduleUnderTest, "moduleUnderTest");
+    }
+
+    @Override
+    public URI moduleLocation() {
+        return location;
+    }
+
+    @Override
+    public Module moduleUnderTest() {
+        return moduleUnderTest;
     }
 }

@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-package org.creek.api.test.conformity;
+package org.creek.api.test.conformity.check;
 
-
-import java.net.URI;
-
-/** Information about the module being tested. */
-public interface CheckTarget {
-
-    /** @return location of the module, e.g. path to the jar file. */
-    URI moduleLocation();
-
-    /** @return the module itself. */
-    Module moduleUnderTest();
-}
+/** Marker interface for types used to customize or disable a specific check */
+public interface ConformityCheck {}
