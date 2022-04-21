@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.internal.test.conformity.CheckTarget;
-import org.creek.internal.test.conformity.PackageFilter;
+import org.creek.internal.test.conformity.filter.PackageFilter;
 
 public final class ExportedPackagesCheck implements CheckRunner {
 

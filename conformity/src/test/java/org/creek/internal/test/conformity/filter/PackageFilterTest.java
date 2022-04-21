@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.creek.internal.test.conformity;
+package org.creek.internal.test.conformity.filter;
 
-import static org.creek.internal.test.conformity.PackageFilter.builder;
+import static org.creek.internal.test.conformity.filter.PackageFilter.builder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.creek.internal.test.conformity;
+package org.creek.internal.test.conformity.filter;
 
 import static java.util.Objects.requireNonNull;
 
