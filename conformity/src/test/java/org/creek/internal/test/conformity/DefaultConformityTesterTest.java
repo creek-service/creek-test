@@ -58,9 +58,7 @@ class DefaultConformityTesterTest {
     @Test
     void shouldDetectUnnamedModule() {
         // Given:
-        final ConformityTester tester =
-                ConformityTester.builder(EqualsTester.class)
-                        .withDisabled("Not testing this one", CheckExportedPackages.builder());
+        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
@@ -78,7 +76,7 @@ class DefaultConformityTesterTest {
         final ConformityTester tester =
                 ConformityTester.builder(ConformityTester.class)
                         .withCustom(
-                                "to allow testing",
+                                "to test customising",
                                 CheckExportedPackages.builder()
                                         .excludedPackages(NotExported.class.getPackageName()));
 
@@ -93,8 +91,7 @@ class DefaultConformityTesterTest {
         // Given:
         final ConformityTester tester =
                 ConformityTester.builder(EqualsTester.class)
-                        .withDisabled("To allow testing!", CheckModule.builder())
-                        .withDisabled("To allow testing!", CheckExportedPackages.builder());
+                        .withDisabled("To allow testing!", CheckModule.builder());
 
         // When:
         tester.check();
