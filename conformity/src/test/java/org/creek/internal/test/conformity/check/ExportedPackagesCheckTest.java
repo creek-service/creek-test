@@ -24,9 +24,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Set;
-import org.creek.api.test.conformity.CheckTarget;
-import org.creek.api.test.conformity.ConformityCheck;
-import org.creek.api.test.conformity.empty.missing.NotExported;
+import org.creek.api.test.conformity.test.types.bad.NotExported;
+import org.creek.internal.test.conformity.CheckTarget;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,11 +40,11 @@ class ExportedPackagesCheckTest {
 
     @Mock private CheckTarget ctx;
     @Mock private Module moduleUnderTest;
-    private ConformityCheck check;
+    private CheckRunner check;
 
     @BeforeEach
     void setUp() {
-        check = new ExportedPackagesCheck.Builder().build();
+        check = new ExportedPackagesCheck(new ExportedPackagesCheck.Options());
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
         when(moduleUnderTest.getName()).thenReturn("Bob");
@@ -125,9 +124,9 @@ class ExportedPackagesCheckTest {
         givenPackages("org.creek.api.a", "org.creek.api.b.c");
 
         check =
-                new ExportedPackagesCheck.Builder()
-                        .excludedPackages("org.creek.api.a", "org.creek.api.b.*")
-                        .build();
+                new ExportedPackagesCheck(
+                        new ExportedPackagesCheck.Options()
+                                .excludedPackages("org.creek.api.a", "org.creek.api.b.*"));
 
         // When:
         check.check(ctx);
@@ -143,13 +142,14 @@ class ExportedPackagesCheckTest {
         // When:
         final Exception e = assertThrows(RuntimeException.class, () -> check.check(ctx));
 
-        // Then: `org.creek.api.test.conformity.empty` is not in list:
+        // Then: `org.creek.api.test.conformity.test.types` is not in list as it contains no
+        // classes:
         assertThat(
                 e.getMessage(),
                 containsString(
                         "["
                                 + System.lineSeparator()
-                                + "\torg.creek.api.test.conformity.empty.missing"
+                                + "\torg.creek.api.test.conformity.test.types.bad"
                                 + System.lineSeparator()
                                 + "]"));
     }

@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package org.creek.api.test.conformity;
+package org.creek.internal.test.conformity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import com.google.common.testing.EqualsTester;
 import org.creek.api.base.annotation.VisibleForTesting;
+import org.creek.api.test.conformity.ConformityTester;
 import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.api.test.conformity.check.CheckModule;
-import org.creek.api.test.conformity.empty.missing.NotExported;
+import org.creek.api.test.conformity.check.ConformityCheck;
+import org.creek.api.test.conformity.test.types.bad.NotExported;
 import org.junit.jupiter.api.Test;
 
-class ConformityTesterTest {
+class DefaultConformityTesterTest {
 
     @Test
     void shouldPassIfEverythingIsOk() {
@@ -37,7 +40,9 @@ class ConformityTesterTest {
     @Test
     void shouldDetectNotExported() {
         // Given:
-        final ConformityTester tester = ConformityTester.builder(ConformityTester.class);
+        final ConformityTester tester =
+                ConformityTester.builder(ConformityTester.class)
+                        .withDisabled("Not testing this one", CheckModule.builder());
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
@@ -55,7 +60,7 @@ class ConformityTesterTest {
         // Given:
         final ConformityTester tester =
                 ConformityTester.builder(EqualsTester.class)
-                        .withDisabled(CheckExportedPackages.builder(), "Not testing this one");
+                        .withDisabled("Not testing this one", CheckExportedPackages.builder());
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
@@ -73,6 +78,7 @@ class ConformityTesterTest {
         final ConformityTester tester =
                 ConformityTester.builder(ConformityTester.class)
                         .withCustom(
+                                "to allow testing",
                                 CheckExportedPackages.builder()
                                         .excludedPackages(NotExported.class.getPackageName()));
 
@@ -87,8 +93,8 @@ class ConformityTesterTest {
         // Given:
         final ConformityTester tester =
                 ConformityTester.builder(EqualsTester.class)
-                        .withDisabled(CheckModule.builder(), "To allow testing!")
-                        .withDisabled(CheckExportedPackages.builder(), "To allow testing!");
+                        .withDisabled("To allow testing!", CheckModule.builder())
+                        .withDisabled("To allow testing!", CheckExportedPackages.builder());
 
         // When:
         tester.check();
@@ -97,7 +103,21 @@ class ConformityTesterTest {
     }
 
     @Test
-    void shouldThrownWhenDisablingIfNotJustification() {
+    void shouldThrownOnUnknownCheck() {
+        // Given:
+        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
+        final ConformityCheck check = mock(ConformityCheck.class);
+
+        // When:
+        final Exception e =
+                assertThrows(IllegalStateException.class, () -> tester.withCustom("cos", check));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("Unsupported check"));
+    }
+
+    @Test
+    void shouldThrownWhenCustomisingIfNoJustification() {
         // Given:
         final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
 
@@ -105,7 +125,22 @@ class ConformityTesterTest {
         final Exception e =
                 assertThrows(
                         IllegalArgumentException.class,
-                        () -> tester.withDisabled(CheckModule.builder(), " "));
+                        () -> tester.withCustom(" ", CheckModule.builder()));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
+    }
+
+    @Test
+    void shouldThrownWhenDisablingIfNoJustification() {
+        // Given:
+        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> tester.withDisabled(" ", CheckModule.builder()));
 
         // Then:
         assertThat(e.getMessage(), startsWith("justification can not be blank"));

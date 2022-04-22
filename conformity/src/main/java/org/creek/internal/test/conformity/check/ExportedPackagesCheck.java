@@ -23,19 +23,18 @@ import static org.creek.internal.test.conformity.Constants.API_PACKAGE;
 import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-import org.creek.api.test.conformity.CheckTarget;
-import org.creek.api.test.conformity.ConformityCheck;
 import org.creek.api.test.conformity.check.CheckExportedPackages;
-import org.creek.internal.test.conformity.PackageFilter;
+import org.creek.internal.test.conformity.CheckTarget;
+import org.creek.internal.test.conformity.filter.PackageFilter;
 
-public final class ExportedPackagesCheck implements ConformityCheck {
+public final class ExportedPackagesCheck implements CheckRunner {
 
     private static final String NL_INDENT = System.lineSeparator() + "\t";
 
     private final Predicate<String> packageFilter;
 
-    private ExportedPackagesCheck(final Predicate<String> packageFilter) {
-        this.packageFilter = requireNonNull(packageFilter, "packageFilter");
+    public ExportedPackagesCheck(final Options options) {
+        this.packageFilter = requireNonNull(options, "options").packageFilter.build()::notExcluded;
     }
 
     @Override
@@ -79,19 +78,14 @@ public final class ExportedPackagesCheck implements ConformityCheck {
         return moduleUnderTest.getPackages().stream().filter(packageFilter).sorted();
     }
 
-    public static final class Builder implements CheckExportedPackages {
+    public static final class Options implements CheckExportedPackages {
 
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
 
         @Override
-        public Builder excludedPackages(final String... packageNames) {
+        public Options excludedPackages(final String... packageNames) {
             Arrays.stream(packageNames).forEach(packageFilter::addExclude);
             return this;
-        }
-
-        @Override
-        public ExportedPackagesCheck build() {
-            return new ExportedPackagesCheck(packageFilter.build()::notExcluded);
         }
     }
 

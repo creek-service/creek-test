@@ -23,8 +23,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.module.ModuleDescriptor;
 import java.net.URI;
-import org.creek.api.test.conformity.CheckTarget;
-import org.creek.api.test.conformity.ConformityCheck;
+import org.creek.internal.test.conformity.CheckTarget;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,11 +39,11 @@ class ModuleCheckTest {
     @Mock private CheckTarget ctx;
     @Mock private Module moduleUnderTest;
     @Mock private ModuleDescriptor descriptor;
-    private ConformityCheck check;
+    private CheckRunner check;
 
     @BeforeEach
     void setUp() {
-        check = new ModuleCheck.Builder().build();
+        check = new ModuleCheck(new ModuleCheck.Options());
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
         when(ctx.moduleLocation()).thenReturn(URI.create("file://path/to/module"));

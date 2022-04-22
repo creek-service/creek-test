@@ -17,7 +17,6 @@
 package org.creek.api.test.conformity.check;
 
 
-import org.creek.api.test.conformity.ConformityCheck;
 import org.creek.internal.test.conformity.check.ExportedPackagesCheck;
 
 /**
@@ -26,11 +25,11 @@ import org.creek.internal.test.conformity.check.ExportedPackagesCheck;
  *
  * <p>Note, non-API packages can be exported <i>to</i> specific modules, e.g. other Creek modules.
  */
-public interface CheckExportedPackages extends ConformityCheck.Builder {
+public interface CheckExportedPackages extends ConformityCheck {
 
     /** @return a builder used to customise the check */
     static CheckExportedPackages builder() {
-        return new ExportedPackagesCheck.Builder();
+        return new ExportedPackagesCheck.Options();
     }
 
     /**

@@ -16,28 +16,15 @@
 
 package org.creek.internal.test.conformity;
 
-import static java.util.Objects.requireNonNull;
 
 import java.net.URI;
-import org.creek.api.test.conformity.CheckTarget;
 
-public final class DefaultCheckContext implements CheckTarget {
+/** Information about the module being tested. */
+public interface CheckTarget {
 
-    private final URI location;
-    private final Module moduleUnderTest;
+    /** @return location of the module, e.g. path to the jar file. */
+    URI moduleLocation();
 
-    public DefaultCheckContext(final URI location, final Module moduleUnderTest) {
-        this.location = requireNonNull(location, "location");
-        this.moduleUnderTest = requireNonNull(moduleUnderTest, "moduleUnderTest");
-    }
-
-    @Override
-    public URI moduleLocation() {
-        return location;
-    }
-
-    @Override
-    public Module moduleUnderTest() {
-        return moduleUnderTest;
-    }
+    /** @return the module itself. */
+    Module moduleUnderTest();
 }
