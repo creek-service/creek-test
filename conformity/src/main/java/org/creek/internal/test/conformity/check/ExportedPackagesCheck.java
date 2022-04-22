@@ -45,6 +45,11 @@ public final class ExportedPackagesCheck implements CheckRunner {
     @Override
     public void check(final CheckTarget target) {
         final Module moduleUnderTest = target.moduleUnderTest();
+        if (moduleUnderTest.getDescriptor().isAutomatic()) {
+            // Do not test automatic modules, as everything is exposed.
+            // The fact a module is automatic will be picked up by CheckModule
+            return;
+        }
 
         checkApiPackagesExported(moduleUnderTest);
         checkNonApiPackagesNotExported(moduleUnderTest);
