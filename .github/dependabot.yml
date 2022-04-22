@@ -5,7 +5,9 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gradle"
+  - package-ecosystem: gradle
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: daily
+    reviewers:
+      - creek-service/code-reviewers
