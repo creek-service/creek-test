@@ -16,15 +16,25 @@
 
 package org.creek.internal.test.conformity;
 
+import static java.util.Objects.requireNonNull;
 
 import java.net.URI;
 
-/** Information about the module being tested. */
-public interface CheckTarget {
+public final class CheckTarget {
 
-    /** @return location of the module, e.g. path to the jar file. */
-    URI moduleLocation();
+    private final URI location;
+    private final Module moduleUnderTest;
 
-    /** @return the module itself. */
-    Module moduleUnderTest();
+    public CheckTarget(final URI location, final Module moduleUnderTest) {
+        this.location = requireNonNull(location, "location");
+        this.moduleUnderTest = requireNonNull(moduleUnderTest, "moduleUnderTest");
+    }
+
+    public URI moduleLocation() {
+        return location;
+    }
+
+    public Module moduleUnderTest() {
+        return moduleUnderTest;
+    }
 }

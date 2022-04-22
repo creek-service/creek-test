@@ -74,8 +74,7 @@ public final class DefaultConformityTester implements ConformityTester {
 
     public void check() {
         final CheckTarget ctx =
-                new DefaultCheckTarget(
-                        location(typeFromModuleToTest), typeFromModuleToTest.getModule());
+                new CheckTarget(location(typeFromModuleToTest), typeFromModuleToTest.getModule());
 
         options.values().stream().map(this::runner).forEach(check -> invoke(check, ctx));
     }
