@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import com.google.common.testing.EqualsTester;
 import org.creek.api.base.annotation.VisibleForTesting;
 import org.creek.api.test.conformity.ConformityTester;
+import org.creek.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.api.test.conformity.check.CheckModule;
 import org.creek.api.test.conformity.check.ConformityCheck;
@@ -42,6 +43,7 @@ class DefaultConformityTesterTest {
         // Given:
         final ConformityTester tester =
                 ConformityTester.builder(ConformityTester.class)
+                        .withDisabled("Not testing this one", CheckConstructorsPrivate.builder())
                         .withDisabled("Not testing this one", CheckModule.builder());
 
         // When:
@@ -80,12 +82,35 @@ class DefaultConformityTesterTest {
                         .withCustom(
                                 "to allow testing",
                                 CheckExportedPackages.builder()
+                                        .excludedPackages(NotExported.class.getPackageName()))
+                        .withCustom(
+                                "todo",
+                                CheckConstructorsPrivate.builder()
                                         .excludedPackages(NotExported.class.getPackageName()));
 
         // When:
         tester.check();
 
         // Then: did not throw
+    }
+
+    @Test
+    void shouldDetectApiTypesWithPublicConstructors() {
+        // Given:
+        final ConformityTester tester =
+                ConformityTester.builder(ConformityTester.class)
+                        .withDisabled("Not testing this one", CheckExportedPackages.builder())
+                        .withDisabled("Not testing this one", CheckModule.builder());
+
+        // When:
+        final Error e = assertThrows(AssertionError.class, tester::check);
+
+        // Then:
+        assertThat(
+                e.getMessage(),
+                startsWith(
+                        "Conformity check failed. check: CheckConstructorsPrivate,"
+                                + " reason: API types should not have public constructors"));
     }
 
     @Test

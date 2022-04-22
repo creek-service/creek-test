@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creek.internal.test.conformity;
 
-val creekVersion : String by extra
-val classGraphVersion : String by extra
 
-dependencies {
-    api("org.creek:creek-base-annotation:$creekVersion")
+import io.github.classgraph.ClassInfo;
+import java.util.stream.Stream;
 
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
+/** Information about the types in a module */
+public interface ModuleTypes {
 
-    testImplementation(project(":util"))
+    /** @return all classes in the module */
+    Stream<ClassInfo> classes();
+
+    /** @return all api classes in the module. */
+    Stream<ClassInfo> apiClasses();
 }

@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creek.api.test.conformity.test.types.bad;
 
-val creekVersion : String by extra
-val classGraphVersion : String by extra
-
-dependencies {
-    api("org.creek:creek-base-annotation:$creekVersion")
-
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
-
-    testImplementation(project(":util"))
-}
+/**
+ * An API type with an implicit public constructor.
+ *
+ * <p>Hence, {@link org.creek.internal.test.conformity.check.ConstructorsPrivateCheck} should fail
+ * for this module.
+ */
+@SuppressWarnings("unused") // Accessed by reflection / ClassGraph.
+public class PublicTypeWithImplicitPublicConstructor {}
