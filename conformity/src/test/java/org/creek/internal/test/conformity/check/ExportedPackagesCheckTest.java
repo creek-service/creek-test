@@ -49,6 +49,7 @@ class ExportedPackagesCheckTest {
         check = new ExportedPackagesCheck(new ExportedPackagesCheck.Options());
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
+        when(moduleUnderTest.isNamed()).thenReturn(true);
         when(moduleUnderTest.getName()).thenReturn("Bob");
         when(moduleUnderTest.getDescriptor()).thenReturn(descriptor);
     }
@@ -119,6 +120,19 @@ class ExportedPackagesCheckTest {
                                 + "\torg.creek.internal.b"
                                 + System.lineSeparator()
                                 + "]"));
+    }
+
+    @Test
+    void shouldIgnoreUnnamedModules() {
+        // Given:
+        when(moduleUnderTest.isNamed()).thenReturn(false);
+        when(moduleUnderTest.getDescriptor()).thenReturn(null);
+        givenPackages("org.creek.api.a");
+
+        // When:
+        check.check(ctx);
+
+        // Then: did not throw.
     }
 
     @Test
