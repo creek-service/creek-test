@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import java.lang.module.ModuleDescriptor;
 import java.util.Arrays;
 import java.util.Set;
 import org.creek.api.test.conformity.test.types.bad.NotExported;
@@ -40,6 +41,7 @@ class ExportedPackagesCheckTest {
 
     @Mock private CheckTarget ctx;
     @Mock private Module moduleUnderTest;
+    @Mock private ModuleDescriptor descriptor;
     private CheckRunner check;
 
     @BeforeEach
@@ -47,7 +49,9 @@ class ExportedPackagesCheckTest {
         check = new ExportedPackagesCheck(new ExportedPackagesCheck.Options());
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
+        when(moduleUnderTest.isNamed()).thenReturn(true);
         when(moduleUnderTest.getName()).thenReturn("Bob");
+        when(moduleUnderTest.getDescriptor()).thenReturn(descriptor);
     }
 
     @Test
@@ -116,6 +120,31 @@ class ExportedPackagesCheckTest {
                                 + "\torg.creek.internal.b"
                                 + System.lineSeparator()
                                 + "]"));
+    }
+
+    @Test
+    void shouldIgnoreUnnamedModules() {
+        // Given:
+        when(moduleUnderTest.isNamed()).thenReturn(false);
+        when(moduleUnderTest.getDescriptor()).thenReturn(null);
+        givenPackages("org.creek.api.a");
+
+        // When:
+        check.check(ctx);
+
+        // Then: did not throw.
+    }
+
+    @Test
+    void shouldIgnoreAutomaticModules() {
+        // Given:
+        when(descriptor.isAutomatic()).thenReturn(true);
+        givenPackages("org.creek.api.a");
+
+        // When:
+        check.check(ctx);
+
+        // Then: did not throw.
     }
 
     @Test
