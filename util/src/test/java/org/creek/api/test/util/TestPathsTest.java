@@ -29,6 +29,7 @@ import static org.creek.api.test.util.TestPaths.write;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
 
 import java.nio.file.Files;
@@ -234,5 +235,18 @@ class TestPathsTest {
 
         // Then:
         assertThat(readString(destination.resolve("file")), is("text"));
+    }
+
+    @Test
+    void shouldThrowOnCopyIfSourceDoesNotExist() {
+        // Given:
+        final Path src = tempDir.resolve("src");
+        final Path destination = tempDir.resolve("dest");
+
+        // When:
+        final Error e = assertThrows(AssertionError.class, () -> copy(src, destination));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("Failed to copy "));
     }
 }
