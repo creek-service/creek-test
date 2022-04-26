@@ -27,7 +27,6 @@ import static org.creek.api.test.util.TestPaths.readBytes;
 import static org.creek.api.test.util.TestPaths.readString;
 import static org.creek.api.test.util.TestPaths.write;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
@@ -217,7 +216,7 @@ class TestPathsTest {
         copy(src, destination);
 
         // Then:
-        assertThat(readString(destination.resolve("file0")),is("text-file0"));
+        assertThat(readString(destination.resolve("file0")), is("text-file0"));
         assertThat(readString(destination.resolve("dir/file1")), is("text-file1"));
         assertThat(Files.isDirectory(destination.resolve("dir/empty")), is(true));
     }
