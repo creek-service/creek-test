@@ -18,6 +18,7 @@ package org.creek.api.test.util;
 
 import static java.nio.file.Files.isDirectory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -173,5 +174,35 @@ public final class TestPaths {
      */
     public static void write(final Path path, final String text) {
         write(path, text.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Copy a source path to a destination path, recursively.
+     *
+     * @param src what to copy
+     * @param dest where to put it
+     */
+    @SuppressFBWarnings(
+            value = "RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE",
+            justification = "false negative")
+    public static void copy(final Path src, final Path dest) {
+        final boolean incRoot = !(Files.isDirectory(src) && Files.isDirectory(dest));
+
+        ensureParent(dest);
+
+        try (Stream<Path> stream = Files.walk(src)) {
+            stream.filter(s -> incRoot || !s.equals(src.toAbsolutePath()))
+                    .forEach(source -> safeCopy(source, dest.resolve(src.relativize(source))));
+        } catch (final IOException e) {
+            throw new AssertionError("Failed to copy " + src + " to " + dest, e);
+        }
+    }
+
+    private static void safeCopy(final Path src, final Path dest) {
+        try {
+            Files.copy(src, dest);
+        } catch (final Exception e) {
+            throw new AssertionError("Failed to copy " + src + " to " + dest, e);
+        }
     }
 }
