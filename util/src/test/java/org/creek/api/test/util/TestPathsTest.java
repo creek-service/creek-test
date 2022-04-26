@@ -18,6 +18,7 @@ package org.creek.api.test.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.creek.api.test.hamcrest.PathMatchers.directory;
+import static org.creek.api.test.util.TestPaths.copy;
 import static org.creek.api.test.util.TestPaths.ensureDirectories;
 import static org.creek.api.test.util.TestPaths.listDirectory;
 import static org.creek.api.test.util.TestPaths.moduleRoot;
@@ -26,10 +27,12 @@ import static org.creek.api.test.util.TestPaths.readBytes;
 import static org.creek.api.test.util.TestPaths.readString;
 import static org.creek.api.test.util.TestPaths.write;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -185,5 +188,52 @@ class TestPathsTest {
     @Test
     void shouldThrowOnErrorWritingString() {
         assertThrows(AssertionError.class, () -> write(tempDir, "contents"));
+    }
+
+    @Test
+    void shouldCopyFile() {
+        // Given:
+        final Path src = tempDir.resolve("src");
+        final Path destination = tempDir.resolve("dest");
+        write(src, "text");
+
+        // When:
+        copy(src, destination);
+
+        // Then:
+        assertThat(readString(destination), is("text"));
+    }
+
+    @Test
+    void shouldCopyDirectory() {
+        // Given:
+        final Path src = tempDir.resolve("src");
+        final Path destination = tempDir.resolve("dest");
+        write(src.resolve("file0"), "text-file0");
+        write(src.resolve("dir/file1"), "text-file1");
+        TestPaths.ensureDirectories(src.resolve("dir/empty"));
+
+        // When:
+        copy(src, destination);
+
+        // Then:
+        assertThat(readString(destination.resolve("file0")),is("text-file0"));
+        assertThat(readString(destination.resolve("dir/file1")), is("text-file1"));
+        assertThat(Files.isDirectory(destination.resolve("dir/empty")), is(true));
+    }
+
+    @Test
+    void shouldCopyDirectoryIfTargetExists() {
+        // Given:
+        final Path src = tempDir.resolve("src");
+        final Path destination = tempDir.resolve("dest");
+        TestPaths.ensureDirectories(destination);
+        write(src.resolve("file"), "text");
+
+        // When:
+        copy(src, destination);
+
+        // Then:
+        assertThat(readString(destination.resolve("file")), is("text"));
     }
 }
