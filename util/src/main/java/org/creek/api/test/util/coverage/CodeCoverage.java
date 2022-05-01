@@ -51,7 +51,7 @@ public final class CodeCoverage {
      * @param buildDir the path to the build directory.
      * @return the Java agent command line arg, or empty.
      */
-    public Optional<String> codeCoverageCmdLineArg(final Path buildDir) {
+    public static Optional<String> codeCoverageCmdLineArg(final Path buildDir) {
         return codeCoverageCmdLineArg(ManagementFactory.getRuntimeMXBean(), Optional.of(buildDir));
     }
 
