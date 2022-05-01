@@ -63,7 +63,8 @@ class CodeCoverageTest {
                                 "--javaagent: but not org.jacoco.agent"));
 
         // When:
-        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
 
         // Then:
         assertThat(result, is(Optional.empty()));
@@ -86,14 +87,25 @@ class CodeCoverageTest {
     void shouldReturnJaCoCoAgentParamWithAbsolutePaths() {
         // Given:
         when(runtimeMXBean.getInputArguments())
-                .thenReturn(List.of("-javaagent:build/org.jacoco.agent.jar:-destfile=build/tmp/something"));
+                .thenReturn(
+                        List.of(
+                                "-javaagent:build/org.jacoco.agent.jar:-destfile=build/tmp/something"));
 
         // When:
-        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
 
         // Then:
         final Path abs = BUILD_DIR.toAbsolutePath();
-        assertThat(result, is(Optional.of("-javaagent:" + abs + "/org.jacoco.agent.jar:-destfile=" + abs + "/tmp/something")));
+        assertThat(
+                result,
+                is(
+                        Optional.of(
+                                "-javaagent:"
+                                        + abs
+                                        + "/org.jacoco.agent.jar:-destfile="
+                                        + abs
+                                        + "/tmp/something")));
     }
 
     @Test
