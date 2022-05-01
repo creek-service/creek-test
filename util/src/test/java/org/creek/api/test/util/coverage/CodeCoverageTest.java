@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import java.lang.management.RuntimeMXBean;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CodeCoverageTest {
 
+    private static final Path BUILD_DIR = Paths.get("some/path/build/");
     @Mock private RuntimeMXBean runtimeMXBean;
 
     @Test
@@ -40,27 +43,69 @@ class CodeCoverageTest {
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
                         List.of(
-                                "-javaagent but not Jacoco",
-                                "--javaagent but not org.jacoco.agent"));
+                                "-javaagent: but not Jacoco",
+                                "--javaagent: but not org.jacoco.agent"));
 
         // When:
-        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean);
+        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
 
         // Then:
         assertThat(result, is(Optional.empty()));
     }
 
     @Test
-    void shouldReturnJaCoCoAgentParam() {
+    void shouldEmptyIfNotJaCoCoAgentParamPresentAndBuildDirProvided() {
         // Given:
         when(runtimeMXBean.getInputArguments())
-                .thenReturn(List.of("--arg", "-javaagent_blah_org.jacoco.agent_blah", "-arg"));
+                .thenReturn(
+                        List.of(
+                                "-javaagent: but not Jacoco",
+                                "--javaagent: but not org.jacoco.agent"));
 
         // When:
-        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean);
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
 
         // Then:
-        assertThat(result, is(Optional.of("-javaagent_blah_org.jacoco.agent_blah")));
+        assertThat(result, is(Optional.empty()));
+    }
+
+    @Test
+    void shouldReturnJaCoCoAgentParamAsIs() {
+        // Given:
+        when(runtimeMXBean.getInputArguments())
+                .thenReturn(List.of("--arg", "-javaagent:blah_org.jacoco.agent_blah", "-arg"));
+
+        // When:
+        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
+
+        // Then:
+        assertThat(result, is(Optional.of("-javaagent:blah_org.jacoco.agent_blah")));
+    }
+
+    @Test
+    void shouldReturnJaCoCoAgentParamWithAbsolutePaths() {
+        // Given:
+        when(runtimeMXBean.getInputArguments())
+                .thenReturn(
+                        List.of(
+                                "-javaagent:build/org.jacoco.agent.jar:-destfile=build/tmp/something"));
+
+        // When:
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
+
+        // Then:
+        final Path abs = BUILD_DIR.toAbsolutePath();
+        assertThat(
+                result,
+                is(
+                        Optional.of(
+                                "-javaagent:"
+                                        + abs
+                                        + "/org.jacoco.agent.jar:-destfile="
+                                        + abs
+                                        + "/tmp/something")));
     }
 
     @Test
@@ -69,13 +114,13 @@ class CodeCoverageTest {
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
                         List.of(
-                                "-javaagent_first_org.jacoco.agent",
-                                "-javaagent_second_org.jacoco.agent"));
+                                "-javaagent:first_org.jacoco.agent",
+                                "-javaagent:second_org.jacoco.agent"));
 
         // When:
-        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean);
+        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
 
         // Then:
-        assertThat(result, is(Optional.of("-javaagent_first_org.jacoco.agent")));
+        assertThat(result, is(Optional.of("-javaagent:first_org.jacoco.agent")));
     }
 }

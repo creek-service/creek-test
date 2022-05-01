@@ -19,9 +19,11 @@ package org.creek.api.test.util.coverage;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.nio.file.Path;
 import java.util.Optional;
 import org.creek.api.base.annotation.VisibleForTesting;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class CodeCoverage {
 
     private CodeCoverage() {}
@@ -32,17 +34,42 @@ public final class CodeCoverage {
      * <p>Useful to set on child processes started by tests to ensure the code they execute is
      * included in coverage metrics.
      *
-     * @return the Java agent command line arg, or empty.
+     * @return the Java agent command line arg containing potentially relative directories, or
+     *     empty.
      */
     public static Optional<String> codeCoverageCmdLineArg() {
-        return codeCoverageCmdLineArg(ManagementFactory.getRuntimeMXBean());
+        return codeCoverageCmdLineArg(ManagementFactory.getRuntimeMXBean(), Optional.empty());
+    }
+
+    /**
+     * Finds the code coverage Java agent command line arg this JVM was started with, if any, and
+     * ensures the paths used in it are absolute.
+     *
+     * <p>Useful to set on child processes started by tests to ensure the code they execute is
+     * included in coverage metrics.
+     *
+     * @param buildDir the path to the build directory.
+     * @return the Java agent command line arg, or empty.
+     */
+    public Optional<String> codeCoverageCmdLineArg(final Path buildDir) {
+        return codeCoverageCmdLineArg(ManagementFactory.getRuntimeMXBean(), Optional.of(buildDir));
     }
 
     @VisibleForTesting
-    static Optional<String> codeCoverageCmdLineArg(final RuntimeMXBean runtimeMXBean) {
-        return runtimeMXBean.getInputArguments().stream()
-                .filter(arg -> arg.startsWith("-javaagent"))
-                .filter(arg -> arg.contains("org.jacoco.agent"))
-                .reduce((first, second) -> first);
+    static Optional<String> codeCoverageCmdLineArg(
+            final RuntimeMXBean runtimeMXBean, final Optional<Path> buildDir) {
+        final Optional<String> found =
+                runtimeMXBean.getInputArguments().stream()
+                        .filter(arg -> arg.startsWith("-javaagent:"))
+                        .filter(arg -> arg.contains("org.jacoco.agent"))
+                        .reduce((first, second) -> first);
+
+        return buildDir.map(
+                        dir ->
+                                found.map(
+                                        arg ->
+                                                arg.replaceAll(
+                                                        "build/", dir.toAbsolutePath() + "/")))
+                .orElse(found);
     }
 }
