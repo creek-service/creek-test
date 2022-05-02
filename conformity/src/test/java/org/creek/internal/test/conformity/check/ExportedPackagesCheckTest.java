@@ -57,7 +57,7 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldIgnoreNoneApiPackages() {
         // Given:
-        givenPackages("org.creek.other", "not.org.creek");
+        givenPackages("org.creek.other", "not.org.creekservice");
 
         // When:
         check.check(ctx);
@@ -68,8 +68,8 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldPassIfAllApiPackagesAreExportedAndNonApiPackagesAreNot() {
         // Given:
-        givenPackages("org.creek.api.a", "org.creek.api.b", "org.creek.internal.a");
-        givenExportedPackages("org.creek.api.a", "org.creek.api.b");
+        givenPackages("org.creekservice.api.a", "org.creek.api.b", "org.creek.internal.a");
+        givenExportedPackages("org.creekservice.api.a", "org.creek.api.b");
 
         // When:
         check.check(ctx);
@@ -80,7 +80,7 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldThrowOnNonExportedApiPackages() {
         // Given:
-        givenPackages("org.creek.api", "org.creek.api.a", "org.creek.api.b");
+        givenPackages("org.creek.api", "org.creek.api.a", "org.creekservice.api.b");
         givenExportedPackages("org.creek.api.a");
 
         // When:
@@ -94,7 +94,7 @@ class ExportedPackagesCheckTest {
                                 + System.lineSeparator()
                                 + "\torg.creek.api"
                                 + System.lineSeparator()
-                                + "\torg.creek.api.b"
+                                + "\torg.creekservice.api.b"
                                 + System.lineSeparator()
                                 + "]"));
     }
@@ -102,8 +102,8 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldThrowOnNonApiPackageExported() {
         // Given:
-        givenPackages("org.creek.internal", "org.creek.internal.a", "org.creek.internal.b");
-        givenExportedPackages("org.creek.internal.a", "org.creek.internal.b");
+        givenPackages("org.creek.internal", "org.creekservice.internal.a", "org.creek.internal.b");
+        givenExportedPackages("org.creekservice.internal.a", "org.creek.internal.b");
 
         // When:
         final Exception e = assertThrows(RuntimeException.class, () -> check.check(ctx));
@@ -115,9 +115,9 @@ class ExportedPackagesCheckTest {
                         "Non-API packages are exposed (without a 'to' clause) "
                                 + "in the module's module-info.java file. module=Bob, exposed_packages=["
                                 + System.lineSeparator()
-                                + "\torg.creek.internal.a"
-                                + System.lineSeparator()
                                 + "\torg.creek.internal.b"
+                                + System.lineSeparator()
+                                + "\torg.creekservice.internal.a"
                                 + System.lineSeparator()
                                 + "]"));
     }
@@ -127,7 +127,7 @@ class ExportedPackagesCheckTest {
         // Given:
         when(moduleUnderTest.isNamed()).thenReturn(false);
         when(moduleUnderTest.getDescriptor()).thenReturn(null);
-        givenPackages("org.creek.api.a");
+        givenPackages("org.creekservice.api.a");
 
         // When:
         check.check(ctx);
@@ -150,12 +150,12 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldIgnoreExcludedPackages() {
         // Given:
-        givenPackages("org.creek.api.a", "org.creek.api.b.c");
+        givenPackages("org.creekservice.api.a", "org.creek.api.b.c");
 
         check =
                 new ExportedPackagesCheck(
                         new ExportedPackagesCheck.Options()
-                                .excludedPackages("org.creek.api.a", "org.creek.api.b.*"));
+                                .excludedPackages("org.creekservice.api.a", "org.creek.api.b.*"));
 
         // When:
         check.check(ctx);
