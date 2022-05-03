@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import com.google.common.testing.EqualsTester;
-import org.creek.api.base.annotation.VisibleForTesting;
 import org.creek.api.test.conformity.ConformityTester;
 import org.creek.api.test.conformity.check.CheckExportedPackages;
 import org.creek.api.test.conformity.check.CheckModule;
 import org.creek.api.test.conformity.check.ConformityCheck;
 import org.creek.api.test.conformity.test.types.bad.NotExported;
+import org.creekservice.api.base.annotation.VisibleForTesting;
 import org.junit.jupiter.api.Test;
 
 class DefaultConformityTesterTest {
