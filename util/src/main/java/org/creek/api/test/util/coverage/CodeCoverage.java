@@ -21,7 +21,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.creek.api.base.annotation.VisibleForTesting;
+import org.creekservice.api.base.annotation.VisibleForTesting;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class CodeCoverage {
