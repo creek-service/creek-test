@@ -7,9 +7,9 @@ Provides test helpers for checking Creek's own modules and code conform to certa
 Each module for conformity can be tested by adding a single test class utilising [`ConformityTester`][1]
 
 ```java
-package org.creek;
+package org.creekservice;
 
-import org.creek.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.ConformityTester;
 import org.junit.jupiter.api.Test;
 
 class ModuleTest {
@@ -26,10 +26,10 @@ For a list of checks, refer to the javadocs of [`ConformityCheck`][2] subtypes.
 Some checks can be customised. See javadocs of [`ConformityCheck.Builder`][2] subtypes. For example:
 
 ```java
-package org.creek;
+package org.creekservice;
 
-import org.creek.api.test.conformity.ConformityTester;
-import org.creek.api.test.conformity.check.CheckExportedPackages;
+import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.junit.jupiter.api.Test;
 
 class ModuleTest {
@@ -45,5 +45,5 @@ class ModuleTest {
 }
 ```
 
-[1]: src/main/java/org/creek/api/test/conformity/ConformityTester.java
-[2]: src/main/java/org/creek/api/test/conformity/ConformityCheck.java
+[1]: src/main/java/org/creekservice/api/test/conformity/ConformityTester.java
+[2]: src/main/java/org/creekservice/api/test/conformity/check/ConformityCheck.java
