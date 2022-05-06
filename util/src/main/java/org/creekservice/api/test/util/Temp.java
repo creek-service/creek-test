@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import org.creekservice.api.base.annotation.VisibleForTesting;
 
 /**
  * Helper to get a temporary directory that is cleaned down when the test exists.
@@ -48,7 +47,7 @@ public final class Temp {
         }
     }
 
-    @VisibleForTesting
+    // @VisibleForTesting
     static void recursiveDelete(final Path path, final FileDeleteMethod delete) {
         try {
             Files.walkFileTree(
@@ -78,7 +77,7 @@ public final class Temp {
         }
     }
 
-    @VisibleForTesting
+    // @VisibleForTesting
     interface FileDeleteMethod {
         void delete(Path path) throws IOException;
     }

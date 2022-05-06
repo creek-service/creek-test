@@ -21,7 +21,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.creekservice.api.base.annotation.VisibleForTesting;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class CodeCoverage {
@@ -55,7 +54,7 @@ public final class CodeCoverage {
         return codeCoverageCmdLineArg(ManagementFactory.getRuntimeMXBean(), Optional.of(buildDir));
     }
 
-    @VisibleForTesting
+    // @VisibleForTesting
     static Optional<String> codeCoverageCmdLineArg(
             final RuntimeMXBean runtimeMXBean, final Optional<Path> buildDir) {
         final Optional<String> found =
