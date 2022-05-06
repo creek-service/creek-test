@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import com.google.common.testing.EqualsTester;
-import org.creekservice.api.base.annotation.VisibleForTesting;
 import org.creekservice.api.test.conformity.ConformityTester;
 import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.check.CheckModule;
@@ -34,7 +33,13 @@ class DefaultConformityTesterTest {
 
     @Test
     void shouldPassIfEverythingIsOk() {
-        ConformityTester.test(VisibleForTesting.class);
+        ConformityTester.builder(ConformityTester.class)
+                .withCustom(
+                        "deliberately bad test classes",
+                        CheckExportedPackages.builder()
+                                .excludedPackages(
+                                        "org.creekservice.api.test.conformity.test.types.bad"))
+                .check();
     }
 
     @Test

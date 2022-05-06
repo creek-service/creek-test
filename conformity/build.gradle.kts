@@ -18,10 +18,6 @@ plugins {
     `java-library`
 }
 
-val creekBaseVersion : String by extra
-
 dependencies {
-    api("org.creekservice:creek-base-annotation:$creekBaseVersion")
-
     testImplementation(project(":util"))
 }
