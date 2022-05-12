@@ -126,6 +126,11 @@ class RemoteDebugTest {
     }
 
     @Test
+    void shouldNotFindDebugAgentInCurrentJvm() {
+        assertThat((List<?>) currentRemoteDebugArguments(), is(empty()));
+    }
+
+    @Test
     void shouldReturnEmptyIfCurrentJvmHasNoAttachMeJavaAgent() {
         // Given:
         final List<String> inputs =
