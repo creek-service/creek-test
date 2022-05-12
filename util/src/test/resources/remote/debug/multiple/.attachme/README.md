@@ -1,0 +1,1 @@
+This directory contains empty jar files.  The directory is searched by the RemoteDebug when being executed from RemoteDebugTest.

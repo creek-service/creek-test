@@ -3,7 +3,7 @@ plugins {
     jacoco
     `maven-publish`
     id("com.github.spotbugs") version "5.0.6"                           // https://plugins.gradle.org/plugin/com.github.spotbugs
-    id("com.diffplug.spotless") version "6.5.1"                         // https://plugins.gradle.org/plugin/com.diffplug.spotless
+    id("com.diffplug.spotless") version "6.5.2"                         // https://plugins.gradle.org/plugin/com.diffplug.spotless
     id("pl.allegro.tech.build.axion-release") version "1.13.6"          // https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release
     id("com.github.kt3k.coveralls") version "2.12.0"                    // https://plugins.gradle.org/plugin/com.github.kt3k.coveralls
     id("org.javamodularity.moduleplugin") version "1.8.10" apply false  // https://plugins.gradle.org/plugin/org.javamodularity.moduleplugin
@@ -52,7 +52,7 @@ subprojects {
     extra.apply {
         // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-        set("spotBugsVersion", "4.6.0")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
+        set("spotBugsVersion", "4.7.0")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
 
         set("log4jVersion", "2.17.2")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
         set("guavaVersion", "31.1-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
