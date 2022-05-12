@@ -102,7 +102,8 @@ public final class RemoteDebug {
     /**
      * Extract the JVM arguments for remote debugging from the current JVM.
      *
-     * <p>This can be useful when wanting to pass remote debugging arguments through a chain of processes.
+     * <p>This can be useful when wanting to pass remote debugging arguments through a chain of
+     * processes.
      *
      * @return the required command line arguments if present, otherwise an empty list.
      */
