@@ -19,6 +19,7 @@ package org.creekservice.api.test.util.debug;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +45,7 @@ public final class RemoteDebug {
     private RemoteDebug() {}
 
     /**
-     * JVM command line arguments for enabling remote debugging via Attach Me.
+     * Create JVM command line arguments for enabling remote debugging via Attach Me.
      *
      * <p>Searches the user home directory for the attachme jar. Ensure the attachme plugin has been
      * run first, as this automatically downloads the jar.
@@ -56,7 +57,7 @@ public final class RemoteDebug {
     }
 
     /**
-     * JVM command line arguments for enabling remote debugging via Attach Me.
+     * Create JVM command line arguments for enabling remote debugging via Attach Me.
      *
      * <p>Searches the user home directory for the attachme jar. Ensure the attachme plugin has been
      * run first, as this automatically downloads the jar.
@@ -69,7 +70,7 @@ public final class RemoteDebug {
     }
 
     /**
-     * JVM command line arguments for enabling remote debugging via Attach Me.
+     * Create JVM command line arguments for enabling remote debugging via Attach Me.
      *
      * <p>Searches the user home directory for the attachme jar. Ensure the attachme plugin has been
      * run first, as this automatically downloads the jar.
@@ -83,7 +84,7 @@ public final class RemoteDebug {
     }
 
     /**
-     * JVM command line arguments for enabling remote debugging via Attach Me.
+     * Create JVM command line arguments for enabling remote debugging via Attach Me.
      *
      * <p>Searches the user home directory for the attachme jar. Ensure the attachme plugin has been
      * run first, as this automatically downloads the jar.
@@ -96,6 +97,34 @@ public final class RemoteDebug {
     public static List<String> containerRemoteDebugArguments(
             final int listenerPort, final int containerDebugPort) {
         return debugArguments(listenerPort, "host.docker.internal", containerDebugPort);
+    }
+
+    /**
+     * Extract the JVM arguments for remote debugging from the current JVM.
+     *
+     * <p>This can be useful when wanting to pass remote debugging arguments through a chain of processes.
+     *
+     * @return the required command line arguments if present, otherwise an empty list.
+     */
+    public static List<String> currentRemoteDebugArguments() {
+        return currentRemoteDebugArguments(
+                ManagementFactory.getRuntimeMXBean().getInputArguments());
+    }
+
+    // VisibleForTesting
+    static List<String> currentRemoteDebugArguments(final List<String> inputArguments) {
+        return inputArguments.stream()
+                .filter(arg -> arg.startsWith("-javaagent:"))
+                .filter(arg -> arg.contains(".attachme/attachme-agent-"))
+                .reduce((first1, second1) -> first1)
+                .map(
+                        javaAgent ->
+                                inputArguments.stream()
+                                        .filter(arg -> arg.startsWith("-agentlib:"))
+                                        .reduce((first, second) -> first)
+                                        .map(agentLib -> List.of(javaAgent, agentLib))
+                                        .orElse(List.of()))
+                .orElse(List.of());
     }
 
     private static List<String> debugArguments(
