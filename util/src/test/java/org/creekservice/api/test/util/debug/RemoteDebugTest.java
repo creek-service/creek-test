@@ -16,7 +16,9 @@
 
 package org.creekservice.api.test.util.debug;
 
+import static org.creekservice.api.test.util.debug.RemoteDebug.currentRemoteDebugArguments;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
@@ -121,5 +123,65 @@ class RemoteDebugTest {
         // Then:
         assertThat(args, hasSize(2));
         assertThat(args.get(0), containsString("port:" + listenerPort + ",host:"));
+    }
+
+    @Test
+    void shouldReturnEmptyIfCurrentJvmHasNoAttachMeJavaAgent() {
+        // Given:
+        final List<String> inputs =
+                List.of(
+                        "an_arg",
+                        "-agentlib:some.stuff-to-copy",
+                        "another_arg",
+                        "not-javaagent:blah.blah.attachme/attachme-agent-1.1.0.jar:blah",
+                        "-javaagent:blah.blah.missing.attachme.stuff-1.1.0.jar:blah",
+                        "blah");
+
+        // When:
+        final List<?> result = currentRemoteDebugArguments(inputs);
+
+        // Then:
+        assertThat(result, is(empty()));
+    }
+
+    @Test
+    void shouldReturnEmptyIfCurrentJvmHasNoAttachMeAgentLib() {
+        // Given:
+        final List<String> inputs =
+                List.of(
+                        "an_arg",
+                        "-not_agentlib:some.stuff-to-copy",
+                        "not-agentlib:some.stuff-to-copy",
+                        "another_arg",
+                        "-javaagent:blah.blah.attachme/attachme-agent-1.1.0.jar:blah",
+                        "blah");
+
+        // When:
+        final List<?> result = currentRemoteDebugArguments(inputs);
+
+        // Then:
+        assertThat(result, is(empty()));
+    }
+
+    @Test
+    void shouldReturnArgsIfCurrentJvmHasRemoteDebuggingEnabled() {
+        // Given:
+        final List<String> inputs =
+                List.of(
+                        "an_arg",
+                        "-agentlib:some.stuff-to-copy",
+                        "another_arg",
+                        "-javaagent:blah.blah.attachme/attachme-agent-1.1.0.jar:blah",
+                        "blah");
+
+        // When:
+        final List<?> result = currentRemoteDebugArguments(inputs);
+
+        // Then:
+        assertThat(
+                result,
+                contains(
+                        "-javaagent:blah.blah.attachme/attachme-agent-1.1.0.jar:blah",
+                        "-agentlib:some.stuff-to-copy"));
     }
 }
