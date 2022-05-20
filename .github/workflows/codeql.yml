@@ -34,6 +34,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
+        tools: latest
         
     - name: Set up JDK 11
       uses: actions/setup-java@v3
@@ -48,7 +49,7 @@ jobs:
     - name: Build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ./gradlew check
+      run: ./gradlew
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
