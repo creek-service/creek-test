@@ -18,6 +18,11 @@ plugins {
     `java-library`
 }
 
+val classGraphVersion : String by extra
+
 dependencies {
+    implementation("io.github.classgraph:classgraph:$classGraphVersion")
+
     testImplementation(project(":util"))
+    testImplementation("org.creekservice:creek-base-annotation:0.2.0-SNAPSHOT")
 }

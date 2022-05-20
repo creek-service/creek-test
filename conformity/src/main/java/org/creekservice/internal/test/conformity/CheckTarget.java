@@ -19,15 +19,19 @@ package org.creekservice.internal.test.conformity;
 import static java.util.Objects.requireNonNull;
 
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicReference;
+import org.creekservice.internal.test.conformity.filter.ClassFinder;
 
-public final class CheckTarget {
+public final class CheckTarget implements AutoCloseable {
 
     private final URI location;
     private final Module moduleUnderTest;
+    private final AtomicReference<ClassFinder> types;
 
-    public CheckTarget(final URI location, final Module moduleUnderTest) {
-        this.location = requireNonNull(location, "location");
-        this.moduleUnderTest = requireNonNull(moduleUnderTest, "moduleUnderTest");
+    public CheckTarget(final Class<?> typeFromModuleToTest) {
+        this.location = location(requireNonNull(typeFromModuleToTest, "typeFromModuleToTest"));
+        this.moduleUnderTest = typeFromModuleToTest.getModule();
+        this.types = new AtomicReference<>();
     }
 
     public URI moduleLocation() {
@@ -36,5 +40,29 @@ public final class CheckTarget {
 
     public Module moduleUnderTest() {
         return moduleUnderTest;
+    }
+
+    public ModuleTypes types() {
+        return types.updateAndGet(
+                existing -> existing == null ? new ClassFinder(moduleUnderTest) : existing);
+    }
+
+    @Override
+    public void close() {
+        types.updateAndGet(
+                existing -> {
+                    if (existing != null) {
+                        existing.close();
+                    }
+                    return null;
+                });
+    }
+
+    private static URI location(final Class<?> typeFromModuleToTest) {
+        try {
+            return typeFromModuleToTest.getProtectionDomain().getCodeSource().getLocation().toURI();
+        } catch (final Exception e) {
+            return URI.create("unknown://");
+        }
     }
 }

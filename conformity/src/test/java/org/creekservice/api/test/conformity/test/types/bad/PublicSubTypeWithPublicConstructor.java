@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package org.creekservice.internal.test.conformity;
+package org.creekservice.api.test.conformity.test.types.bad;
 
-public final class Constants {
-    private Constants() {}
-
-    public static final String CREEK_PACKAGE = "org.creekservice";
-    public static final String API_PACKAGE = CREEK_PACKAGE + ".api";
+/**
+ * A subtype type with an explicit public constructor.
+ *
+ * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck} should
+ * fail for this module.
+ */
+public class PublicSubTypeWithPublicConstructor extends PublicTypeWithPublicConstructor {
+    public PublicSubTypeWithPublicConstructor(final int i) {
+        super(i);
+    }
 }

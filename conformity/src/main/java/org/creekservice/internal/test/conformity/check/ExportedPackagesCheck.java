@@ -19,7 +19,6 @@ package org.creekservice.internal.test.conformity.check;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.creekservice.internal.test.conformity.Constants.API_PACKAGE;
-import static org.creekservice.internal.test.conformity.Constants.OLD_API_PACKAGE;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -59,10 +58,7 @@ public final class ExportedPackagesCheck implements CheckRunner {
     private void checkApiPackagesExported(final Module moduleUnderTest) {
         final String notExported =
                 sortedFilteredPackages(moduleUnderTest)
-                        .filter(
-                                pkg ->
-                                        pkg.startsWith(API_PACKAGE)
-                                                || pkg.startsWith(OLD_API_PACKAGE))
+                        .filter(pkg -> pkg.startsWith(API_PACKAGE))
                         .filter(pkg -> !moduleUnderTest.isExported(pkg))
                         .collect(joining(NL_INDENT));
 
@@ -74,10 +70,7 @@ public final class ExportedPackagesCheck implements CheckRunner {
     private void checkNonApiPackagesNotExported(final Module moduleUnderTest) {
         final String exported =
                 sortedFilteredPackages(moduleUnderTest)
-                        .filter(
-                                pkg ->
-                                        !(pkg.startsWith(API_PACKAGE)
-                                                || pkg.startsWith(OLD_API_PACKAGE)))
+                        .filter(pkg -> !pkg.startsWith(API_PACKAGE))
                         .filter(moduleUnderTest::isExported)
                         .collect(joining(NL_INDENT));
 

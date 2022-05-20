@@ -16,9 +16,16 @@
 
 package org.creekservice.internal.test.conformity;
 
-public final class Constants {
-    private Constants() {}
 
-    public static final String CREEK_PACKAGE = "org.creekservice";
-    public static final String API_PACKAGE = CREEK_PACKAGE + ".api";
+import io.github.classgraph.ClassInfo;
+import java.util.stream.Stream;
+
+/** Information about the types in a module */
+public interface ModuleTypes {
+
+    /** @return all classes in the module */
+    Stream<ClassInfo> classes();
+
+    /** @return all api classes in the module. */
+    Stream<ClassInfo> apiClasses();
 }

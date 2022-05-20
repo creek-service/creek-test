@@ -18,6 +18,7 @@ package org.creekservice;
 
 
 import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,10 @@ class ModuleTest {
                 .withCustom(
                         "Package contains test classes that intentionally break checks",
                         CheckExportedPackages.builder()
+                                .excludedPackages(NotExported.class.getPackageName()))
+                .withCustom(
+                        "Package contains test classes that intentionally break checks",
+                        CheckConstructorsPrivate.builder()
                                 .excludedPackages(NotExported.class.getPackageName()))
                 .check();
     }

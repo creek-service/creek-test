@@ -18,29 +18,37 @@ package org.creekservice.internal.test.conformity;
 
 import static java.util.Objects.requireNonNull;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.check.CheckModule;
 import org.creekservice.api.test.conformity.check.ConformityCheck;
 import org.creekservice.internal.test.conformity.check.CheckRunner;
+import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck;
 import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
 import org.creekservice.internal.test.conformity.check.ModuleCheck;
 
 public final class DefaultConformityTester implements ConformityTester {
 
     private static final List<ConformityCheck> DEFAULT_OPTIONS =
-            List.of(CheckModule.builder(), CheckExportedPackages.builder());
+            List.of(
+                    CheckModule.builder(),
+                    CheckExportedPackages.builder(),
+                    CheckConstructorsPrivate.builder());
 
     private static final Map<Class<? extends ConformityCheck>, CheckRunnerFactory<?>> RUNNERS =
             Map.of(
                     ModuleCheck.Options.class,
                     options -> new ModuleCheck((ModuleCheck.Options) options),
                     ExportedPackagesCheck.Options.class,
-                    options -> new ExportedPackagesCheck((ExportedPackagesCheck.Options) options));
+                    options -> new ExportedPackagesCheck((ExportedPackagesCheck.Options) options),
+                    ConstructorsPrivateCheck.Options.class,
+                    options ->
+                            new ConstructorsPrivateCheck(
+                                    (ConstructorsPrivateCheck.Options) options));
 
     private final Class<?> typeFromModuleToTest;
     private final Map<Class<? extends ConformityCheck>, ConformityCheck> options = new HashMap<>();
@@ -73,10 +81,9 @@ public final class DefaultConformityTester implements ConformityTester {
     }
 
     public void check() {
-        final CheckTarget ctx =
-                new CheckTarget(location(typeFromModuleToTest), typeFromModuleToTest.getModule());
-
-        options.values().stream().map(this::runner).forEach(check -> invoke(check, ctx));
+        try (CheckTarget ctx = new CheckTarget(typeFromModuleToTest)) {
+            options.values().stream().map(this::runner).forEach(check -> invoke(check, ctx));
+        }
     }
 
     private <T extends ConformityCheck> CheckRunner runner(final T options) {
@@ -93,19 +100,12 @@ public final class DefaultConformityTester implements ConformityTester {
         return factory;
     }
 
-    private void invoke(final CheckRunner check, final CheckTarget ctx) {
+    private <T extends ConformityCheck> void invoke(
+            final CheckRunner check, final CheckTarget ctx) {
         try {
             check.check(ctx);
         } catch (final Exception e) {
             throw new ConformityCheckFailedError(check, e);
-        }
-    }
-
-    private static URI location(final Class<?> typeFromModuleToTest) {
-        try {
-            return typeFromModuleToTest.getProtectionDomain().getCodeSource().getLocation().toURI();
-        } catch (final Exception e) {
-            return URI.create("unknown://");
         }
     }
 
