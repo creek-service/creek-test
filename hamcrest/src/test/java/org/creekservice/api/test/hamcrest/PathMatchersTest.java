@@ -53,7 +53,7 @@ class PathMatchersTest {
     }
 
     @Nested
-    class RegularFile {
+    class RegularFileTest {
         @Test
         void shouldPassIfFile() {
             assertThat(tempDir.resolve("file"), is(regularFile()));
@@ -71,7 +71,7 @@ class PathMatchersTest {
     }
 
     @Nested
-    class Directory {
+    class DirectoryTest {
         @Test
         void shouldPassIfDirectory() {
             assertThat(tempDir.resolve("dir"), is(directory()));
@@ -89,7 +89,7 @@ class PathMatchersTest {
     }
 
     @Nested
-    class DoesNotExist {
+    class DoesNotExistTest {
         @Test
         void shouldPassIfDoesNotExist() {
             assertThat(tempDir.resolve("does.not.exist"), doesNotExist());
@@ -103,7 +103,7 @@ class PathMatchersTest {
     }
 
     @Nested
-    class DirectoryChildren {
+    class DirectoryChildrenTest {
 
         @Test
         void shouldPassIfChildNamesMatch() {
@@ -137,7 +137,7 @@ class PathMatchersTest {
     }
 
     @Nested
-    class FileContains {
+    class FileContainsTest {
 
         private Path file;
 
@@ -170,7 +170,7 @@ class PathMatchersTest {
 
     @SuppressFBWarnings(value = "SIC_INNER_SHOULD_BE_STATIC", justification = "red herring")
     @Nested
-    class Description {
+    class DescriptionTest {
         private final org.hamcrest.Description description = new StringDescription();
 
         @Test

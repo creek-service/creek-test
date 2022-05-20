@@ -19,8 +19,8 @@ package org.creekservice.api.test.conformity.test.types.bad;
 /**
  * An API type in a package that is not exported from {@code module-info.java}.
  *
- * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ExportedPackagesCheck} should fail for
- * this module.
+ * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ExportedPackagesCheck} should
+ * fail for this module.
  *
  * <p>It's parent package is empty. so ot should not be reported as needing to be exported.
  */

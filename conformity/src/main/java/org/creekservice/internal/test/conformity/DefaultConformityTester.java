@@ -30,6 +30,13 @@ import org.creekservice.internal.test.conformity.check.CheckRunner;
 import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck;
 import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
 import org.creekservice.internal.test.conformity.check.ModuleCheck;
+import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.check.CheckExportedPackages;
+import org.creekservice.api.test.conformity.check.CheckModule;
+import org.creekservice.api.test.conformity.check.ConformityCheck;
+import org.creekservice.internal.test.conformity.check.CheckRunner;
+import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
+import org.creekservice.internal.test.conformity.check.ModuleCheck;
 
 public final class DefaultConformityTester implements ConformityTester {
 

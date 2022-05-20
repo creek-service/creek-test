@@ -21,6 +21,9 @@ import org.creekservice.api.test.conformity.ConformityTester;
 import org.creekservice.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
+import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.check.CheckExportedPackages;
+import org.creekservice.api.test.conformity.test.types.bad.NotExported;
 import org.junit.jupiter.api.Test;
 
 class ModuleTest {

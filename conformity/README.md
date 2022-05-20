@@ -46,4 +46,4 @@ class ModuleTest {
 ```
 
 [1]: src/main/java/org/creekservice/api/test/conformity/ConformityTester.java
-[2]: src/main/java/org/creekservice/api/test/conformity/ConformityCheck.java
+[2]: src/main/java/org/creekservice/api/test/conformity/check/ConformityCheck.java
