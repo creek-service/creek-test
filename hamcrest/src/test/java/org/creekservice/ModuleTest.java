@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creekservice;
 
-val creekVersion : String by extra
-val classGraphVersion : String by extra
 
-dependencies {
-    api("org.creekservice:creek-base-annotation:$creekVersion")
+import org.creekservice.api.test.conformity.ConformityTester;
+import org.junit.jupiter.api.Test;
 
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
+class ModuleTest {
 
-    testImplementation(project(":util"))
+    @Test
+    void shouldConform() {
+        ConformityTester.test(ModuleTest.class);
+    }
 }

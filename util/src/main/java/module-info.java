@@ -1,5 +1,5 @@
 module creek.test.util {
     requires transitive creek.base.annotation;
 
-    exports org.creek.api.test.util;
+    exports org.creekservice.api.test.util;
 }

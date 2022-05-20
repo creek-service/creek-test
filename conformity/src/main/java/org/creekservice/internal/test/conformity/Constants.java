@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creekservice.internal.test.conformity;
 
-val creekVersion : String by extra
-val classGraphVersion : String by extra
+public final class Constants {
+    private Constants() {}
 
-dependencies {
-    api("org.creekservice:creek-base-annotation:$creekVersion")
-
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
-
-    testImplementation(project(":util"))
+    public static final String CREEK_PACKAGE = "org.creekservice";
+    public static final String API_PACKAGE = CREEK_PACKAGE + ".api";
 }

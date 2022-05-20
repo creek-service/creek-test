@@ -5,7 +5,7 @@ plugins {
 val creekVersion : String by extra
 
 dependencies {
-    api("org.creek:creek-base-annotation:$creekVersion")
+    api("org.creekservice:creek-base-annotation:$creekVersion")
 
     testImplementation(project(":hamcrest"))
     testImplementation(project(":conformity"))

@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creekservice.api.test.conformity.check;
 
-val creekVersion : String by extra
-val classGraphVersion : String by extra
 
-dependencies {
-    api("org.creekservice:creek-base-annotation:$creekVersion")
+import org.creekservice.internal.test.conformity.check.ModuleCheck;
 
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
+/**
+ * Module should have a {@code module-info.java} file, i.e. the module the test is running in should
+ * be named and not an automatic module.
+ */
+public interface CheckModule extends ConformityCheck {
 
-    testImplementation(project(":util"))
+    /** @return a builder used to customise the check */
+    static CheckModule builder() {
+        return new ModuleCheck.Options();
+    }
 }

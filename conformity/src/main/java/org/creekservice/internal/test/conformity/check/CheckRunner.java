@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creekservice.internal.test.conformity.check;
 
-val creekVersion : String by extra
-val classGraphVersion : String by extra
 
-dependencies {
-    api("org.creekservice:creek-base-annotation:$creekVersion")
+import org.creekservice.internal.test.conformity.CheckTarget;
 
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
+/** Runner of a single check */
+public interface CheckRunner {
 
-    testImplementation(project(":util"))
+    /** @return the name of the check, used in error messages. */
+    String name();
+
+    /**
+     * Run the check
+     *
+     * @param target check target.
+     */
+    void check(CheckTarget target);
 }
