@@ -50,7 +50,7 @@ subprojects {
     project.version = project.parent?.version!!
 
     extra.apply {
-        // Avoid oCreek dependencies as it causes circular dependencies that make releasing tricky...
+        // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
         set("spotBugsVersion", "4.7.0")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
         set("classGraphVersion", "4.8.143")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
