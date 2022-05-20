@@ -18,14 +18,6 @@ package org.creekservice.api.test.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.creekservice.api.test.hamcrest.PathMatchers.directory;
-import static org.creekservice.api.test.util.TestPaths.ensureDirectories;
-import static org.creekservice.api.test.util.TestPaths.listDirectory;
-import static org.creekservice.api.test.util.TestPaths.moduleRoot;
-import static org.creekservice.api.test.util.TestPaths.projectRoot;
-import static org.creekservice.api.test.util.TestPaths.readBytes;
-import static org.creekservice.api.test.util.TestPaths.readString;
-import static org.creekservice.api.test.util.TestPaths.write;
-import static org.creekservice.api.test.hamcrest.PathMatchers.directory;
 import static org.creekservice.api.test.util.TestPaths.copy;
 import static org.creekservice.api.test.util.TestPaths.ensureDirectories;
 import static org.creekservice.api.test.util.TestPaths.listDirectory;

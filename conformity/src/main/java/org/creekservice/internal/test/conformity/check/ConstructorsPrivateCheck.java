@@ -110,4 +110,3 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
         }
     }
 }
-

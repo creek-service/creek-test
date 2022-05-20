@@ -20,7 +20,5 @@ public final class Constants {
     private Constants() {}
 
     public static final String CREEK_PACKAGE = "org.creekservice";
-    public static final String OLD_CREEK_PACKAGE = "org.creekservice";
     public static final String API_PACKAGE = CREEK_PACKAGE + ".api";
-    public static final String OLD_API_PACKAGE = OLD_CREEK_PACKAGE + ".api";
 }

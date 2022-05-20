@@ -19,8 +19,8 @@ package org.creekservice.api.test.conformity.test.types.bad;
 /**
  * An API type with a public constructor.
  *
- * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck} should fail
- * for this module.
+ * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck} should
+ * fail for this module.
  */
 @SuppressWarnings("unused") // Accessed by reflection / ClassGraph.
 public class PublicTypeWithPublicConstructor {

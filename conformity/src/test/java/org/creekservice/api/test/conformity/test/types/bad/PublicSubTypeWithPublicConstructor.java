@@ -19,8 +19,8 @@ package org.creekservice.api.test.conformity.test.types.bad;
 /**
  * A subtype type with an explicit public constructor.
  *
- * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck} should fail
- * for this module.
+ * <p>Hence, {@link org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck} should
+ * fail for this module.
  */
 public class PublicSubTypeWithPublicConstructor extends PublicTypeWithPublicConstructor {
     public PublicSubTypeWithPublicConstructor(final int i) {

@@ -68,8 +68,9 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldPassIfAllApiPackagesAreExportedAndNonApiPackagesAreNot() {
         // Given:
-        givenPackages("org.creekservice.api.a", "org.creek.api.b", "org.creek.internal.a");
-        givenExportedPackages("org.creekservice.api.a", "org.creek.api.b");
+        givenPackages(
+                "org.creekservice.api.a", "org.creekservice.api.b", "org.creekservice.internal.a");
+        givenExportedPackages("org.creekservice.api.a", "org.creekservice.api.b");
 
         // When:
         check.check(ctx);
@@ -80,8 +81,8 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldThrowOnNonExportedApiPackages() {
         // Given:
-        givenPackages("org.creek.api", "org.creek.api.a", "org.creekservice.api.b");
-        givenExportedPackages("org.creek.api.a");
+        givenPackages("org.creekservice.api", "org.creekservice.api.a", "org.creekservice.api.b");
+        givenExportedPackages("org.creekservice.api.a");
 
         // When:
         final Exception e = assertThrows(RuntimeException.class, () -> check.check(ctx));
@@ -92,7 +93,7 @@ class ExportedPackagesCheckTest {
                 is(
                         "API packages are not exposed in the module's module-info.java file. module=Bob, unexposed_packages=["
                                 + System.lineSeparator()
-                                + "\torg.creek.api"
+                                + "\torg.creekservice.api"
                                 + System.lineSeparator()
                                 + "\torg.creekservice.api.b"
                                 + System.lineSeparator()
@@ -102,8 +103,11 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldThrowOnNonApiPackageExported() {
         // Given:
-        givenPackages("org.creek.internal", "org.creekservice.internal.a", "org.creek.internal.b");
-        givenExportedPackages("org.creekservice.internal.a", "org.creek.internal.b");
+        givenPackages(
+                "org.creekservice.internal",
+                "org.creekservice.internal.a",
+                "org.creekservice.internal.b");
+        givenExportedPackages("org.creekservice.internal.a", "org.creekservice.internal.b");
 
         // When:
         final Exception e = assertThrows(RuntimeException.class, () -> check.check(ctx));
@@ -115,9 +119,9 @@ class ExportedPackagesCheckTest {
                         "Non-API packages are exposed (without a 'to' clause) "
                                 + "in the module's module-info.java file. module=Bob, exposed_packages=["
                                 + System.lineSeparator()
-                                + "\torg.creek.internal.b"
-                                + System.lineSeparator()
                                 + "\torg.creekservice.internal.a"
+                                + System.lineSeparator()
+                                + "\torg.creekservice.internal.b"
                                 + System.lineSeparator()
                                 + "]"));
     }
@@ -139,7 +143,7 @@ class ExportedPackagesCheckTest {
     void shouldIgnoreAutomaticModules() {
         // Given:
         when(descriptor.isAutomatic()).thenReturn(true);
-        givenPackages("org.creek.api.a");
+        givenPackages("org.creekservice.api.a");
 
         // When:
         check.check(ctx);
@@ -150,12 +154,13 @@ class ExportedPackagesCheckTest {
     @Test
     void shouldIgnoreExcludedPackages() {
         // Given:
-        givenPackages("org.creekservice.api.a", "org.creek.api.b.c");
+        givenPackages("org.creekservice.api.a", "org.creekservice.api.b.c");
 
         check =
                 new ExportedPackagesCheck(
                         new ExportedPackagesCheck.Options()
-                                .excludedPackages("org.creekservice.api.a", "org.creek.api.b.*"));
+                                .excludedPackages(
+                                        "org.creekservice.api.a", "org.creekservice.api.b.*"));
 
         // When:
         check.check(ctx);
@@ -171,7 +176,7 @@ class ExportedPackagesCheckTest {
         // When:
         final Exception e = assertThrows(RuntimeException.class, () -> check.check(ctx));
 
-        // Then: `org.creek.api.test.conformity.test.types` is not in list as it contains no
+        // Then: `org.creekservice.api.test.conformity.test.types` is not in list as it contains no
         // classes:
         assertThat(
                 e.getMessage(),
