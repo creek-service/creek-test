@@ -16,7 +16,6 @@
 
 package org.creekservice.internal.test.conformity.filter;
 
-import static java.util.Objects.requireNonNull;
 import static org.creekservice.internal.test.conformity.Constants.API_PACKAGE;
 import static org.creekservice.internal.test.conformity.Constants.CREEK_PACKAGE;
 
@@ -28,25 +27,15 @@ import org.creekservice.internal.test.conformity.ModuleTypes;
 
 public final class ClassFinder implements ModuleTypes, AutoCloseable {
 
-    private final Module moduleUnderTest;
     private final ScanResult scanResult;
 
     public ClassFinder(final Module moduleUnderTest) {
-        this.moduleUnderTest = requireNonNull(moduleUnderTest, "moduleUnderTest");
-        this.scanResult =
-                new ClassGraph()
-                        .enableClassInfo()
-                        .enableMethodInfo()
-                        .ignoreClassVisibility()
-                        .acceptPackages(CREEK_PACKAGE)
-                        .scan();
+        this.scanResult = scan(moduleUnderTest);
     }
 
     @Override
     public Stream<ClassInfo> classes() {
-        return scanResult.getAllClassesAsMap().values().stream()
-                .filter(ci -> ci.getModuleInfo() != null)
-                .filter(ci -> moduleUnderTest.getName().equals(ci.getModuleInfo().getName()));
+        return scanResult.getAllClasses().stream();
     }
 
     @Override
@@ -57,5 +46,25 @@ public final class ClassFinder implements ModuleTypes, AutoCloseable {
     @Override
     public void close() {
         scanResult.close();
+    }
+
+    private ScanResult scan(final Module moduleUnderTest) {
+        final String[] packages =
+                moduleUnderTest.getPackages().stream()
+                        .filter(pkg -> pkg.startsWith(CREEK_PACKAGE))
+                        .toArray(String[]::new);
+
+        final ClassGraph classGraph =
+                new ClassGraph()
+                        .enableClassInfo()
+                        .enableMethodInfo()
+                        .ignoreClassVisibility()
+                        .acceptPackages(packages);
+
+        if (moduleUnderTest.isNamed()) {
+            classGraph.acceptModules(moduleUnderTest.getName());
+        }
+
+        return classGraph.scan();
     }
 }
