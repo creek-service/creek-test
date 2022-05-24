@@ -44,10 +44,10 @@ allprojects {
 
 subprojects {
     apply(plugin = "maven-publish")
+    apply(plugin = "jacoco")
 
     if (!name.startsWith("test-")) {
         apply(plugin = "org.javamodularity.moduleplugin")
-        apply(plugin = "jacoco")
     }
 
     project.version = project.parent?.version!!
