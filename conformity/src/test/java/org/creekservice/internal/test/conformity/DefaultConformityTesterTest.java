@@ -28,6 +28,7 @@ import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.check.CheckModule;
 import org.creekservice.api.test.conformity.check.ConformityCheck;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
+import org.creekservice.api.test.conformity.test.types.bad.PublicSubTypeWithPublicConstructor;
 import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithImplicitPublicConstructor;
 import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithPublicConstructor;
 import org.junit.jupiter.api.Test;
@@ -89,6 +90,7 @@ class DefaultConformityTesterTest {
                         .withExcludedClasses(
                                 "testing",
                                 NotExported.class,
+                                PublicSubTypeWithPublicConstructor.class,
                                 PublicTypeWithImplicitPublicConstructor.class,
                                 PublicTypeWithPublicConstructor.class);
 
