@@ -22,7 +22,6 @@ import static org.creekservice.internal.test.conformity.Constants.API_PACKAGE;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.internal.test.conformity.CheckTarget;
 import org.creekservice.internal.test.conformity.filter.PackageFilter;
@@ -57,9 +56,11 @@ public final class ExportedPackagesCheck implements CheckRunner {
 
     private void checkApiPackagesExported(final Module moduleUnderTest) {
         final String notExported =
-                sortedFilteredPackages(moduleUnderTest)
+                moduleUnderTest.getPackages().stream()
+                        .filter(packageFilter)
                         .filter(pkg -> pkg.startsWith(API_PACKAGE))
                         .filter(pkg -> !moduleUnderTest.isExported(pkg))
+                        .sorted()
                         .collect(joining(NL_INDENT));
 
         if (!notExported.isEmpty()) {
@@ -69,9 +70,11 @@ public final class ExportedPackagesCheck implements CheckRunner {
 
     private void checkNonApiPackagesNotExported(final Module moduleUnderTest) {
         final String exported =
-                sortedFilteredPackages(moduleUnderTest)
+                moduleUnderTest.getPackages().stream()
+                        .filter(packageFilter)
                         .filter(pkg -> !pkg.startsWith(API_PACKAGE))
                         .filter(moduleUnderTest::isExported)
+                        .sorted()
                         .collect(joining(NL_INDENT));
 
         if (!exported.isEmpty()) {
@@ -79,16 +82,17 @@ public final class ExportedPackagesCheck implements CheckRunner {
         }
     }
 
-    private Stream<String> sortedFilteredPackages(final Module moduleUnderTest) {
-        return moduleUnderTest.getPackages().stream().filter(packageFilter).sorted();
-    }
-
     public static final class Options implements CheckExportedPackages {
 
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
 
         @Override
-        public Options excludedPackages(final String... packageNames) {
+        public Options withExcludedPackages(
+                final String justification, final String... packageNames) {
+            if (justification.isBlank()) {
+                throw new IllegalArgumentException("justification can not be blank.");
+            }
+
             Arrays.stream(packageNames).forEach(packageFilter::addExclude);
             return this;
         }

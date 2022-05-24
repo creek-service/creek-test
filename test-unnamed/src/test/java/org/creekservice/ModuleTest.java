@@ -53,9 +53,10 @@ class ModuleTest {
         ConformityTester.builder(ModuleTest.class)
                 .withDisabled("not a module", CheckModule.builder())
                 .withCustom(
-                        "deliberately bad type",
                         CheckConstructorsPrivate.builder()
-                                .excludedClasses(ApiTypeWithPublicConstructor.class))
+                                .withExcludedClasses(
+                                        "deliberately bad type",
+                                        ApiTypeWithPublicConstructor.class))
                 .check();
     }
 }

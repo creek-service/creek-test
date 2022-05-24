@@ -17,6 +17,7 @@
 package org.creekservice.api.test.conformity.check;
 
 
+import org.creekservice.api.test.conformity.ExcludesPackages;
 import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
 
 /**
@@ -25,19 +26,11 @@ import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
  *
  * <p>Note, non-API packages can be exported <i>to</i> specific modules, e.g. other Creek modules.
  */
-public interface CheckExportedPackages extends ConformityCheck {
+public interface CheckExportedPackages
+        extends ConformityCheck, ExcludesPackages<CheckExportedPackages> {
 
     /** @return a builder used to customise the check */
     static CheckExportedPackages builder() {
         return new ExportedPackagesCheck.Options();
     }
-
-    /**
-     * Exclude one or more packages from the check
-     *
-     * @param packageNames packages to exclude. Any name ending in `.*` will ignore all sub-packages
-     *     too.
-     * @return self.
-     */
-    CheckExportedPackages excludedPackages(String... packageNames);
 }

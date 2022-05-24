@@ -17,6 +17,8 @@
 package org.creekservice.api.test.conformity.check;
 
 
+import org.creekservice.api.test.conformity.ExcludesClasses;
+import org.creekservice.api.test.conformity.ExcludesPackages;
 import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck;
 
 /**
@@ -25,37 +27,13 @@ import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck;
  * <p>The use of factory methods makes it easier in the future to change the type of object
  * returned, allowing for more flexibility when refactoring.
  */
-public interface CheckConstructorsPrivate extends ConformityCheck {
+public interface CheckConstructorsPrivate
+        extends ConformityCheck,
+                ExcludesPackages<CheckConstructorsPrivate>,
+                ExcludesClasses<CheckConstructorsPrivate> {
 
     /** @return a builder used to customise the check */
     static CheckConstructorsPrivate builder() {
         return new ConstructorsPrivateCheck.Options();
     }
-
-    /**
-     * Exclude one or more classes from the check
-     *
-     * @param classes classes to exclude. Subtypes will not be excluded.
-     * @return self.
-     */
-    CheckConstructorsPrivate excludedClasses(Class<?>... classes);
-
-    /**
-     * Exclude one or more classes from the check
-     *
-     * @param excludeSubtypes {@code} true if subtypes of the supplied {@code classes} should also
-     *     be excluded
-     * @param classes classes to exclude.
-     * @return self.
-     */
-    CheckConstructorsPrivate excludedClasses(boolean excludeSubtypes, Class<?>... classes);
-
-    /**
-     * Exclude classes in one or more packages from the check
-     *
-     * @param packageNames packages to exclude. Any name ending in `.*` will also ignore all
-     *     sub-packages.
-     * @return self.
-     */
-    CheckConstructorsPrivate excludedPackages(String... packageNames);
 }

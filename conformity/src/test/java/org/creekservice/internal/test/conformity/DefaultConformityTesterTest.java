@@ -28,6 +28,9 @@ import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.check.CheckModule;
 import org.creekservice.api.test.conformity.check.ConformityCheck;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
+import org.creekservice.api.test.conformity.test.types.bad.PublicSubTypeWithPublicConstructor;
+import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithImplicitPublicConstructor;
+import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithPublicConstructor;
 import org.junit.jupiter.api.Test;
 
 class DefaultConformityTesterTest {
@@ -35,16 +38,9 @@ class DefaultConformityTesterTest {
     @Test
     void shouldPassIfEverythingIsOk() {
         ConformityTester.builder(ConformityTester.class)
-                .withCustom(
+                .withExcludedPackages(
                         "deliberately bad test classes",
-                        CheckExportedPackages.builder()
-                                .excludedPackages(
-                                        "org.creekservice.api.test.conformity.test.types.bad"))
-                .withCustom(
-                        "deliberately bad test classes",
-                        CheckConstructorsPrivate.builder()
-                                .excludedPackages(
-                                        "org.creekservice.api.test.conformity.test.types.bad"))
+                        "org.creekservice.api.test.conformity.test.types.bad")
                 .check();
     }
 
@@ -88,13 +84,15 @@ class DefaultConformityTesterTest {
         final ConformityTester tester =
                 ConformityTester.builder(ConformityTester.class)
                         .withCustom(
-                                "to test customising",
                                 CheckExportedPackages.builder()
-                                        .excludedPackages(NotExported.class.getPackageName()))
-                        .withCustom(
-                                "todo",
-                                CheckConstructorsPrivate.builder()
-                                        .excludedPackages(NotExported.class.getPackageName()));
+                                        .withExcludedPackages(
+                                                "testing", NotExported.class.getPackageName()))
+                        .withExcludedClasses(
+                                "testing",
+                                NotExported.class,
+                                PublicSubTypeWithPublicConstructor.class,
+                                PublicTypeWithImplicitPublicConstructor.class,
+                                PublicTypeWithPublicConstructor.class);
 
         // When:
         tester.check();
@@ -142,25 +140,10 @@ class DefaultConformityTesterTest {
 
         // When:
         final Exception e =
-                assertThrows(IllegalStateException.class, () -> tester.withCustom("cos", check));
+                assertThrows(IllegalStateException.class, () -> tester.withCustom(check));
 
         // Then:
         assertThat(e.getMessage(), startsWith("Unsupported check"));
-    }
-
-    @Test
-    void shouldThrownWhenCustomisingIfNoJustification() {
-        // Given:
-        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
-
-        // When:
-        final Exception e =
-                assertThrows(
-                        IllegalArgumentException.class,
-                        () -> tester.withCustom(" ", CheckModule.builder()));
-
-        // Then:
-        assertThat(e.getMessage(), startsWith("justification can not be blank"));
     }
 
     @Test

@@ -21,7 +21,11 @@ import static java.util.Objects.requireNonNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.conformity.ExcludesClasses;
+import org.creekservice.api.test.conformity.ExcludesPackages;
 import org.creekservice.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.check.CheckModule;
@@ -33,11 +37,11 @@ import org.creekservice.internal.test.conformity.check.ModuleCheck;
 
 public final class DefaultConformityTester implements ConformityTester {
 
-    private static final List<ConformityCheck> DEFAULT_OPTIONS =
+    private static final List<Supplier<ConformityCheck>> DEFAULT_OPTIONS =
             List.of(
-                    CheckModule.builder(),
-                    CheckExportedPackages.builder(),
-                    CheckConstructorsPrivate.builder());
+                    CheckModule::builder,
+                    CheckExportedPackages::builder,
+                    CheckConstructorsPrivate::builder);
 
     private static final Map<Class<? extends ConformityCheck>, CheckRunnerFactory<?>> RUNNERS =
             Map.of(
@@ -56,15 +60,14 @@ public final class DefaultConformityTester implements ConformityTester {
     public DefaultConformityTester(final Class<?> typeFromModuleToTest) {
         this.typeFromModuleToTest = requireNonNull(typeFromModuleToTest, "typeFromModuleToTest");
 
-        DEFAULT_OPTIONS.forEach(check -> options.put(check.getClass(), check));
+        DEFAULT_OPTIONS.forEach(
+                supplier -> {
+                    final ConformityCheck check = supplier.get();
+                    options.put(check.getClass(), check);
+                });
     }
 
-    public DefaultConformityTester withCustom(
-            final String justification, final ConformityCheck check) {
-        if (justification.isBlank()) {
-            throw new IllegalArgumentException("justification can not be blank.");
-        }
-
+    public DefaultConformityTester withCustom(final ConformityCheck check) {
         runnerFactory(check);
         this.options.put(check.getClass(), check);
         return this;
@@ -77,6 +80,34 @@ public final class DefaultConformityTester implements ConformityTester {
         }
 
         options.remove(check.getClass());
+        return this;
+    }
+
+    @Override
+    public ConformityTester withExcludedPackages(
+            final String justification, final String... packageNames) {
+        optionsSupporting(ExcludesPackages.class)
+                .forEach(check -> check.withExcludedPackages(justification, packageNames));
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ConformityTester withExcludedClasses(
+            final String justification, final Class<?>... classes) {
+        optionsSupporting(ExcludesClasses.class)
+                .forEach(check -> check.withExcludedClasses(justification, classes));
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ConformityTester withExcludedClasses(
+            final String justification, final boolean excludeSubtypes, final Class<?>... classes) {
+        optionsSupporting(ExcludesClasses.class)
+                .forEach(
+                        check ->
+                                check.withExcludedClasses(justification, excludeSubtypes, classes));
         return this;
     }
 
@@ -107,6 +138,12 @@ public final class DefaultConformityTester implements ConformityTester {
         } catch (final Exception e) {
             throw new ConformityCheckFailedError(check, e);
         }
+    }
+
+    private <T> Stream<T> optionsSupporting(final Class<T> type) {
+        return options.values().stream()
+                .filter(check -> type.isAssignableFrom(check.getClass()))
+                .map(type::cast);
     }
 
     @FunctionalInterface

@@ -25,7 +25,8 @@ import org.creekservice.internal.test.conformity.DefaultConformityTester;
  *
  * <p>See subtypes of {@link ConformityCheck} for details of checks.
  */
-public interface ConformityTester {
+public interface ConformityTester
+        extends ExcludesPackages<ConformityTester>, ExcludesClasses<ConformityTester> {
 
     /**
      * Execute the standard set of conformity checks against the module containing the supplied
@@ -54,16 +55,15 @@ public interface ConformityTester {
      *
      * <pre>{@code
      * ConformityTester.builder(ModuleTest.class)
-     *                 .withCustom("Customizing because ...",
-     *                             CheckExportedPackages.builder().excludedPackages("some.package")
+     *                 .withCustom(CheckExportedPackages.builder()
+     *                 .excludedPackages("Excluded because ...", "some.package")
      *                 .check();
      * }</pre>
      *
-     * @param justification the reason why its being customized.
      * @param check the customized check
      * @return self
      */
-    ConformityTester withCustom(String justification, ConformityCheck check);
+    ConformityTester withCustom(ConformityCheck check);
 
     /**
      * Disable a check.

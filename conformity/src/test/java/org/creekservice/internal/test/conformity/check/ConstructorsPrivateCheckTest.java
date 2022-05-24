@@ -26,6 +26,7 @@ import org.creekservice.api.test.conformity.test.types.bad.PublicSubTypeWithPubl
 import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithImplicitPublicConstructor;
 import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithPublicConstructor;
 import org.creekservice.internal.test.conformity.CheckTarget;
+import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck.Options;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class ConstructorsPrivateCheckTest {
 
     @BeforeEach
     void setUp() {
-        check = new ConstructorsPrivateCheck(new ConstructorsPrivateCheck.Options());
+        check = new ConstructorsPrivateCheck(new Options());
     }
 
     @Test
@@ -109,8 +110,9 @@ class ConstructorsPrivateCheckTest {
         // Given:
         check =
                 new ConstructorsPrivateCheck(
-                        new ConstructorsPrivateCheck.Options()
-                                .excludedPackages(
+                        new Options()
+                                .withExcludedPackages(
+                                        "testing",
                                         PublicSubTypeWithPublicConstructor.class.getPackageName()));
 
         // When:
@@ -124,8 +126,9 @@ class ConstructorsPrivateCheckTest {
         // Given:
         check =
                 new ConstructorsPrivateCheck(
-                        new ConstructorsPrivateCheck.Options()
-                                .excludedClasses(
+                        new Options()
+                                .withExcludedClasses(
+                                        "testing",
                                         PublicTypeWithPublicConstructor.class,
                                         PublicTypeWithImplicitPublicConstructor.class,
                                         PublicSubTypeWithPublicConstructor.class));
@@ -141,8 +144,9 @@ class ConstructorsPrivateCheckTest {
         // Given:
         check =
                 new ConstructorsPrivateCheck(
-                        new ConstructorsPrivateCheck.Options()
-                                .excludedClasses(
+                        new Options()
+                                .withExcludedClasses(
+                                        "testing",
                                         true,
                                         PublicTypeWithPublicConstructor.class,
                                         PublicTypeWithImplicitPublicConstructor.class));
@@ -151,5 +155,35 @@ class ConstructorsPrivateCheckTest {
         check.check(target);
 
         // Then: did not fail.
+    }
+
+    @Test
+    void shouldThrownOnEmptyPackageJustification() {
+        // Given:
+        final Options options = new Options();
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> options.withExcludedPackages(" ", "org.creekservice.api.a"));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
+    }
+
+    @Test
+    void shouldThrownOnEmptyClassJustification() {
+        // Given:
+        final Options options = new Options();
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> options.withExcludedClasses(" ", getClass()));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
     }
 }

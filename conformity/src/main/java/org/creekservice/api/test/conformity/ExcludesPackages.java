@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package org.creekservice;
+package org.creekservice.api.test.conformity;
 
-
-import org.creekservice.api.test.conformity.ConformityTester;
-import org.creekservice.api.test.conformity.test.types.bad.NotExported;
-import org.junit.jupiter.api.Test;
-
-class ModuleTest {
-
-    @Test
-    void shouldConform() {
-        ConformityTester.builder(ModuleTest.class)
-                .withExcludedPackages(
-                        "Package contains test classes that intentionally break checks",
-                        NotExported.class.getPackageName())
-                .check();
-    }
+/** Common interface for checks that exclude by package. */
+public interface ExcludesPackages<T> {
+    /**
+     * Exclude classes in one or more packages from the check
+     *
+     * @param justification text explaining why they are excluded.
+     * @param packageNames packages to exclude. Any name ending in `.*` will also ignore all
+     *     sub-packages.
+     * @return self.
+     */
+    T withExcludedPackages(String justification, String... packageNames);
 }
