@@ -25,10 +25,12 @@ public final class CheckTarget implements AutoCloseable {
 
     private final URI location;
     private final Module moduleUnderTest;
+    private final Class<?> typeFromModuleToTest;
     private final AtomicReference<ClassFinder> types;
 
     public CheckTarget(final Class<?> typeFromModuleToTest) {
-        this.location = location(requireNonNull(typeFromModuleToTest, "typeFromModuleToTest"));
+        this.typeFromModuleToTest = requireNonNull(typeFromModuleToTest, "typeFromModuleToTest");
+        this.location = location(typeFromModuleToTest);
         this.moduleUnderTest = typeFromModuleToTest.getModule();
         this.types = new AtomicReference<>();
     }
@@ -43,7 +45,7 @@ public final class CheckTarget implements AutoCloseable {
 
     public ModuleTypes types() {
         return types.updateAndGet(
-                existing -> existing == null ? new ClassFinder(moduleUnderTest) : existing);
+                existing -> existing == null ? new ClassFinder(typeFromModuleToTest) : existing);
     }
 
     @Override

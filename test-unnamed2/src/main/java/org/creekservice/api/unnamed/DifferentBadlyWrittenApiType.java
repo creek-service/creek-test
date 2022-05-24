@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-plugins {
-    `java-library`
-}
+package org.creekservice.api.unnamed;
 
-dependencies {
-    testImplementation(project(":conformity"))
-}
-
-tasks.test {
-    // As not a module, need to compliance check the actual jar:
-    dependsOn("jar")
-    classpath = files(tasks.jar.get().archiveFile, project.sourceSets.test.get().output, configurations.testRuntimeClasspath)
-}
+// Has public constructor...
+public final class DifferentBadlyWrittenApiType {}
