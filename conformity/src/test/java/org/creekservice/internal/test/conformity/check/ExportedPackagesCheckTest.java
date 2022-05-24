@@ -19,6 +19,7 @@ package org.creekservice.internal.test.conformity.check;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.Set;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
 import org.creekservice.internal.test.conformity.CheckTarget;
+import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck.Options;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +48,7 @@ class ExportedPackagesCheckTest {
 
     @BeforeEach
     void setUp() {
-        check = new ExportedPackagesCheck(new ExportedPackagesCheck.Options());
+        check = new ExportedPackagesCheck(new Options());
 
         when(ctx.moduleUnderTest()).thenReturn(moduleUnderTest);
         when(moduleUnderTest.isNamed()).thenReturn(true);
@@ -158,9 +160,11 @@ class ExportedPackagesCheckTest {
 
         check =
                 new ExportedPackagesCheck(
-                        new ExportedPackagesCheck.Options()
-                                .excludedPackages(
-                                        "org.creekservice.api.a", "org.creekservice.api.b.*"));
+                        new Options()
+                                .withExcludedPackages(
+                                        "testing",
+                                        "org.creekservice.api.a",
+                                        "org.creekservice.api.b.*"));
 
         // When:
         check.check(ctx);
@@ -186,6 +190,21 @@ class ExportedPackagesCheckTest {
                                 + "\torg.creekservice.api.test.conformity.test.types.bad"
                                 + System.lineSeparator()
                                 + "]"));
+    }
+
+    @Test
+    void shouldThrownOnEmptyJustification() {
+        // Given:
+        final Options options = new Options();
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> options.withExcludedPackages(" ", "org.creekservice.api.a"));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
     }
 
     private void givenPackages(final String... packageNames) {

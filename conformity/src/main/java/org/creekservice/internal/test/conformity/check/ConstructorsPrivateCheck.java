@@ -80,18 +80,29 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
 
         @Override
-        public Options excludedClasses(final Class<?>... classes) {
-            return excludedClasses(false, classes);
+        public Options withExcludedClasses(final String justification, final Class<?>... classes) {
+            return withExcludedClasses(justification, false, classes);
         }
 
         @Override
-        public Options excludedClasses(final boolean excludeSubtypes, final Class<?>... classes) {
+        public Options withExcludedClasses(
+                final String justification,
+                final boolean excludeSubtypes,
+                final Class<?>... classes) {
+            if (justification.isBlank()) {
+                throw new IllegalArgumentException("justification can not be blank.");
+            }
+
             Arrays.stream(classes).forEach(c -> classFilter.addExclude(c, excludeSubtypes));
             return this;
         }
 
         @Override
-        public Options excludedPackages(final String... packageNames) {
+        public Options withExcludedPackages(
+                final String justification, final String... packageNames) {
+            if (justification.isBlank()) {
+                throw new IllegalArgumentException("justification can not be blank.");
+            }
             Arrays.stream(packageNames).forEach(packageFilter::addExclude);
             return this;
         }
