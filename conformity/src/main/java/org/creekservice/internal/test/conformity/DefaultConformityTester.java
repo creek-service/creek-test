@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.creekservice.api.test.conformity.ConformityTester;
 import org.creekservice.api.test.conformity.ExcludesClasses;
@@ -94,20 +95,26 @@ public final class DefaultConformityTester implements ConformityTester {
     @SuppressWarnings("unchecked")
     @Override
     public ConformityTester withExcludedClasses(
-            final String justification, final Class<?>... classes) {
-        optionsSupporting(ExcludesClasses.class)
-                .forEach(check -> check.withExcludedClasses(justification, classes));
-        return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public ConformityTester withExcludedClasses(
             final String justification, final boolean excludeSubtypes, final Class<?>... classes) {
         optionsSupporting(ExcludesClasses.class)
                 .forEach(
                         check ->
                                 check.withExcludedClasses(justification, excludeSubtypes, classes));
+        return this;
+    }
+
+    @Override
+    public ConformityTester withExcludedClassPattern(
+            final String justification, final Pattern pattern) {
+        optionsSupporting(ExcludesClasses.class)
+                .forEach(check -> check.withExcludedClassPattern(justification, pattern));
+        return this;
+    }
+
+    @Override
+    public ConformityTester withoutExcludedTestClassPattern(final String justification) {
+        optionsSupporting(ExcludesClasses.class)
+                .forEach(check -> check.withoutExcludedTestClassPattern(justification));
         return this;
     }
 

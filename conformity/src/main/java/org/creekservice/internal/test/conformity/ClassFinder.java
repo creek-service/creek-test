@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.creekservice.internal.test.conformity.filter;
+package org.creekservice.internal.test.conformity;
 
 import static org.creekservice.internal.test.conformity.Constants.API_PACKAGE;
 import static org.creekservice.internal.test.conformity.Constants.CREEK_PACKAGE;
@@ -23,7 +23,6 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import java.util.stream.Stream;
-import org.creekservice.internal.test.conformity.ModuleTypes;
 
 public final class ClassFinder implements ModuleTypes, AutoCloseable {
 

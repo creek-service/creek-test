@@ -133,6 +133,19 @@ class TestPathsTest {
     }
 
     @Test
+    void shouldEnsureDirectoriesEvenIfTheyExist() {
+        // Given:
+        final Path dir = tempDir.resolve("some/long/path");
+        ensureDirectories(dir);
+
+        // When:
+        ensureDirectories(dir);
+
+        // Then:
+        assertThat(dir, is(directory()));
+    }
+
+    @Test
     void shouldThrowOnErrorEnsuringDirectories() {
         // Given:
         final Path filePath = tempDir.resolve("file");

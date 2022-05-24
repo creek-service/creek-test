@@ -61,7 +61,7 @@ public final class PackageFilter {
     }
 
     /**
-     * Test if a package <i>not</i> is excluded.
+     * Test if a package is <i>not</i> excluded.
      *
      * @param packageName the package name.
      * @return {@code false} if excluded.

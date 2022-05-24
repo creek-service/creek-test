@@ -47,7 +47,7 @@ public final class ClassFilter {
     }
 
     /**
-     * Test if a type <i>not</i> is excluded.
+     * Test if a type is <i>not</i> excluded.
      *
      * @param type the type.
      * @return {@code false} if excluded.
@@ -114,10 +114,7 @@ public final class ClassFilter {
 
         @Override
         public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
+            if (!(o instanceof ExcludedType)) {
                 return false;
             }
             final ExcludedType that = (ExcludedType) o;
@@ -150,10 +147,7 @@ public final class ClassFilter {
 
         @Override
         public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
+            if (!(o instanceof ExcludedHierarchy)) {
                 return false;
             }
             final ExcludedHierarchy that = (ExcludedHierarchy) o;
