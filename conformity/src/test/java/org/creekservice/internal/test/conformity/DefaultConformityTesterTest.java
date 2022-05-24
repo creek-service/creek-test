@@ -28,6 +28,8 @@ import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.api.test.conformity.check.CheckModule;
 import org.creekservice.api.test.conformity.check.ConformityCheck;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
+import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithImplicitPublicConstructor;
+import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithPublicConstructor;
 import org.junit.jupiter.api.Test;
 
 class DefaultConformityTesterTest {
@@ -83,13 +85,12 @@ class DefaultConformityTesterTest {
                         .withCustom(
                                 CheckExportedPackages.builder()
                                         .withExcludedPackages(
-                                                "to test customising",
-                                                NotExported.class.getPackageName()))
-                        .withCustom(
-                                CheckConstructorsPrivate.builder()
-                                        .withExcludedPackages(
-                                                "to test customising",
-                                                NotExported.class.getPackageName()));
+                                                "testing", NotExported.class.getPackageName()))
+                        .withExcludedClasses(
+                                "testing",
+                                NotExported.class,
+                                PublicTypeWithImplicitPublicConstructor.class,
+                                PublicTypeWithPublicConstructor.class);
 
         // When:
         tester.check();
