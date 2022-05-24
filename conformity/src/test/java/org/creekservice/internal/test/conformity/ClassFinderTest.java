@@ -31,7 +31,7 @@ class ClassFinderTest {
 
     @BeforeAll
     static void setUp() {
-        finder = new ClassFinder(ClassFinderTest.class.getModule());
+        finder = new ClassFinder(ClassFinderTest.class);
     }
 
     @AfterAll

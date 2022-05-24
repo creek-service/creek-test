@@ -20,6 +20,9 @@ plugins {
 
 dependencies {
     testImplementation(project(":conformity"))
+    // Depend on unnamed, which brings in bad types
+    //   but that does not mean this module's conformity checks should fail.
+    testImplementation(project(":test-unnamed"))
 }
 
 tasks.test {

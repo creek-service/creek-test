@@ -4,5 +4,6 @@ include(
     "util",
     "hamcrest",
     "conformity",
-    "test-unnamed"
+    "test-unnamed",
+    "test-unnamed2"
 )

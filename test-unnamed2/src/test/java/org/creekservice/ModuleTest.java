@@ -22,41 +22,37 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.creekservice.api.test.conformity.ConformityTester;
-import org.creekservice.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creekservice.api.test.conformity.check.CheckModule;
-import org.creekservice.api.unnamed.ApiTypeWithPublicConstructor;
+import org.creekservice.api.unnamed.DifferentBadlyWrittenApiType;
 import org.junit.jupiter.api.Test;
 
 class ModuleTest {
 
     @Test
     void shouldBeUnnamed() {
-        assertThat(ApiTypeWithPublicConstructor.class.getModule().isNamed(), is(false));
+        assertThat(DifferentBadlyWrittenApiType.class.getModule().isNamed(), is(false));
     }
 
     @Test
     void shouldFailOnBadTypes() {
         // Given:
         final ConformityTester tester =
-                ConformityTester.builder(ApiTypeWithPublicConstructor.class)
+                ConformityTester.builder(DifferentBadlyWrittenApiType.class)
                         .withDisabled("not a module", CheckModule.builder());
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
 
         // Then:
-        assertThat(e.getMessage(), containsString(ApiTypeWithPublicConstructor.class.getName()));
+        assertThat(e.getMessage(), containsString(DifferentBadlyWrittenApiType.class.getName()));
     }
 
     @Test
     void shouldPassConformityFromUnnamedModule() {
-        ConformityTester.builder(ApiTypeWithPublicConstructor.class)
+        // Importantly, this test should not fail due to types imported from test-unnamed:
+        ConformityTester.builder(DifferentBadlyWrittenApiType.class)
                 .withDisabled("not a module", CheckModule.builder())
-                .withCustom(
-                        CheckConstructorsPrivate.builder()
-                                .withExcludedClasses(
-                                        "deliberately bad type",
-                                        ApiTypeWithPublicConstructor.class))
+                .withExcludedClasses("Intentionally bad", DifferentBadlyWrittenApiType.class)
                 .check();
     }
 }

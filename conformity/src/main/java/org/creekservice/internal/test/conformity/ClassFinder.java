@@ -22,14 +22,16 @@ import static org.creekservice.internal.test.conformity.Constants.CREEK_PACKAGE;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public final class ClassFinder implements ModuleTypes, AutoCloseable {
 
     private final ScanResult scanResult;
 
-    public ClassFinder(final Module moduleUnderTest) {
-        this.scanResult = scan(moduleUnderTest);
+    public ClassFinder(final Class<?> typeFromModuleToTest) {
+        this.scanResult = scan(typeFromModuleToTest);
     }
 
     @Override
@@ -47,7 +49,9 @@ public final class ClassFinder implements ModuleTypes, AutoCloseable {
         scanResult.close();
     }
 
-    private ScanResult scan(final Module moduleUnderTest) {
+    private static ScanResult scan(final Class<?> typeFromModuleToTest) {
+        final Module moduleUnderTest = typeFromModuleToTest.getModule();
+
         final String[] packages =
                 moduleUnderTest.getPackages().stream()
                         .filter(pkg -> pkg.startsWith(CREEK_PACKAGE))
@@ -62,8 +66,32 @@ public final class ClassFinder implements ModuleTypes, AutoCloseable {
 
         if (moduleUnderTest.isNamed()) {
             classGraph.acceptModules(moduleUnderTest.getName());
+        } else {
+            classGraph.acceptJars(jarLeafName(typeFromModuleToTest));
         }
 
         return classGraph.scan();
+    }
+
+    private static String[] jarLeafName(final Class<?> typeFromModuleToTest) {
+        try {
+            final Path codeLocation =
+                    Path.of(
+                            typeFromModuleToTest
+                                    .getProtectionDomain()
+                                    .getCodeSource()
+                                    .getLocation()
+                                    .toURI());
+            final Path fileName = codeLocation.getFileName();
+            if (fileName == null || !fileName.toString().endsWith(".jar")) {
+                throw new IllegalStateException(
+                        "Code location not a jar file. "
+                                + "See: https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars");
+            }
+
+            return new String[] {fileName.toString()};
+        } catch (URISyntaxException e) {
+            return new String[] {};
+        }
     }
 }
