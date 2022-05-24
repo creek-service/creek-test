@@ -42,8 +42,7 @@ class ClassPatternFilterTest {
                         builder().addExclude(".*Test").build(false),
                         builder().addExclude(".*Test").build(false))
                 .addEqualityGroup(builder().addExclude(".*Diff").build(false))
-                .addEqualityGroup(
-                        builder().addExclude(".*Test").build(true))
+                .addEqualityGroup(builder().addExclude(".*Test").build(true))
                 .testEquals();
     }
 

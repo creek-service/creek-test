@@ -102,22 +102,20 @@ public final class ClassPatternFilter {
             return this;
         }
 
-        /** @return the built filter.
-         * @param excludeTestClasses if {@code true}, the filter will exclude test classes and any types nested within
-         *                           using the pattern {@code .*Test(\$.*)?}.
+        /**
+         * @return the built filter.
+         * @param excludeTestClasses if {@code true}, the filter will exclude test classes and any
+         *     types nested within using the pattern {@code .*Test(\$.*)?}.
          */
         public ClassPatternFilter build(final boolean excludeTestClasses) {
-            final Stream<String> patterns = excluded.stream()
-                    .map(Pattern::pattern);
+            final Stream<String> patterns = excluded.stream().map(Pattern::pattern);
 
-            final Stream<String> all = excludeTestClasses
-                    ? Stream.concat(patterns, Stream.of(".*Test(\\$.*)?"))
-                    : patterns;
+            final Stream<String> all =
+                    excludeTestClasses
+                            ? Stream.concat(patterns, Stream.of(".*Test(\\$.*)?"))
+                            : patterns;
 
-            final String combined =
-                    all
-                            .reduce((l, r) -> l + "|" + r)
-                            .orElse("");
+            final String combined = all.reduce((l, r) -> l + "|" + r).orElse("");
 
             return new ClassPatternFilter(Pattern.compile(combined));
         }
