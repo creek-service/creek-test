@@ -101,6 +101,22 @@ class DefaultConformityTesterTest {
     }
 
     @Test
+    void shouldCustomiseChecksUsingClassPattern() {
+        // Given:
+        final ConformityTester tester =
+                ConformityTester.builder(ConformityTester.class)
+                        .withDisabled("not testing this", CheckExportedPackages.builder())
+                        .withExcludedClassPattern(
+                                "testing",
+                                PublicSubTypeWithPublicConstructor.class.getPackageName() + ".*");
+
+        // When:
+        tester.check();
+
+        // Then: did not throw
+    }
+
+    @Test
     void shouldDetectApiTypesWithPublicConstructors() {
         // Given:
         final ConformityTester tester =
@@ -130,6 +146,20 @@ class DefaultConformityTesterTest {
         tester.check();
 
         // Then: did not throw
+    }
+
+    @Test
+    void shouldCheckTestTypesIfToldToo() {
+        // Given:
+        final ConformityTester tester = ConformityTester.builder(ConformityTester.class)
+                .withDisabled("Not testing this one", CheckExportedPackages.builder())
+                .withoutExcludedTestClassPattern("testing");
+
+        // When:
+        final Error e = assertThrows(AssertionError.class, tester::check);
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("Conformity check failed. check: CheckConstructorsPrivate"));
     }
 
     @Test

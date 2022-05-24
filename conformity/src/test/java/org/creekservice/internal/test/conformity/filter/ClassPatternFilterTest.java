@@ -16,17 +16,19 @@
 
 package org.creekservice.internal.test.conformity.filter;
 
-import static org.creekservice.internal.test.conformity.filter.ClassFilter.builder;
+import static org.creekservice.internal.test.conformity.filter.ClassPatternFilter.builder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import com.google.common.testing.EqualsTester;
+import java.util.Map;
+import org.creekservice.api.test.conformity.test.types.bad.ExampleTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ClassFilterTest {
+class ClassPatternFilterTest {
 
-    private ClassFilter.Builder builder;
+    private ClassPatternFilter.Builder builder;
 
     @BeforeEach
     void setUp() {
@@ -37,29 +39,29 @@ class ClassFilterTest {
     void shouldImplementHashCodeAndEquals() {
         new EqualsTester()
                 .addEqualityGroup(
-                        builder().addExclude(String.class, false).build(),
-                        builder().addExclude(String.class, false).build())
-                .addEqualityGroup(builder().build())
-                .addEqualityGroup(builder().addExclude(Integer.class, false).build())
-                .addEqualityGroup(builder().addExclude(String.class, true).build())
-                .addEqualityGroup(builder().addExclude(Integer.class, true).build())
+                        builder().addExclude(".*Test").build(false),
+                        builder().addExclude(".*Test").build(false))
+                .addEqualityGroup(builder().addExclude(".*Diff").build(false))
+                .addEqualityGroup(
+                        builder().addExclude(".*Test").build(true))
                 .testEquals();
     }
 
     @Test
     void shouldPassAll() {
         // Given:
-        final ClassFilter filter = builder.build();
+        final ClassPatternFilter filter = builder.build(false);
 
         // Then:
         assertThat(filter.isExcluded(String.class), is(false));
         assertThat(filter.notExcluded(String.class), is(true));
+        assertThat(filter.notExcluded(ExampleTest.NestedType.class), is(true));
     }
 
     @Test
     void shouldExcludeExact() {
         // Given:
-        final ClassFilter filter = builder.addExclude(Number.class, false).build();
+        final ClassPatternFilter filter = builder.addExclude(Number.class.getName()).build(false);
 
         // Then:
         assertThat(filter.isExcluded(Number.class), is(true));
@@ -67,12 +69,34 @@ class ClassFilterTest {
     }
 
     @Test
-    void shouldExcludeSubtypes() {
+    void shouldExcludePattern() {
         // Given:
-        final ClassFilter filter = builder.addExclude(Number.class, true).build();
+        final ClassPatternFilter filter = builder.addExclude("java\\.lang\\..*").build(false);
 
         // Then:
         assertThat(filter.isExcluded(Number.class), is(true));
         assertThat(filter.isExcluded(Double.class), is(true));
+        assertThat(filter.isExcluded(Map.class), is(false));
+    }
+
+    @Test
+    void shouldCombinePatternsCorrectly() {
+        // Given:
+        final ClassPatternFilter filter =
+                builder.addExclude("java\\.lang\\..*").addExclude("java\\.util\\..*").build(false);
+
+        // Then:
+        assertThat(filter.isExcluded(Number.class), is(true));
+        assertThat(filter.isExcluded(Map.class), is(true));
+    }
+
+    @Test
+    void shouldExcludeNestedTypes() {
+        // Given:
+        final ClassPatternFilter filter = builder.build(true);
+
+        // Then:
+        assertThat(filter.isExcluded(ExampleTest.class), is(true));
+        assertThat(filter.isExcluded(ExampleTest.NestedType.class), is(true));
     }
 }

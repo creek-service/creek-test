@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.creekservice.api.test.conformity.test.types.bad.ExampleTest;
 import org.creekservice.api.test.conformity.test.types.bad.PublicSubTypeWithPublicConstructor;
 import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithImplicitPublicConstructor;
 import org.creekservice.api.test.conformity.test.types.bad.PublicTypeWithPublicConstructor;
@@ -124,14 +125,13 @@ class ConstructorsPrivateCheckTest {
     @Test
     void shouldExcludeByType() {
         // Given:
-        check =
-                new ConstructorsPrivateCheck(
-                        new Options()
-                                .withExcludedClasses(
-                                        "testing",
-                                        PublicTypeWithPublicConstructor.class,
-                                        PublicTypeWithImplicitPublicConstructor.class,
-                                        PublicSubTypeWithPublicConstructor.class));
+        final Options options = new Options();
+        options.withExcludedClasses(
+                "testing",
+                PublicTypeWithPublicConstructor.class,
+                PublicTypeWithImplicitPublicConstructor.class,
+                PublicSubTypeWithPublicConstructor.class);
+        check = new ConstructorsPrivateCheck(options);
 
         // When:
         check.check(target);
@@ -155,6 +155,45 @@ class ConstructorsPrivateCheckTest {
         check.check(target);
 
         // Then: did not fail.
+    }
+
+    @Test
+    void shouldExcludeByClassPattern() {
+        // Given:
+        final Options options = new Options();
+        options.withExcludedClassPattern(
+                "testing", PublicTypeWithPublicConstructor.class.getPackageName() + "\\.Public.*");
+        check = new ConstructorsPrivateCheck(options);
+
+        // When:
+        check.check(target);
+
+        // Then: did not fail.
+    }
+
+    @Test
+    void shouldAllowInclusionOfTestFiles() {
+        // Given:
+        final Options options = new Options();
+        options.withExcludedClassPattern(
+                        "testing",
+                        PublicTypeWithPublicConstructor.class.getPackageName() + "\\.Public.*")
+                .withoutExcludedTestClassPattern("testing");
+        check = new ConstructorsPrivateCheck(options);
+
+        final Exception e = assertThrows(RuntimeException.class, () -> check.check(target));
+
+        // Then:
+        assertThat(
+                e.getMessage(),
+                containsString(
+                        ExampleTest.class.getName() + " has public constructors: public <init>()"));
+
+        assertThat(
+                e.getMessage(),
+                containsString(
+                        ExampleTest.NestedType.class.getName()
+                                + " has public constructors: public <init>()"));
     }
 
     @Test
@@ -182,6 +221,36 @@ class ConstructorsPrivateCheckTest {
                 assertThrows(
                         IllegalArgumentException.class,
                         () -> options.withExcludedClasses(" ", getClass()));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
+    }
+
+    @Test
+    void shouldThrownOnEmptyClassPatternJustification() {
+        // Given:
+        final Options options = new Options();
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> options.withExcludedClassPattern(" ", ".*"));
+
+        // Then:
+        assertThat(e.getMessage(), startsWith("justification can not be blank"));
+    }
+
+    @Test
+    void shouldThrownOnEmptyTestJustification() {
+        // Given:
+        final Options options = new Options();
+
+        // When:
+        final Exception e =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> options.withoutExcludedTestClassPattern("\t"));
 
         // Then:
         assertThat(e.getMessage(), startsWith("justification can not be blank"));

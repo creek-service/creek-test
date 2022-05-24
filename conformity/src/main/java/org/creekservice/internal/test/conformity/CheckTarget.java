@@ -20,7 +20,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicReference;
-import org.creekservice.internal.test.conformity.filter.ClassFinder;
 
 public final class CheckTarget implements AutoCloseable {
 

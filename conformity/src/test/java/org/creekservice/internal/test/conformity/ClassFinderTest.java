@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.creekservice.internal.test.conformity.filter;
+package org.creekservice.internal.test.conformity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import io.github.classgraph.ClassInfo;
 import org.creekservice.api.base.annotation.VisibleForTesting;
 import org.creekservice.api.test.conformity.ConformityTester;
-import org.creekservice.internal.test.conformity.CheckTarget;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

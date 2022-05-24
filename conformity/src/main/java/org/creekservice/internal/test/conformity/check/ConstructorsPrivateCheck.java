@@ -22,9 +22,11 @@ import static java.util.stream.Collectors.joining;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.MethodInfo;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import org.creekservice.api.test.conformity.check.CheckConstructorsPrivate;
 import org.creekservice.internal.test.conformity.CheckTarget;
 import org.creekservice.internal.test.conformity.filter.ClassFilter;
+import org.creekservice.internal.test.conformity.filter.ClassPatternFilter;
 import org.creekservice.internal.test.conformity.filter.PackageFilter;
 
 public final class ConstructorsPrivateCheck implements CheckRunner {
@@ -33,10 +35,12 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
 
     private final PackageFilter packageFilter;
     private final ClassFilter classFilter;
+    private final ClassPatternFilter classPatternFilter;
 
     public ConstructorsPrivateCheck(final Options options) {
         this.packageFilter = requireNonNull(options, "options").packageFilter.build();
         this.classFilter = options.classFilter.build();
+        this.classPatternFilter = options.classPatternFilter.build(options.excludeTestClasses);
     }
 
     @Override
@@ -52,6 +56,7 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
                         .filter(ClassInfo::isPublic)
                         .filter(ci -> packageFilter.notExcluded(ci.getPackageName()))
                         .filter(ci -> classFilter.notExcluded(ci.loadClass()))
+                        .filter(ci -> classPatternFilter.notExcluded(ci.loadClass()))
                         .map(this::publicConstructors)
                         .filter(info -> !info.isBlank())
                         .collect(joining(NL_INDENT));
@@ -76,12 +81,19 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
 
     public static final class Options implements CheckConstructorsPrivate {
 
-        private final ClassFilter.Builder classFilter = ClassFilter.builder();
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
+        private final ClassFilter.Builder classFilter = ClassFilter.builder();
+        private final ClassPatternFilter.Builder classPatternFilter = ClassPatternFilter.builder();
+        private boolean excludeTestClasses = true;
 
         @Override
-        public Options withExcludedClasses(final String justification, final Class<?>... classes) {
-            return withExcludedClasses(justification, false, classes);
+        public Options withExcludedPackages(
+                final String justification, final String... packageNames) {
+            if (justification.isBlank()) {
+                throw new IllegalArgumentException("justification can not be blank.");
+            }
+            Arrays.stream(packageNames).forEach(packageFilter::addExclude);
+            return this;
         }
 
         @Override
@@ -98,12 +110,24 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
         }
 
         @Override
-        public Options withExcludedPackages(
-                final String justification, final String... packageNames) {
+        public CheckConstructorsPrivate withExcludedClassPattern(
+                final String justification, final Pattern pattern) {
             if (justification.isBlank()) {
                 throw new IllegalArgumentException("justification can not be blank.");
             }
-            Arrays.stream(packageNames).forEach(packageFilter::addExclude);
+
+            classPatternFilter.addExclude(pattern);
+            return this;
+        }
+
+        @Override
+        public CheckConstructorsPrivate withoutExcludedTestClassPattern(
+                final String justification) {
+            if (justification.isBlank()) {
+                throw new IllegalArgumentException("justification can not be blank.");
+            }
+
+            excludeTestClasses = false;
             return this;
         }
     }
