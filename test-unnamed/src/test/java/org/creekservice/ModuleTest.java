@@ -49,6 +49,24 @@ class ModuleTest {
     }
 
     @Test
+    void shouldFailIfNonModuleTypeNotFromJar() {
+        // Given:
+        final ConformityTester tester =
+                ConformityTester.builder(ModuleTest.class)
+                        .withDisabled("not a module", CheckModule.builder());
+
+        // When:
+        final Error e = assertThrows(AssertionError.class, tester::check);
+
+        // Then:
+        assertThat(
+                e.getMessage(),
+                containsString(
+                        "Code location not a jar file. "
+                                + "See: https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars"));
+    }
+
+    @Test
     void shouldPassConformityFromUnnamedModule() {
         ConformityTester.builder(ApiTypeWithPublicConstructor.class)
                 .withDisabled("not a module", CheckModule.builder())
