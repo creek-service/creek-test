@@ -16,13 +16,12 @@
 
 package org.creekservice.api.test.hamcrest;
 
-import org.hamcrest.Matcher;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.function.Supplier;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.hamcrest.Matcher;
 
 /** Hamcrest async assert with timeout. */
 public final class AssertEventually {
