@@ -2,11 +2,11 @@ plugins {
     java
     jacoco
     `maven-publish`
-    id("com.github.spotbugs") version "5.0.6"                           // https://plugins.gradle.org/plugin/com.github.spotbugs
-    id("com.diffplug.spotless") version "6.6.1"                         // https://plugins.gradle.org/plugin/com.diffplug.spotless
-    id("pl.allegro.tech.build.axion-release") version "1.13.9"          // https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release
+    id("com.github.spotbugs") version "5.0.12"                           // https://plugins.gradle.org/plugin/com.github.spotbugs
+    id("com.diffplug.spotless") version "6.10.0"                         // https://plugins.gradle.org/plugin/com.diffplug.spotless
+    id("pl.allegro.tech.build.axion-release") version "1.14.0"          // https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release
     id("com.github.kt3k.coveralls") version "2.12.0"                    // https://plugins.gradle.org/plugin/com.github.kt3k.coveralls
-    id("org.javamodularity.moduleplugin") version "1.8.11" apply false  // https://plugins.gradle.org/plugin/org.javamodularity.moduleplugin
+    id("org.javamodularity.moduleplugin") version "1.8.12" apply false  // https://plugins.gradle.org/plugin/org.javamodularity.moduleplugin
 }
 
 project.version = scmVersion.version
@@ -55,15 +55,15 @@ subprojects {
     extra.apply {
         // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-        set("spotBugsVersion", "4.7.0")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
-        set("classGraphVersion", "4.8.147")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
+        set("spotBugsVersion", "4.7.2")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
+        set("classGraphVersion", "4.8.149")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
 
-        set("log4jVersion", "2.17.2")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+        set("log4jVersion", "2.18.0")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
         set("guavaVersion", "31.1-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
 
-        set("junitVersion", "5.8.2")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+        set("junitVersion", "5.9.0")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
         set("junitPioneerVersion", "1.7.1")     // https://mvnrepository.com/artifact/org.junit-pioneer/junit-pioneer
-        set("mockitoVersion", "4.5.1")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+        set("mockitoVersion", "4.7.0")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
         set("hamcrestVersion", "2.2")           // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
     }
 
