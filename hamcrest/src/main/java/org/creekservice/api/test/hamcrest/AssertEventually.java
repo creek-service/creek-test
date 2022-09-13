@@ -16,22 +16,20 @@
 
 package org.creekservice.api.test.hamcrest;
 
+import static java.util.Objects.requireNonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import org.hamcrest.Matcher;
 
 /** Hamcrest async assert with timeout. */
 public final class AssertEventually {
 
-    private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
-    private static final Duration DEFAULT_INITIAL_PAUSE_PERIOD = Duration.ofMillis(1);
-    private static final Duration DEFAULT_MAX_PAUSE_PERIOD = Duration.ofSeconds(1);
-
+    @FunctionalInterface
     public interface ExceptionFilter {
-
         void accept(RuntimeException e);
     }
 
@@ -44,126 +42,18 @@ public final class AssertEventually {
 
     public static <T> T assertThatEventually(
             final Supplier<? extends T> actualSupplier, final Matcher<? super T> expected) {
-        return assertThatEventually(actualSupplier, expected, FailOnException);
-    }
-
-    public static <T> T assertThatEventually(
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final ExceptionFilter exceptionFilter) {
-        return assertThatEventually("", actualSupplier, expected, exceptionFilter);
-    }
-
-    public static <T> T assertThatEventually(
-            final String message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected) {
-        return assertThatEventually(() -> message, actualSupplier, expected);
-    }
-
-    public static <T> T assertThatEventually(
-            final Supplier<String> message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected) {
-        return assertThatEventually(message, actualSupplier, expected, FailOnException);
-    }
-
-    public static <T> T assertThatEventually(
-            final String message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final ExceptionFilter exceptionFilter) {
-        return assertThatEventually(() -> message, actualSupplier, expected, exceptionFilter);
-    }
-
-    public static <T> T assertThatEventually(
-            final Supplier<String> message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final ExceptionFilter exceptionFilter) {
-        return assertThatEventually(
-                message, actualSupplier, expected, DEFAULT_TIMEOUT, exceptionFilter);
-    }
-
-    public static <T> T assertThatEventually(
-            final String message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final Duration timeout) {
-        return assertThatEventually(message, actualSupplier, expected, timeout, FailOnException);
-    }
-
-    public static <T> T assertThatEventually(
-            final String message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final Duration timeout,
-            final ExceptionFilter exceptionFilter) {
-        return assertThatEventually(
-                () -> message, actualSupplier, expected, timeout, exceptionFilter);
-    }
-
-    public static <T> T assertThatEventually(
-            final Supplier<String> message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final Duration timeout,
-            final ExceptionFilter exceptionFilter) {
-        return assertThatEventually(
-                message,
-                actualSupplier,
-                expected,
-                timeout,
-                DEFAULT_INITIAL_PAUSE_PERIOD,
-                DEFAULT_MAX_PAUSE_PERIOD,
-                exceptionFilter);
-    }
-
-    public static <T> T assertThatEventually(
-            final String message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final Duration initialPausePeriod,
-            final Duration maxPausePeriod) {
-        return assertThatEventually(
-                () -> message,
-                actualSupplier,
-                expected,
-                DEFAULT_TIMEOUT,
-                initialPausePeriod,
-                maxPausePeriod);
-    }
-
-    public static <T> T assertThatEventually(
-            final Supplier<String> message,
-            final Supplier<? extends T> actualSupplier,
-            final Matcher<? super T> expected,
-            final Duration timeout,
-            final Duration initialPausePeriod,
-            final Duration maxPausePeriod) {
-        return assertThatEventually(
-                message,
-                actualSupplier,
-                expected,
-                timeout,
-                initialPausePeriod,
-                maxPausePeriod,
-                FailOnException);
+        return assertThatEventually(actualSupplier, expected, withSettings());
     }
 
     @SuppressWarnings("BusyWait")
     public static <T> T assertThatEventually(
-            final Supplier<String> message,
             final Supplier<? extends T> actualSupplier,
             final Matcher<? super T> expected,
-            final Duration timeout,
-            final Duration initialPausePeriod,
-            final Duration maxPausePeriod,
-            final ExceptionFilter exceptionFilter) {
+            final Settings settings) {
         try {
-            final Instant end = Instant.now().plus(timeout);
+            final Instant end = Instant.now().plus(settings.timeout);
 
-            long period = initialPausePeriod.toMillis();
+            Duration period = settings.initialPeriod;
             while (Instant.now().isBefore(end)) {
                 T actual = null;
                 boolean acquired = false;
@@ -172,24 +62,91 @@ public final class AssertEventually {
                     actual = actualSupplier.get();
                     acquired = true;
                 } catch (final RuntimeException e) {
-                    exceptionFilter.accept(e);
+                    settings.exceptionFilter.accept(e);
                 }
 
                 if (acquired && expected.matches(actual)) {
                     return actual;
                 }
 
-                Thread.sleep(period);
-                period = Math.min(period * 2, maxPausePeriod.toMillis());
+                Thread.sleep(period.toMillis());
+
+                period = increasePeriod(settings, period);
             }
 
             final T actual = actualSupplier.get();
-            assertThat(message.get(), actual, expected);
+            assertThat(settings.message.get(), actual, expected);
             return actual;
         } catch (final InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public static Settings withSettings() {
+        return new Settings();
+    }
+
+    public static final class Settings {
+
+        private Supplier<String> message = () -> "";
+        private ExceptionFilter exceptionFilter = FailOnException;
+        private Duration timeout = Duration.ofSeconds(30);
+        private Duration initialPeriod = Duration.ofMillis(1);
+        private Duration maxPeriod = Duration.ofSeconds(1);
+
+        private Settings() {}
+
+        public Settings withMessage(final String message) {
+            requireNonNull(message, "message");
+            this.message = () -> message;
+            return this;
+        }
+
+        public Settings withMessage(final Supplier<String> message) {
+            this.message = requireNonNull(message, "message");
+            return this;
+        }
+
+        public Settings withExceptionFilter(final ExceptionFilter filter) {
+            this.exceptionFilter = requireNonNull(filter, "filter");
+            return this;
+        }
+
+        public Settings withTimeout(final Duration timeout) {
+            this.timeout = requireNonNull(timeout, "timeout");
+            return this;
+        }
+
+        public Settings withTimeout(final int count, final TimeUnit unit) {
+            return withTimeout(Duration.of(count, unit.toChronoUnit()));
+        }
+
+        public Settings withInitialPeriod(final Duration period) {
+            if (period.isZero() || period.isNegative()) {
+                throw new IllegalArgumentException("period must be positive");
+            }
+            this.initialPeriod = requireNonNull(period, "period");
+            return this;
+        }
+
+        public Settings withInitialPeriod(final int count, final TimeUnit unit) {
+            return withInitialPeriod(Duration.of(count, unit.toChronoUnit()));
+        }
+
+        public Settings withMaxPeriod(final Duration period) {
+            this.maxPeriod = requireNonNull(period, "period");
+            return this;
+        }
+
+        public Settings withMaxPeriod(final int count, final TimeUnit unit) {
+            return withMaxPeriod(Duration.of(count, unit.toChronoUnit()));
+        }
+    }
+
     private AssertEventually() {}
+
+    private static Duration increasePeriod(final Settings settings, final Duration currentPeriod) {
+        final Duration doubled = currentPeriod.multipliedBy(2);
+        return doubled.compareTo(settings.maxPeriod) < 0 ? doubled : settings.maxPeriod;
+    }
 }
