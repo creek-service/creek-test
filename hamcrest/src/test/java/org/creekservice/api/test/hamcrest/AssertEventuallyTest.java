@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.testing.NullPointerTester;
@@ -52,7 +53,6 @@ import org.mockito.quality.Strictness;
 class AssertEventuallyTest {
 
     @Mock private Supplier<Integer> supplier;
-    private final long start = System.currentTimeMillis();
 
     @BeforeEach
     void setUp() {
@@ -93,6 +93,24 @@ class AssertEventuallyTest {
         // Then:
         assertThat(e.getMessage(), containsString("Expected: is <4>"));
         assertThat(e.getMessage(), containsString("     but: was <3>"));
+    }
+
+    @Test
+    void shouldTestOneLastTimeOnTimeout() {
+        // Given:
+        final long start = System.currentTimeMillis();
+        final long timeout = 50;
+        final long threshold = start + timeout;
+        when(supplier.get()).thenAnswer(inv -> (System.currentTimeMillis() < threshold) ? 3 : 4);
+
+        // When:
+        assertThatEventually(
+                supplier,
+                is(4),
+                withSettings().withInitialPeriod(ofMillis(timeout)).withTimeout(ofMillis(timeout)));
+
+        // Then:
+        verify(supplier, times(2)).get();
     }
 
     @Test
@@ -193,6 +211,9 @@ class AssertEventuallyTest {
 
     @Test
     void shouldAcceptTimeout() {
+        // Given:
+        final long start = System.currentTimeMillis();
+
         // When:
         assertThrows(
                 AssertionError.class,
