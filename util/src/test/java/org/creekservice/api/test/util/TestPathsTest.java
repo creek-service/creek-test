@@ -18,6 +18,7 @@ package org.creekservice.api.test.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.creekservice.api.test.hamcrest.PathMatchers.directory;
+import static org.creekservice.api.test.hamcrest.PathMatchers.doesNotExist;
 import static org.creekservice.api.test.util.TestPaths.copy;
 import static org.creekservice.api.test.util.TestPaths.ensureDirectories;
 import static org.creekservice.api.test.util.TestPaths.listDirectory;
@@ -153,6 +154,47 @@ class TestPathsTest {
 
         // Then:
         assertThrows(AssertionError.class, () -> ensureDirectories(tempDir.resolve(filePath)));
+    }
+
+    @Test
+    void shouldDeleteNonExistent() {
+        // Given:
+        final Path path = tempDir.resolve("missing");
+
+        // When:
+        TestPaths.delete(path);
+
+        // Then: did not throw.
+    }
+
+    @Test
+    void shouldDeleteFile() {
+        // Given:
+        final Path path = tempDir.resolve("file");
+        write(path, "text");
+
+        // When:
+        TestPaths.delete(path);
+
+        // Then:
+        assertThat(path, is(doesNotExist()));
+    }
+
+    @Test
+    void shouldDeleteDirectoryRecursive() {
+        // Given:
+        final Path dir = tempDir.resolve("dir");
+        final Path sub = dir.resolve("sub");
+        ensureDirectories(sub);
+        write(dir.resolve("file1"), "text");
+        write(sub.resolve("file2"), "text");
+        write(sub.resolve("file3"), "text");
+
+        // When:
+        TestPaths.delete(dir);
+
+        // Then:
+        assertThat(dir, is(doesNotExist()));
     }
 
     @Test
