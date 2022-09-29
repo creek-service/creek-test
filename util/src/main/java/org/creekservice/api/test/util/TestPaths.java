@@ -19,11 +19,14 @@ package org.creekservice.api.test.util;
 import static java.nio.file.Files.isDirectory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 /** Utility methods for working with paths, directories and files in tests. */
@@ -116,6 +119,24 @@ public final class TestPaths {
         final Path parent = path.getParent();
         if (parent != null) {
             ensureDirectories(parent);
+        }
+    }
+
+    /**
+     * Delete a file or directory.
+     *
+     * <p>Directories are deleted recursively.
+     *
+     * @param path the path to delete.
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void delete(final Path path) {
+        try (Stream<Path> walk = Files.walk(path)) {
+            walk.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        } catch (final NoSuchFileException e) {
+            // Intentionally do nothing
+        } catch (final IOException e) {
+            throw new AssertionError("Failed to delete : " + path, e);
         }
     }
 
