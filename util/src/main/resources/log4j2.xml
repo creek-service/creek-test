@@ -18,17 +18,21 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%m%n"/>
+            <PatternLayout pattern="%-5level %logger{36} %m%n"/>
             <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="ACCEPT"/>
         </Console>
         <Console name="Console_Error" target="SYSTEM_ERR">
-            <PatternLayout pattern="%m%n"/>
+            <PatternLayout pattern="%-5level %logger{36} %m%n"/>
             <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
         </Console>
     </Appenders>
 
     <Loggers>
-        <Root level="DEBUG">
+        <Logger name="org.creekservice" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Console_Error"/>
+        </Logger>
+        <Root level="INFO">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="Console_Error"/>
         </Root>
