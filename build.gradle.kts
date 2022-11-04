@@ -15,11 +15,11 @@ subprojects {
     project.version = project.parent?.version!!
 
     apply(plugin = "creek-common-convention")
+    apply(plugin = "jacoco")
 
     if (!name.startsWith("test-")) {
         apply(plugin = "creek-module-convention")
         apply(plugin = "creek-publishing-convention")
-        apply(plugin = "jacoco")
     }
 
     project.version = project.parent?.version!!
