@@ -2,6 +2,7 @@ plugins {
     java
     jacoco
     `creek-common-convention` apply false
+    `creek-module-convention` apply false
     `creek-coverage-convention`
     `creek-publishing-convention` apply false
     `creek-sonatype-publishing-convention`
@@ -16,6 +17,7 @@ subprojects {
     apply(plugin = "creek-common-convention")
 
     if (!name.startsWith("test-")) {
+        apply(plugin = "creek-module-convention")
         apply(plugin = "creek-publishing-convention")
         apply(plugin = "jacoco")
     }

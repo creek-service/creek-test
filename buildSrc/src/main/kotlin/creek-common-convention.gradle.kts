@@ -4,7 +4,6 @@ plugins {
     checkstyle
     id("com.github.spotbugs")
     id("com.diffplug.spotless")
-    id("org.javamodularity.moduleplugin")
 }
 
 group = "org.creekservice"
