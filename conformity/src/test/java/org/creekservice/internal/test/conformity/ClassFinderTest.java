@@ -19,8 +19,8 @@ package org.creekservice.internal.test.conformity;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import io.github.classgraph.ClassInfo;
-import org.creekservice.api.base.annotation.VisibleForTesting;
 import org.creekservice.api.test.conformity.ConformityTester;
+import org.creekservice.api.test.util.TestPaths;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -82,17 +82,13 @@ class ClassFinderTest {
                 "from classes",
                 finder.classes()
                         .map(ClassInfo::getSimpleName)
-                        .noneMatch(
-                                className ->
-                                        className.equals(VisibleForTesting.class.getSimpleName())));
+                        .noneMatch(className -> className.equals(TestPaths.class.getSimpleName())));
 
         assertThat(
                 "from api classes",
                 finder.apiClasses()
                         .map(ClassInfo::getSimpleName)
-                        .noneMatch(
-                                className ->
-                                        className.equals(VisibleForTesting.class.getSimpleName())));
+                        .noneMatch(className -> className.equals(TestPaths.class.getSimpleName())));
     }
 
     @Test
