@@ -21,8 +21,10 @@ import java.net.URI;
 import org.creekservice.api.test.conformity.check.CheckModule;
 import org.creekservice.internal.test.conformity.CheckTarget;
 
+/** Check that the module under test is a named, non-automatic, module. */
 public final class ModuleCheck implements CheckRunner {
 
+    /** @param ignored for now. */
     public ModuleCheck(final Options ignored) {}
 
     @Override
@@ -45,6 +47,7 @@ public final class ModuleCheck implements CheckRunner {
         }
     }
 
+    /** Options to configure this check */
     public static final class Options implements CheckModule {}
 
     private static final class ModuleCheckException extends RuntimeException {

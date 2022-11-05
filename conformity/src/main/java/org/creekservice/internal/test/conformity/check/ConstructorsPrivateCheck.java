@@ -29,6 +29,7 @@ import org.creekservice.internal.test.conformity.filter.ClassFilter;
 import org.creekservice.internal.test.conformity.filter.ClassPatternFilter;
 import org.creekservice.internal.test.conformity.filter.PackageFilter;
 
+/** Checks there are no public constructors on API types. */
 public final class ConstructorsPrivateCheck implements CheckRunner {
 
     private static final String NL_INDENT = System.lineSeparator() + "\t";
@@ -37,6 +38,7 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
     private final ClassFilter classFilter;
     private final ClassPatternFilter classPatternFilter;
 
+    /** @param options options to control behaviour */
     public ConstructorsPrivateCheck(final Options options) {
         this.packageFilter = requireNonNull(options, "options").packageFilter.build();
         this.classFilter = options.classFilter.build();
@@ -79,6 +81,7 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
                 : classInfo.getName() + " has public constructors: " + publicConstructors;
     }
 
+    /** Options to configure this check */
     public static final class Options implements CheckConstructorsPrivate {
 
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();

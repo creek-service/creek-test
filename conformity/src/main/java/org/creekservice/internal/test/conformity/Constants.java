@@ -16,9 +16,13 @@
 
 package org.creekservice.internal.test.conformity;
 
+/** Some useful constants. */
 public final class Constants {
     private Constants() {}
 
+    /** Std Creek package prefix */
     public static final String CREEK_PACKAGE = "org.creekservice";
+
+    /** Std Creek package for API types. */
     public static final String API_PACKAGE = CREEK_PACKAGE + ".api";
 }

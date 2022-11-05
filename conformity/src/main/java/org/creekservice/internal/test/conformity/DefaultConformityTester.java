@@ -36,6 +36,7 @@ import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck;
 import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
 import org.creekservice.internal.test.conformity.check.ModuleCheck;
 
+/** Default implementation of {@link ConformityTester} */
 public final class DefaultConformityTester implements ConformityTester {
 
     private static final List<Supplier<ConformityCheck>> DEFAULT_OPTIONS =
@@ -58,6 +59,11 @@ public final class DefaultConformityTester implements ConformityTester {
     private final Class<?> typeFromModuleToTest;
     private final Map<Class<? extends ConformityCheck>, ConformityCheck> options = new HashMap<>();
 
+    /**
+     * Create instance.
+     *
+     * @param typeFromModuleToTest any type from the module under test.
+     */
     public DefaultConformityTester(final Class<?> typeFromModuleToTest) {
         this.typeFromModuleToTest = requireNonNull(typeFromModuleToTest, "typeFromModuleToTest");
 
@@ -68,12 +74,14 @@ public final class DefaultConformityTester implements ConformityTester {
                 });
     }
 
+    @Override
     public DefaultConformityTester withCustom(final ConformityCheck check) {
         runnerFactory(check);
         this.options.put(check.getClass(), check);
         return this;
     }
 
+    @Override
     public DefaultConformityTester withDisabled(
             final String justification, final ConformityCheck check) {
         if (justification.isBlank()) {
@@ -118,6 +126,7 @@ public final class DefaultConformityTester implements ConformityTester {
         return this;
     }
 
+    @Override
     public void check() {
         try (CheckTarget ctx = new CheckTarget(typeFromModuleToTest)) {
             options.values().stream().map(this::runner).forEach(check -> invoke(check, ctx));

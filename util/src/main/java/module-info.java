@@ -1,3 +1,8 @@
+/**
+ * Module containing common code to help with testing
+ *
+ * <p>Intended for internal Creek use only
+ */
 module creek.test.util {
     requires transitive com.github.spotbugs.annotations;
     requires transitive java.management;

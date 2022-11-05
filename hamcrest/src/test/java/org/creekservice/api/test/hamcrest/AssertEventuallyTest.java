@@ -17,7 +17,6 @@
 package org.creekservice.api.test.hamcrest;
 
 import static java.time.Duration.ofMillis;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.creekservice.api.test.hamcrest.AssertEventually.RetryOnException;
 import static org.creekservice.api.test.hamcrest.AssertEventually.assertThatEventually;
 import static org.creekservice.api.test.hamcrest.AssertEventually.withSettings;
@@ -35,6 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.testing.NullPointerTester;
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Supplier;
@@ -219,7 +219,9 @@ class AssertEventuallyTest {
                 AssertionError.class,
                 () ->
                         assertThatEventually(
-                                supplier, is(4), withSettings().withTimeout(100, MILLISECONDS)));
+                                supplier,
+                                is(4),
+                                withSettings().withTimeout(Duration.ofMillis(100))));
 
         // Then:
         assertThat(System.currentTimeMillis() - start, is(greaterThanOrEqualTo(100L)));
@@ -229,11 +231,11 @@ class AssertEventuallyTest {
     void shouldThrowOnInvalidInitialPeriod() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> withSettings().withInitialPeriod(0, MILLISECONDS));
+                () -> withSettings().withInitialPeriod(Duration.ZERO));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> withSettings().withInitialPeriod(-1, MILLISECONDS));
+                () -> withSettings().withInitialPeriod(Duration.ofMillis(-1)));
     }
 
     @Test
@@ -246,8 +248,8 @@ class AssertEventuallyTest {
                                 supplier,
                                 is(4),
                                 withSettings()
-                                        .withInitialPeriod(10, MILLISECONDS)
-                                        .withTimeout(40, MILLISECONDS)));
+                                        .withInitialPeriod(Duration.ofMillis(10))
+                                        .withTimeout(Duration.ofMillis(40))));
 
         // Then:
         final int times = Mockito.mockingDetails(supplier).getInvocations().size();
@@ -264,8 +266,8 @@ class AssertEventuallyTest {
                                 supplier,
                                 is(4),
                                 withSettings()
-                                        .withMaxPeriod(1, MILLISECONDS)
-                                        .withTimeout(30, MILLISECONDS)));
+                                        .withMaxPeriod(Duration.ofMillis(1))
+                                        .withTimeout(Duration.ofMillis(30))));
 
         // Then:
         final int times = Mockito.mockingDetails(supplier).getInvocations().size();

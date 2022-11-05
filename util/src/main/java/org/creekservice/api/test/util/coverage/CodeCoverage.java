@@ -22,6 +22,7 @@ import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.util.Optional;
 
+/** Util class for capturing code coverage specific JVM arguments. */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class CodeCoverage {
 

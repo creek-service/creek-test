@@ -21,6 +21,7 @@ import static java.util.Objects.requireNonNull;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicReference;
 
+/** A target on which checks will be run. */
 public final class CheckTarget implements AutoCloseable {
 
     private final URI location;
@@ -28,6 +29,11 @@ public final class CheckTarget implements AutoCloseable {
     private final Class<?> typeFromModuleToTest;
     private final AtomicReference<ClassFinder> types;
 
+    /**
+     * Create instance
+     *
+     * @param typeFromModuleToTest any type from the module under test.
+     */
     public CheckTarget(final Class<?> typeFromModuleToTest) {
         this.typeFromModuleToTest = requireNonNull(typeFromModuleToTest, "typeFromModuleToTest");
         this.location = location(typeFromModuleToTest);
@@ -35,14 +41,17 @@ public final class CheckTarget implements AutoCloseable {
         this.types = new AtomicReference<>();
     }
 
+    /** @return the location of the module */
     public URI moduleLocation() {
         return location;
     }
 
+    /** @return the module under test */
     public Module moduleUnderTest() {
         return moduleUnderTest;
     }
 
+    /** @return the types the module contains */
     public ModuleTypes types() {
         return types.updateAndGet(
                 existing -> existing == null ? new ClassFinder(typeFromModuleToTest) : existing);

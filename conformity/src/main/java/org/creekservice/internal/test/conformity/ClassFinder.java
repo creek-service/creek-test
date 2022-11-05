@@ -26,10 +26,12 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+/** Finds Creek types in a module */
 public final class ClassFinder implements ModuleTypes, AutoCloseable {
 
     private final ScanResult scanResult;
 
+    /** @param typeFromModuleToTest any type from the module to scan. */
     public ClassFinder(final Class<?> typeFromModuleToTest) {
         this.scanResult = scan(typeFromModuleToTest);
     }

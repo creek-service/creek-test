@@ -144,6 +144,7 @@ public final class TestPaths {
      * Read the contents of a file as a bytes.
      *
      * @param path path to read
+     * @return the contents of the file
      */
     public static byte[] readBytes(final Path path) {
         try {
@@ -157,6 +158,7 @@ public final class TestPaths {
      * Read the contents of a file as a String.
      *
      * @param path path to read
+     * @return the contents of the file
      */
     public static String readString(final Path path) {
         try {
