@@ -39,7 +39,11 @@ public final class PathMatchers {
 
     private PathMatchers() {}
 
-    /** Check a path is a regular file. */
+    /**
+     * Check a path is a regular file.
+     *
+     * @return the path matcher
+     */
     public static Matcher<Path> regularFile() {
         return new TypeSafeDiagnosingMatcher<>() {
             @Override
@@ -63,7 +67,11 @@ public final class PathMatchers {
         };
     }
 
-    /** Check a path is a directory. */
+    /**
+     * Check a path is a directory.
+     *
+     * @return the path matcher
+     */
     public static Matcher<Path> directory() {
         return new TypeSafeDiagnosingMatcher<>() {
             @Override
@@ -87,7 +95,11 @@ public final class PathMatchers {
         };
     }
 
-    /** Check a path does not exist as a file or directory. */
+    /**
+     * Check a path does not exist as a file or directory.
+     *
+     * @return the path matcher
+     */
     public static Matcher<Path> doesNotExist() {
         return new TypeSafeDiagnosingMatcher<>() {
             @Override
@@ -111,6 +123,7 @@ public final class PathMatchers {
      * Check a directory contains files and directories with the supplied {@code names}.
      *
      * @param names the expected complete set of children in the directory.
+     * @return the path matcher
      */
     public static Matcher<Path> directoryChildren(final String... names) {
         return directoryChildren(containsInAnyOrder(names));
@@ -120,6 +133,7 @@ public final class PathMatchers {
      * Check the names of the children in a directory match the supplied {@code childrenMatcher}.
      *
      * @param childrenMatcher the matcher invoked with the full set of child names
+     * @return the path matcher
      */
     public static Matcher<Path> directoryChildren(
             final Matcher<? super Collection<String>> childrenMatcher) {
@@ -146,6 +160,7 @@ public final class PathMatchers {
      * Check the content of a file contains the supplied {@code text}.
      *
      * @param text the text the file should contain.
+     * @return the path matcher
      */
     public static Matcher<Path> fileContains(final String text) {
         return fileContains(containsString(text));
@@ -155,6 +170,7 @@ public final class PathMatchers {
      * Check the content of a file matches the supplied {@code contentMatcher}.
      *
      * @param contentMatcher the matcher that is invoked with the file contents.
+     * @return the path matcher
      */
     public static Matcher<Path> fileContains(final Matcher<String> contentMatcher) {
         final FeatureMatcher<Path, String> contentIsAsExpected =

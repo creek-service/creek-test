@@ -21,30 +21,70 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import org.hamcrest.Matcher;
 
 /** Hamcrest async assert with timeout. */
 public final class AssertEventually {
 
+    /** A filter used to control how exceptions thrown by the check are handler. */
     @FunctionalInterface
     public interface ExceptionFilter {
+
+        /**
+         * Called on exception.
+         *
+         * @param e the exception
+         */
         void accept(RuntimeException e);
     }
 
+    /** An exception filter that causing any exceptions to be thrown out of the assertion */
     public static final ExceptionFilter FailOnException =
             e -> {
                 throw e;
             };
 
+    /**
+     * An exception filter that swallows any exceptions, allowing the assertion to continue checking
+     */
     public static final ExceptionFilter RetryOnException = e -> {};
 
+    /**
+     * Hamcrest style assertion, taking a value supplier rather than a value.
+     *
+     * <p>The supplier is polled periodically until either the matcher matches or a timeout is
+     * reached.
+     *
+     * @param actualSupplier the actual value supplied
+     * @param expected the expected matcher
+     * @param <T> the type of the value being matched
+     * @return the value that matched the matcher
+     * @throws AssertionError on failure to match within the timeout.
+     * @throws RuntimeException if the supplier throws
+     */
     public static <T> T assertThatEventually(
             final Supplier<? extends T> actualSupplier, final Matcher<? super T> expected) {
         return assertThatEventually(actualSupplier, expected, withSettings());
     }
 
+    /**
+     * Hamcrest style assertion, taking a value supplier rather than a value.
+     *
+     * <p>The supplier is polled periodically until either the matcher matches or a timeout is
+     * reached.
+     *
+     * <p>The timeout, check period and other functionality is configurable via the supplied {@link
+     * Settings},
+     *
+     * @param actualSupplier the actual value supplied
+     * @param expected the expected matcher
+     * @param settings settings to control the behaviour
+     * @param <T> the type of the value being matched
+     * @return the value that matched the matcher
+     * @throws AssertionError on failure to match within the timeout.
+     * @throws RuntimeException if the supplier throws
+     */
     @SuppressWarnings("BusyWait")
     public static <T> T assertThatEventually(
             final Supplier<? extends T> actualSupplier,
@@ -82,10 +122,16 @@ public final class AssertEventually {
         }
     }
 
+    /**
+     * Factory method for settings builder
+     *
+     * @return settings builder
+     */
     public static Settings withSettings() {
         return new Settings();
     }
 
+    /** Settings to control the assertion. */
     public static final class Settings {
 
         private Supplier<String> message = () -> "";
@@ -96,31 +142,61 @@ public final class AssertEventually {
 
         private Settings() {}
 
+        /**
+         * Set a custom message used on failure
+         *
+         * @param message the custom message
+         * @return self.
+         */
         public Settings withMessage(final String message) {
             requireNonNull(message, "message");
             this.message = () -> message;
             return this;
         }
 
+        /**
+         * Set a custom message used on failure
+         *
+         * @param message the custom message supplier. Only called on failure
+         * @return self.
+         */
         public Settings withMessage(final Supplier<String> message) {
             this.message = requireNonNull(message, "message");
             return this;
         }
 
+        /**
+         * Set a custom the exception filter
+         *
+         * @param filter the custom filter
+         * @return self.
+         */
         public Settings withExceptionFilter(final ExceptionFilter filter) {
             this.exceptionFilter = requireNonNull(filter, "filter");
             return this;
         }
 
+        /**
+         * Customise how long to wait before the assertion fails.
+         *
+         * @param timeout the custom timeout.
+         * @return self.
+         */
         public Settings withTimeout(final Duration timeout) {
             this.timeout = requireNonNull(timeout, "timeout");
             return this;
         }
 
-        public Settings withTimeout(final int count, final TimeUnit unit) {
-            return withTimeout(Duration.of(count, unit.toChronoUnit()));
-        }
-
+        /**
+         * The initial duration to wait before testing
+         *
+         * <p>After this initial period}, if the check fails, the duration to wait before trying
+         * again will double, and keep doubling on subsequent failures, up to a {@link
+         * #withMaxPeriod maximum}.
+         *
+         * @param period initial duration
+         * @return self.
+         */
         public Settings withInitialPeriod(final Duration period) {
             if (period.isZero() || period.isNegative()) {
                 throw new IllegalArgumentException("period must be positive");
@@ -129,17 +205,19 @@ public final class AssertEventually {
             return this;
         }
 
-        public Settings withInitialPeriod(final int count, final TimeUnit unit) {
-            return withInitialPeriod(Duration.of(count, unit.toChronoUnit()));
-        }
-
+        /**
+         * The maximum duration between attempts.
+         *
+         * <p>After the {@link #withInitialPeriod initial period}, if the check fails, the duration
+         * to wait before trying again will double, and keep doubling on subsequent failures, up to
+         * this maximum.
+         *
+         * @param period maximum duration between attempts
+         * @return self.
+         */
         public Settings withMaxPeriod(final Duration period) {
             this.maxPeriod = requireNonNull(period, "period");
             return this;
-        }
-
-        public Settings withMaxPeriod(final int count, final TimeUnit unit) {
-            return withMaxPeriod(Duration.of(count, unit.toChronoUnit()));
         }
     }
 

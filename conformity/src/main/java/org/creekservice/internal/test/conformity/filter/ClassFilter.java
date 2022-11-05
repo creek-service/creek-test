@@ -28,6 +28,11 @@ public final class ClassFilter {
 
     private final List<Predicate<Class<?>>> excluded;
 
+    /**
+     * Factory method for creating a new filter builder.
+     *
+     * @return the new builder instance
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -78,6 +83,7 @@ public final class ClassFilter {
         return "ClassFilter{" + "excluded=" + excluded + '}';
     }
 
+    /** Filter builder */
     public static final class Builder {
 
         private final List<Predicate<Class<?>>> excluded = new ArrayList<>();
@@ -86,6 +92,8 @@ public final class ClassFilter {
 
         /**
          * @param type the type to exclude.
+         * @param excludeSubtypes flag indication if subtypes of {@code type} should also be
+         *     excluded.
          * @return self.
          */
         public Builder addExclude(final Class<?> type, final boolean excludeSubtypes) {

@@ -29,6 +29,11 @@ public final class PackageFilter {
 
     private final Map<String, Boolean> excluded;
 
+    /**
+     * Factory method for creating a new filter builder.
+     *
+     * @return the new builder instance
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -105,6 +110,7 @@ public final class PackageFilter {
         return endsInWildcard(pkg) ? pkg.substring(0, pkg.length() - PKG_WILDCARD.length()) : pkg;
     }
 
+    /** Builder of immutable package filters */
     public static final class Builder {
 
         private final Map<String, Boolean> excluded = new HashMap<>();

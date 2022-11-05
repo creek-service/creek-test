@@ -36,6 +36,13 @@ public final class Temp {
 
     private Temp() {}
 
+    /**
+     * Create a temporary directory to use during testing, which will be cleaned down when the JVM
+     * exits.
+     *
+     * @param prefix directory prefix to use.
+     * @return the path to the dir.
+     */
     public static Path tempDir(final String prefix) {
         try {
             final Path path = Files.createTempDirectory(prefix).toAbsolutePath();

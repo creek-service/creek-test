@@ -29,6 +29,11 @@ public final class ClassPatternFilter {
 
     private final Pattern excluded;
 
+    /**
+     * Factory method for creating a new filter builder.
+     *
+     * @return the new builder instance
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -79,6 +84,7 @@ public final class ClassPatternFilter {
         return "ClassPatternFilter{" + "excluded=" + excluded + '}';
     }
 
+    /** Filter builder */
     public static final class Builder {
 
         private final List<Pattern> excluded = new ArrayList<>();

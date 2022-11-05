@@ -26,12 +26,14 @@ import org.creekservice.api.test.conformity.check.CheckExportedPackages;
 import org.creekservice.internal.test.conformity.CheckTarget;
 import org.creekservice.internal.test.conformity.filter.PackageFilter;
 
+/** Checks only API packages are exported to all. */
 public final class ExportedPackagesCheck implements CheckRunner {
 
     private static final String NL_INDENT = System.lineSeparator() + "\t";
 
     private final Predicate<String> packageFilter;
 
+    /** @param options options to control behaviour */
     public ExportedPackagesCheck(final Options options) {
         this.packageFilter = requireNonNull(options, "options").packageFilter.build()::notExcluded;
     }
@@ -82,6 +84,7 @@ public final class ExportedPackagesCheck implements CheckRunner {
         }
     }
 
+    /** Options to configure this check */
     public static final class Options implements CheckExportedPackages {
 
         private final PackageFilter.Builder packageFilter = PackageFilter.builder();
