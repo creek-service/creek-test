@@ -17,6 +17,8 @@
 /**
  * Configuration for Creek Gradle plugin publishing.
  *
+ * <p>Version: 1.1
+ *
  * <p>Apply this plugin to any module publishing a Gradle plugin.
  *
  * <p>Do NOT ally the `creek-publishing-convention`.
@@ -71,17 +73,6 @@ tasks.jar {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/creek-service/${rootProject.name}")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-
     publications.withType<MavenPublication>().configureEach {
 
         if (prependRootName) {
