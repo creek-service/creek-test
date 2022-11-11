@@ -22,7 +22,9 @@ import org.creekservice.internal.test.conformity.CheckTarget;
 /** Runner of a single check */
 public interface CheckRunner {
 
-    /** @return the name of the check, used in error messages. */
+    /**
+     * @return the name of the check, used in error messages.
+     */
     String name();
 
     /**

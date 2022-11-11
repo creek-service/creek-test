@@ -29,7 +29,9 @@ import org.creekservice.internal.test.conformity.check.ExportedPackagesCheck;
 public interface CheckExportedPackages
         extends ConformityCheck, ExcludesPackages<CheckExportedPackages> {
 
-    /** @return a builder used to customise the check */
+    /**
+     * @return a builder used to customise the check
+     */
     static CheckExportedPackages builder() {
         return new ExportedPackagesCheck.Options();
     }

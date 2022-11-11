@@ -33,7 +33,9 @@ public final class ExportedPackagesCheck implements CheckRunner {
 
     private final Predicate<String> packageFilter;
 
-    /** @param options options to control behaviour */
+    /**
+     * @param options options to control behaviour
+     */
     public ExportedPackagesCheck(final Options options) {
         this.packageFilter = requireNonNull(options, "options").packageFilter.build()::notExcluded;
     }

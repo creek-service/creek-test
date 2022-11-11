@@ -41,17 +41,23 @@ public final class CheckTarget implements AutoCloseable {
         this.types = new AtomicReference<>();
     }
 
-    /** @return the location of the module */
+    /**
+     * @return the location of the module
+     */
     public URI moduleLocation() {
         return location;
     }
 
-    /** @return the module under test */
+    /**
+     * @return the module under test
+     */
     public Module moduleUnderTest() {
         return moduleUnderTest;
     }
 
-    /** @return the types the module contains */
+    /**
+     * @return the types the module contains
+     */
     public ModuleTypes types() {
         return types.updateAndGet(
                 existing -> existing == null ? new ClassFinder(typeFromModuleToTest) : existing);

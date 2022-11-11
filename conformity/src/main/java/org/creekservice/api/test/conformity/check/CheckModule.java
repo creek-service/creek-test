@@ -25,7 +25,9 @@ import org.creekservice.internal.test.conformity.check.ModuleCheck;
  */
 public interface CheckModule extends ConformityCheck {
 
-    /** @return a builder used to customise the check */
+    /**
+     * @return a builder used to customise the check
+     */
     static CheckModule builder() {
         return new ModuleCheck.Options();
     }
