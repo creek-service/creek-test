@@ -32,7 +32,9 @@ public interface CheckConstructorsPrivate
                 ExcludesPackages<CheckConstructorsPrivate>,
                 ExcludesClasses<CheckConstructorsPrivate> {
 
-    /** @return a builder used to customise the check */
+    /**
+     * @return a builder used to customise the check
+     */
     static CheckConstructorsPrivate builder() {
         return new ConstructorsPrivateCheck.Options();
     }

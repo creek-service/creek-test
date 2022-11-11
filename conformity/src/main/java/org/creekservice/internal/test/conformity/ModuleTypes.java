@@ -23,9 +23,13 @@ import java.util.stream.Stream;
 /** Information about the types in a module */
 public interface ModuleTypes {
 
-    /** @return all classes in the module */
+    /**
+     * @return all classes in the module
+     */
     Stream<ClassInfo> classes();
 
-    /** @return all api classes in the module. */
+    /**
+     * @return all api classes in the module.
+     */
     Stream<ClassInfo> apiClasses();
 }

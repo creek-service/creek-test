@@ -24,7 +24,9 @@ import org.creekservice.internal.test.conformity.CheckTarget;
 /** Check that the module under test is a named, non-automatic, module. */
 public final class ModuleCheck implements CheckRunner {
 
-    /** @param ignored for now. */
+    /**
+     * @param ignored for now.
+     */
     public ModuleCheck(final Options ignored) {}
 
     @Override

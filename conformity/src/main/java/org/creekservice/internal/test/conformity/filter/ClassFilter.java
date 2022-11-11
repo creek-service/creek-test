@@ -101,7 +101,9 @@ public final class ClassFilter {
             return this;
         }
 
-        /** @return the built filter. */
+        /**
+         * @return the built filter.
+         */
         public ClassFilter build() {
             return new ClassFilter(excluded);
         }

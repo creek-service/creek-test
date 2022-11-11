@@ -38,7 +38,9 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
     private final ClassFilter classFilter;
     private final ClassPatternFilter classPatternFilter;
 
-    /** @param options options to control behaviour */
+    /**
+     * @param options options to control behaviour
+     */
     public ConstructorsPrivateCheck(final Options options) {
         this.packageFilter = requireNonNull(options, "options").packageFilter.build();
         this.classFilter = options.classFilter.build();

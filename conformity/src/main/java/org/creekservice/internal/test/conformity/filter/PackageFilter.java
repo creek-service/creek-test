@@ -127,7 +127,9 @@ public final class PackageFilter {
             return this;
         }
 
-        /** @return the built filter. */
+        /**
+         * @return the built filter.
+         */
         public PackageFilter build() {
             return new PackageFilter(excluded);
         }

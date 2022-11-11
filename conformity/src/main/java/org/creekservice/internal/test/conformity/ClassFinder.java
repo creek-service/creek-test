@@ -31,7 +31,9 @@ public final class ClassFinder implements ModuleTypes, AutoCloseable {
 
     private final ScanResult scanResult;
 
-    /** @param typeFromModuleToTest any type from the module to scan. */
+    /**
+     * @param typeFromModuleToTest any type from the module to scan.
+     */
     public ClassFinder(final Class<?> typeFromModuleToTest) {
         this.scanResult = scan(typeFromModuleToTest);
     }
