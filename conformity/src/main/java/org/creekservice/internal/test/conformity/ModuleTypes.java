@@ -16,7 +16,6 @@
 
 package org.creekservice.internal.test.conformity;
 
-
 import io.github.classgraph.ClassInfo;
 import java.util.stream.Stream;
 

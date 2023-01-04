@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.conformity;
 
-
 import org.creekservice.api.test.conformity.check.ConformityCheck;
 import org.creekservice.internal.test.conformity.DefaultConformityTester;
 

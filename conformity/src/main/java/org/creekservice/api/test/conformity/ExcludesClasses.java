@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.conformity;
 
-
 import java.util.regex.Pattern;
 
 /** Common interface for checks that exclude by class. */

@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.util.debug;
 
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
