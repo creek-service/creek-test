@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.util.coverage;
 
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;

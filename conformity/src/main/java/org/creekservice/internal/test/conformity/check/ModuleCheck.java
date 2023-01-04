@@ -16,7 +16,6 @@
 
 package org.creekservice.internal.test.conformity.check;
 
-
 import java.net.URI;
 import org.creekservice.api.test.conformity.check.CheckModule;
 import org.creekservice.internal.test.conformity.CheckTarget;

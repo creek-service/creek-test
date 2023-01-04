@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.conformity.check;
 
-
 import org.creekservice.api.test.conformity.ExcludesClasses;
 import org.creekservice.api.test.conformity.ExcludesPackages;
 import org.creekservice.internal.test.conformity.check.ConstructorsPrivateCheck;
