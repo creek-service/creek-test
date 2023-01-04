@@ -16,7 +16,6 @@
 
 package org.creekservice;
 
-
 import org.creekservice.api.test.conformity.ConformityTester;
 import org.creekservice.api.test.conformity.test.types.bad.NotExported;
 import org.junit.jupiter.api.Test;

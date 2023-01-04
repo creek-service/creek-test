@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.util;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;

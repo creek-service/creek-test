@@ -16,7 +16,6 @@
 
 package org.creekservice.internal.test.conformity.check;
 
-
 import org.creekservice.internal.test.conformity.CheckTarget;
 
 /** Runner of a single check */
