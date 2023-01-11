@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.creekservice/creek-test-hamcrest.svg)](https://central.sonatype.dev/search?q=creek-test-*)
 [![CodeQL](https://github.com/creek-service/creek-test/actions/workflows/codeql.yml/badge.svg)](https://github.com/creek-service/creek-test/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/creek-service/creek-test/badge)](https://api.securityscorecards.dev/projects/github.com/creek-service/creek-test)
-[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/6897/badge)](https://bestpractices.coreinfrastructure.org/projects/6897)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/6899/badge)](https://bestpractices.coreinfrastructure.org/projects/6899)
 
 # Creek Test
 
