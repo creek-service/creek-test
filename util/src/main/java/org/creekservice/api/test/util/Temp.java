@@ -16,6 +16,7 @@
 
 package org.creekservice.api.test.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -42,6 +43,7 @@ public final class Temp {
      * @param prefix directory prefix to use.
      * @return the path to the dir.
      */
+    @SuppressFBWarnings(value = "PATH_TRAVERSAL_IN", justification = "Trusted user data")
     public static Path tempDir(final String prefix) {
         try {
             final Path path = Files.createTempDirectory(prefix).toAbsolutePath();
