@@ -62,8 +62,8 @@ class ModuleTest {
         assertThat(
                 e.getMessage(),
                 containsString(
-                        "Code location not a jar file. "
-                                + "See: https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars"));
+                        "Code location not a jar file. See:"
+                            + " https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars"));
     }
 
     @Test

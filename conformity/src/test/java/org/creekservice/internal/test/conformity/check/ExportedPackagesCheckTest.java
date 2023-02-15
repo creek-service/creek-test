@@ -93,7 +93,8 @@ class ExportedPackagesCheckTest {
         assertThat(
                 e.getMessage(),
                 is(
-                        "API packages are not exposed in the module's module-info.java file. module=Bob, unexposed_packages=["
+                        "API packages are not exposed in the module's module-info.java file."
+                                + " module=Bob, unexposed_packages=["
                                 + System.lineSeparator()
                                 + "\torg.creekservice.api"
                                 + System.lineSeparator()
@@ -118,8 +119,8 @@ class ExportedPackagesCheckTest {
         assertThat(
                 e.getMessage(),
                 is(
-                        "Non-API packages are exposed (without a 'to' clause) "
-                                + "in the module's module-info.java file. module=Bob, exposed_packages=["
+                        "Non-API packages are exposed (without a 'to' clause) in the module's"
+                                + " module-info.java file. module=Bob, exposed_packages=["
                                 + System.lineSeparator()
                                 + "\torg.creekservice.internal.a"
                                 + System.lineSeparator()

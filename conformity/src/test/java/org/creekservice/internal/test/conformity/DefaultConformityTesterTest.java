@@ -59,7 +59,8 @@ class DefaultConformityTesterTest {
         assertThat(
                 e.getMessage(),
                 startsWith(
-                        "Conformity check failed. check: CheckExportedPackages, reason: API packages are not exposed"));
+                        "Conformity check failed. check: CheckExportedPackages, reason: API"
+                                + " packages are not exposed"));
         assertThat(e.getCause().getMessage(), startsWith("API packages are not exposed"));
     }
 
@@ -75,7 +76,8 @@ class DefaultConformityTesterTest {
         assertThat(
                 e.getMessage(),
                 startsWith(
-                        "Conformity check failed. check: CheckModule, reason: The module is automatic"));
+                        "Conformity check failed. check: CheckModule, reason: The module is"
+                                + " automatic"));
     }
 
     @Test

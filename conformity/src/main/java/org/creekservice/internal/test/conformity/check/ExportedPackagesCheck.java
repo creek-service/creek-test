@@ -121,8 +121,8 @@ public final class ExportedPackagesCheck implements CheckRunner {
 
         NonApiPackageExposedException(final String moduleName, final String exposed) {
             super(
-                    "Non-API packages are exposed (without a 'to' clause) in the module's module-info.java file."
-                            + " module="
+                    "Non-API packages are exposed (without a 'to' clause) in the module's"
+                            + " module-info.java file. module="
                             + moduleName
                             + ", exposed_packages=["
                             + NL_INDENT

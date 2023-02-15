@@ -71,7 +71,8 @@ class ConstructorsPrivateCheckTest {
                 e.getMessage(),
                 containsString(
                         PublicTypeWithPublicConstructor.class.getName()
-                                + " has public constructors: public <init>(int), public <init>(long)"));
+                                + " has public constructors: public <init>(int), public"
+                                + " <init>(long)"));
     }
 
     @Test
@@ -103,7 +104,8 @@ class ConstructorsPrivateCheckTest {
                 not(
                         containsString(
                                 PublicSubTypeWithPublicConstructor.class.getName()
-                                        + " has public constructors: public <init>(int), public <init>(long)")));
+                                        + " has public constructors: public <init>(int), public"
+                                        + " <init>(long)")));
     }
 
     @Test
