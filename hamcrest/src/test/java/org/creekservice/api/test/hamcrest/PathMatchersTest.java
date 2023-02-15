@@ -193,7 +193,8 @@ class PathMatchersTest {
             assertThat(
                     description(directoryChildren("a", "b")),
                     is(
-                            "(is a directory and contents is iterable with items [\"a\", \"b\"] in any order)"));
+                            "(is a directory and contents is iterable with items [\"a\", \"b\"] in"
+                                    + " any order)"));
         }
 
         @Test
