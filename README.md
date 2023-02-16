@@ -17,7 +17,7 @@ See [CreekService.org](https://www.creekservice.org) for info on Creek Service.
 
 * **[util](util)**: some Creek specific test utility classes.
 * **[hamcrest](hamcrest)**: some additional [Hamcrest][1] matchers and helpers.
-* **[conformity](conformity)**: tests helpers for checking projects conform to Creek standards.
+* **[conformity](conformity)**: tests helpers for checking projects conform to Creek standards, automating some of code review tasks.
 
 [1]: http://hamcrest.org/JavaHamcrest/index
 
