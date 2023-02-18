@@ -1,3 +1,5 @@
+[![javadoc](https://javadoc.io/badge2/org.creekservice/creek-test-conformity/javadoc.svg)](https://javadoc.io/doc/org.creekservice/creek-test-conformity)
+
 # Creek Test Conformity
 
 Provides test helpers for checking Creek's own modules and code conform to certain standards.
