@@ -139,14 +139,18 @@ class CodeCoverageTest {
                 codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
 
         // Then:
+        final Path abs = BUILD_DIR.toAbsolutePath();
         assertThat(
                 result,
                 is(
                         Optional.of(
-                                "-javaagent:/Users/andy/dev/github.com/creek/creek-test/util/some/path/build/tmp/"
-                                    + "expandedArchives/org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile=/Users/andy/dev/github.com/creek/creek-test/util/some/path/build/jacoco/test.exec,"
-                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
+                                "-javaagent:"
+                                        + abs
+                                        + "/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                        + "destfile="
+                                        + abs
+                                        + "/jacoco/test.exec,"
+                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 
     @Test
@@ -155,22 +159,26 @@ class CodeCoverageTest {
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
                         List.of(
-                                "-javaagent:/Users/andy/dev/github.com/creek/creek-system-test/executor/build/tmp/"
+                                "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
                                     + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
                                     + "destfile=build/jacoco/test.exec,"
                                     + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
 
         // When:
-        final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
 
         // Then:
+        final Path abs = BUILD_DIR.toAbsolutePath();
         assertThat(
                 result,
                 is(
                         Optional.of(
-                                "-javaagent:/Users/andy/dev/github.com/creek/creek-system-test/executor/build/tmp/"
+                                "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
                                     + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile=build/jacoco/test.exec,"
-                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
+                                    + "destfile="
+                                        + abs
+                                        + "/jacoco/test.exec,"
+                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 }

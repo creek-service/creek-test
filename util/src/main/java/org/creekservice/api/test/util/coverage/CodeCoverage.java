@@ -68,7 +68,8 @@ public final class CodeCoverage {
                                 found.map(
                                         arg ->
                                                 arg.replaceAll(
-                                                        "build/", dir.toAbsolutePath() + "/")))
+                                                        "([:=])build/",
+                                                        "$1" + dir.toAbsolutePath() + "/")))
                 .orElse(found);
     }
 }
