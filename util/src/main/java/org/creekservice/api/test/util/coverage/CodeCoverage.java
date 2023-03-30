@@ -60,7 +60,7 @@ public final class CodeCoverage {
         final Optional<String> found =
                 runtimeMXBean.getInputArguments().stream()
                         .filter(arg -> arg.startsWith("-javaagent:"))
-                        .filter(arg -> arg.contains("org.jacoco.agent"))
+                        .filter(arg -> arg.contains("jacocoagent.jar"))
                         .reduce((first, second) -> first);
 
         return buildDir.map(
@@ -68,7 +68,8 @@ public final class CodeCoverage {
                                 found.map(
                                         arg ->
                                                 arg.replaceAll(
-                                                        "build/", dir.toAbsolutePath() + "/")))
+                                                        "([:=])build/",
+                                                        "$1" + dir.toAbsolutePath() + "/")))
                 .orElse(found);
     }
 }

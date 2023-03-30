@@ -44,7 +44,7 @@ class CodeCoverageTest {
                 .thenReturn(
                         List.of(
                                 "-javaagent: but not Jacoco",
-                                "--javaagent: but not org.jacoco.agent"));
+                                "--javaagent: but not jacocoagent.jar"));
 
         // When:
         final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
@@ -60,7 +60,7 @@ class CodeCoverageTest {
                 .thenReturn(
                         List.of(
                                 "-javaagent: but not Jacoco",
-                                "--javaagent: but not org.jacoco.agent"));
+                                "--javaagent: but not jacocoagent.jar"));
 
         // When:
         final Optional<String> result =
@@ -74,13 +74,13 @@ class CodeCoverageTest {
     void shouldReturnJaCoCoAgentParamAsIs() {
         // Given:
         when(runtimeMXBean.getInputArguments())
-                .thenReturn(List.of("--arg", "-javaagent:blah_org.jacoco.agent_blah", "-arg"));
+                .thenReturn(List.of("--arg", "-javaagent:blah_jacocoagent.jar_blah", "-arg"));
 
         // When:
         final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
 
         // Then:
-        assertThat(result, is(Optional.of("-javaagent:blah_org.jacoco.agent_blah")));
+        assertThat(result, is(Optional.of("-javaagent:blah_jacocoagent.jar_blah")));
     }
 
     @Test
@@ -88,8 +88,7 @@ class CodeCoverageTest {
         // Given:
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
-                        List.of(
-                                "-javaagent:build/org.jacoco.agent.jar:-destfile=build/tmp/something"));
+                        List.of("-javaagent:build/jacocoagent.jar:destfile=build/tmp/something"));
 
         // When:
         final Optional<String> result =
@@ -103,7 +102,7 @@ class CodeCoverageTest {
                         Optional.of(
                                 "-javaagent:"
                                         + abs
-                                        + "/org.jacoco.agent.jar:-destfile="
+                                        + "/jacocoagent.jar:destfile="
                                         + abs
                                         + "/tmp/something")));
     }
@@ -114,13 +113,72 @@ class CodeCoverageTest {
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
                         List.of(
-                                "-javaagent:first_org.jacoco.agent",
-                                "-javaagent:second_org.jacoco.agent"));
+                                "-javaagent:first_jacocoagent.jar",
+                                "-javaagent:second_jacocoagent.jar"));
 
         // When:
         final Optional<String> result = codeCoverageCmdLineArg(runtimeMXBean, Optional.empty());
 
         // Then:
-        assertThat(result, is(Optional.of("-javaagent:first_org.jacoco.agent")));
+        assertThat(result, is(Optional.of("-javaagent:first_jacocoagent.jar")));
+    }
+
+    @Test
+    void shouldWorkWithGradle7() {
+        // Given:
+        when(runtimeMXBean.getInputArguments())
+                .thenReturn(
+                        List.of(
+                                "-javaagent:build/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar"
+                                    + "_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                    + "destfile=build/jacoco/test.exec,"
+                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
+
+        // When:
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
+
+        // Then:
+        final Path abs = BUILD_DIR.toAbsolutePath();
+        assertThat(
+                result,
+                is(
+                        Optional.of(
+                                "-javaagent:"
+                                        + abs
+                                        + "/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                        + "destfile="
+                                        + abs
+                                        + "/jacoco/test.exec,"
+                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
+    }
+
+    @Test
+    void shouldWorkWithGradle8() {
+        // Given:
+        when(runtimeMXBean.getInputArguments())
+                .thenReturn(
+                        List.of(
+                                "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
+                                    + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                    + "destfile=build/jacoco/test.exec,"
+                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
+
+        // When:
+        final Optional<String> result =
+                codeCoverageCmdLineArg(runtimeMXBean, Optional.of(BUILD_DIR));
+
+        // Then:
+        final Path abs = BUILD_DIR.toAbsolutePath();
+        assertThat(
+                result,
+                is(
+                        Optional.of(
+                                "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
+                                    + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                    + "destfile="
+                                        + abs
+                                        + "/jacoco/test.exec,"
+                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 }
