@@ -34,4 +34,3 @@ jobs:
           DEPENDENCY_GRAPH_INCLUDE_CONFIGURATIONS: runtimeClasspath
           DEPENDENCY_GRAPH_INCLUDE_PROJECTS: "^:(?!(buildSrc|test-)).*"
         run: ./gradlew allDeps --configuration runtimeClasspath
-
