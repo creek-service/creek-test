@@ -51,15 +51,15 @@ subprojects {
     extra.apply {
         // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-        set("spotBugsVersion", "4.7.3")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
-        set("classGraphVersion", "4.8.162")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
+        set("spotBugsVersion", "4.8.0")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
+        set("classGraphVersion", "4.8.163")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
 
-        set("log4jVersion", "2.20.0")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-        set("guavaVersion", "32.1.2-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
+        set("log4jVersion", "2.21.1")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+        set("guavaVersion", "32.1.3-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
 
         set("junitVersion", "5.10.0")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
         set("junitPioneerVersion", "2.1.0")     // https://mvnrepository.com/artifact/org.junit-pioneer/junit-pioneer
-        set("mockitoVersion", "5.5.0")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+        set("mockitoVersion", "5.6.0")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
         set("hamcrestVersion", "2.2")           // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
     }
 
