@@ -34,7 +34,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CodeCoverageTest {
 
-    private static final Path BUILD_DIR = Paths.get("some/path/build/");
+    private static final Path BUILD_DIR = Paths.get("some", "path", "build");
+    private static final Path ROOT;
+
+    static {
+        Path path = Paths.get("");
+        while (path.getParent() != null) {
+            path = path.getParent();
+        }
+        ROOT = path;
+    }
+
     @Mock private RuntimeMXBean runtimeMXBean;
 
     @Test
@@ -88,7 +98,11 @@ class CodeCoverageTest {
         // Given:
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
-                        List.of("-javaagent:build/jacocoagent.jar:destfile=build/tmp/something"));
+                        List.of(
+                                "-javaagent:"
+                                        + Paths.get("build", "jacocoagent.jar")
+                                        + ":destfile="
+                                        + Paths.get("build", "tmp", "something")));
 
         // When:
         final Optional<String> result =
@@ -101,10 +115,9 @@ class CodeCoverageTest {
                 is(
                         Optional.of(
                                 "-javaagent:"
-                                        + abs
-                                        + "/jacocoagent.jar:destfile="
-                                        + abs
-                                        + "/tmp/something")));
+                                        + abs.resolve("jacocoagent.jar")
+                                        + ":destfile="
+                                        + abs.resolve(Paths.get("tmp", "something")))));
     }
 
     @Test
@@ -129,10 +142,16 @@ class CodeCoverageTest {
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
                         List.of(
-                                "-javaagent:build/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar"
-                                    + "_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile=build/jacoco/test.exec,"
-                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
+                                "-javaagent:"
+                                        + Paths.get(
+                                                "build",
+                                                "tmp",
+                                                "expandedArchives",
+                                                "org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c",
+                                                "jacocoagent.jar=")
+                                        + "destfile="
+                                        + Paths.get("build", "jacoco", "test.exec")
+                                        + ",append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
 
         // When:
         final Optional<String> result =
@@ -145,24 +164,46 @@ class CodeCoverageTest {
                 is(
                         Optional.of(
                                 "-javaagent:"
-                                        + abs
-                                        + "/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                        + "destfile="
-                                        + abs
-                                        + "/jacoco/test.exec,"
-                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
+                                        + abs.resolve(
+                                                Paths.get(
+                                                        "tmp",
+                                                        "expandedArchives",
+                                                        "org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c",
+                                                        "jacocoagent.jar"))
+                                        + "=destfile="
+                                        + abs.resolve(Paths.get("jacoco", "test.exec"))
+                                        + ",append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 
     @Test
     void shouldWorkWithGradle8() {
         // Given:
+        final Path agentAbs =
+                ROOT.resolve(
+                        Paths.get(
+                                "home",
+                                "runner",
+                                "work",
+                                "creek-system-test",
+                                "executor",
+                                "build",
+                                "tmp",
+                                ".cache",
+                                "expanded",
+                                "zip_a33b649e552c51298e5a242c2f0d0e3c",
+                                "jacocoagent.jar"));
+
         when(runtimeMXBean.getInputArguments())
                 .thenReturn(
                         List.of(
-                                "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
-                                    + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile=build/jacoco/test.exec,"
-                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
+                                "-javaagent:"
+                                        + agentAbs
+                                        + "=destfile="
+                                        + Paths.get(
+                                                "build",
+                                                "jacoco",
+                                                "test.exec"
+                                                    + ",append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
 
         // When:
         final Optional<String> result =
@@ -174,11 +215,10 @@ class CodeCoverageTest {
                 result,
                 is(
                         Optional.of(
-                                "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
-                                    + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile="
-                                        + abs
-                                        + "/jacoco/test.exec,"
-                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
+                                "-javaagent:"
+                                        + agentAbs
+                                        + "=destfile="
+                                        + abs.resolve(Paths.get("jacoco", "test.exec"))
+                                        + ",append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 }
