@@ -70,8 +70,11 @@ public final class CodeCoverage {
                                 found.map(
                                         arg ->
                                                 arg.replaceAll(
-                                                        "([:=])build" + Pattern.quote(File.separator),
-                                                        "$1" + dir.toAbsolutePath() + File.separator)))
+                                                        "([:=])build"
+                                                                + Pattern.quote(File.separator),
+                                                        "$1"
+                                                                + dir.toAbsolutePath()
+                                                                + File.separator)))
                 .orElse(found);
     }
 }
