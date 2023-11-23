@@ -69,9 +69,7 @@ public final class CodeCoverage {
                                         arg ->
                                                 arg.replaceAll(
                                                         "([:=])build([/\\\\])",
-                                                        "$1"
-                                                                + dir.toAbsolutePath()
-                                                                + "$2")))
+                                                        "$1" + dir.toAbsolutePath() + "$2")))
                 .orElse(found);
     }
 }
