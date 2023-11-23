@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,15 +36,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CodeCoverageTest {
 
     private static final Path BUILD_DIR = Paths.get("some", "path", "build");
-    private static final Path ROOT;
-
-    static {
-        Path path = Paths.get("");
-        while (path.getParent() != null) {
-            path = path.getParent();
-        }
-        ROOT = path;
-    }
+    private static final Path ROOT = rootDir();
 
     @Mock private RuntimeMXBean runtimeMXBean;
 
@@ -220,5 +213,14 @@ class CodeCoverageTest {
                                         + "=destfile="
                                         + abs.resolve(Paths.get("jacoco", "test.exec"))
                                         + ",append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
+    }
+
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
+    private static Path rootDir() {
+        Path path = Paths.get("");
+        while (path.getParent() != null) {
+            path = path.getParent();
+        }
+        return path;
     }
 }
