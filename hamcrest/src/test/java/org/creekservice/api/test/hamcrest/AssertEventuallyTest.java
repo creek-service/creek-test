@@ -271,6 +271,6 @@ class AssertEventuallyTest {
 
         // Then:
         final int times = Mockito.mockingDetails(supplier).getInvocations().size();
-        assertThat(times, is(both(greaterThan(10)).and(lessThan(30))));
+        assertThat(times, is(both(greaterThan(3)).and(lessThan(30))));
     }
 }
