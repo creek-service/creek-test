@@ -18,6 +18,7 @@ package org.creekservice.internal.test.conformity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.classgraph.ClassInfo;
 import org.creekservice.api.test.conformity.ConformityTester;
 import org.creekservice.api.test.util.TestPaths;
@@ -124,6 +125,7 @@ class ClassFinderTest {
                                         className.equals(StaticNestedClass.class.getSimpleName())));
     }
 
+    @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC")
     @SuppressWarnings("InnerClassMayBeStatic")
     public final class NestedClass {}
 
