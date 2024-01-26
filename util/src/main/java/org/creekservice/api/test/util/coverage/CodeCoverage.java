@@ -16,10 +16,13 @@
 
 package org.creekservice.api.test.util.coverage;
 
+import static java.io.File.separator;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /** Util class for capturing code coverage specific JVM arguments. */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -68,8 +71,8 @@ public final class CodeCoverage {
                                 found.map(
                                         arg ->
                                                 arg.replaceAll(
-                                                        "([:=])build/",
-                                                        "$1" + dir.toAbsolutePath() + "/")))
+                                                        "([:=])build" + Pattern.quote(separator),
+                                                        "$1" + dir.toAbsolutePath() + separator)))
                 .orElse(found);
     }
 }
