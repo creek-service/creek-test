@@ -22,7 +22,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 /** Util class for capturing code coverage specific JVM arguments. */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -71,7 +70,7 @@ public final class CodeCoverage {
                                 found.map(
                                         arg ->
                                                 arg.replaceAll(
-                                                        "([:=])build" + Pattern.quote(separator),
+                                                        "([:=])build[\\\\/]",
                                                         "$1" + dir.toAbsolutePath() + separator)))
                 .orElse(found);
     }
