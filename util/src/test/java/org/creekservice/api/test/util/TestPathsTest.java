@@ -22,6 +22,7 @@ import static org.creekservice.api.test.hamcrest.PathMatchers.doesNotExist;
 import static org.creekservice.api.test.util.TestPaths.copy;
 import static org.creekservice.api.test.util.TestPaths.ensureDirectories;
 import static org.creekservice.api.test.util.TestPaths.listDirectory;
+import static org.creekservice.api.test.util.TestPaths.listDirectoryRecursive;
 import static org.creekservice.api.test.util.TestPaths.moduleRoot;
 import static org.creekservice.api.test.util.TestPaths.projectRoot;
 import static org.creekservice.api.test.util.TestPaths.readBytes;
@@ -119,6 +120,31 @@ class TestPathsTest {
     @Test
     void shouldThrowOnErrorListingDirectory() {
         assertThrows(AssertionError.class, () -> listDirectory(tempDir.resolve("I do not exist")));
+    }
+
+    @Test
+    void shouldListDirectoryRecursively() {
+        // Given:
+        ensureDirectories(tempDir.resolve("child1/subChild1"));
+        write(tempDir.resolve("child2"), "some-content");
+        write(tempDir.resolve("child1/subChild2"), "some-content");
+
+        // When:
+        final Stream<Path> result = listDirectoryRecursive(tempDir);
+
+        // Then:
+        final List<String> children =
+                result.map(tempDir::relativize).map(Objects::toString).collect(Collectors.toList());
+        assertThat(
+                children,
+                containsInAnyOrder("child1", "child2", "child1/subChild1", "child1/subChild2"));
+    }
+
+    @Test
+    void shouldThrowOnErrorListingDirectoryRecursively() {
+        assertThrows(
+                AssertionError.class,
+                () -> listDirectoryRecursive(tempDir.resolve("I do not exist")));
     }
 
     @Test
