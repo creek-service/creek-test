@@ -22,6 +22,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -89,6 +90,25 @@ public final class TestPaths {
     public static Stream<Path> listDirectory(final Path path) {
         try {
             return Files.list(path);
+        } catch (final IOException e) {
+            throw new AssertionError("Failed to list directory: " + path, e);
+        }
+    }
+
+    /**
+     * List directory content, recursive.
+     *
+     * <p>Strictly speaking, the returned stream should have {@link Stream#close()} called on it.
+     *
+     * @param path the directory to list
+     * @param options the walk options
+     * @return stream of entries in the directory
+     */
+    @SuppressWarnings("resource")
+    public static Stream<Path> listDirectoryRecursive(
+            final Path path, final FileVisitOption... options) {
+        try {
+            return Files.walk(path, options).filter(p -> !path.equals(p));
         } catch (final IOException e) {
             throw new AssertionError("Failed to list directory: " + path, e);
         }
