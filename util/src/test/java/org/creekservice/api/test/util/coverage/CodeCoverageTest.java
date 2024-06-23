@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -102,9 +103,11 @@ class CodeCoverageTest {
                         Optional.of(
                                 "-javaagent:"
                                         + abs
-                                        + "/jacocoagent.jar:destfile="
+                                        + File.separator
+                                        + "jacocoagent.jar:destfile="
                                         + abs
-                                        + "/tmp/something")));
+                                        + File.separator
+                                        + "tmp/something")));
     }
 
     @Test
@@ -146,10 +149,12 @@ class CodeCoverageTest {
                         Optional.of(
                                 "-javaagent:"
                                         + abs
-                                        + "/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                        + File.separator
+                                        + "tmp/expandedArchives/org.jacoco.agent-0.8.8.jar_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
                                         + "destfile="
                                         + abs
-                                        + "/jacoco/test.exec,"
+                                        + File.separator
+                                        + "jacoco/test.exec,"
                                         + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 
@@ -178,7 +183,8 @@ class CodeCoverageTest {
                                     + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
                                     + "destfile="
                                         + abs
-                                        + "/jacoco/test.exec,"
+                                        + File.separator
+                                        + "jacoco/test.exec,"
                                         + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")));
     }
 }
