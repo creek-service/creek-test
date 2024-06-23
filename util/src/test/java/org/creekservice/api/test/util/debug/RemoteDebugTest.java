@@ -16,6 +16,7 @@
 
 package org.creekservice.api.test.util.debug;
 
+import static java.io.File.separator;
 import static org.creekservice.api.test.util.debug.RemoteDebug.currentRemoteDebugArguments;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -66,7 +67,8 @@ class RemoteDebugTest {
         final Path dir =
                 Paths.get("src/test/resources/remote/debug/multiple/.attachme").toAbsolutePath();
         assertThat(
-                args.get(0), is("-javaagent:" + dir + "/agent-1.1.0.jar=port:7857,host:localhost"));
+                args.get(0),
+                is("-javaagent:" + dir + separator + "agent-1.1.0.jar=port:7857,host:localhost"));
         assertThat(
                 args.get(1),
                 is("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:0"));
@@ -101,7 +103,11 @@ class RemoteDebugTest {
                 Paths.get("src/test/resources/remote/debug/multiple/.attachme").toAbsolutePath();
         assertThat(
                 args.get(0),
-                is("-javaagent:" + dir + "/agent-1.1.0.jar=port:7857,host:host.docker.internal"));
+                is(
+                        "-javaagent:"
+                                + dir
+                                + separator
+                                + "agent-1.1.0.jar=port:7857,host:host.docker.internal"));
         assertThat(
                 args.get(1),
                 is(

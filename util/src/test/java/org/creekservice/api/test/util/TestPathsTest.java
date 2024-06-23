@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -137,7 +138,11 @@ class TestPathsTest {
                 result.map(tempDir::relativize).map(Objects::toString).collect(Collectors.toList());
         assertThat(
                 children,
-                containsInAnyOrder("child1", "child2", "child1/subChild1", "child1/subChild2"));
+                containsInAnyOrder(
+                        "child1",
+                        "child2",
+                        "child1" + File.separator + "subChild1",
+                        "child1" + File.separator + "subChild2"));
     }
 
     @Test
