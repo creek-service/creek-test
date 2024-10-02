@@ -22,7 +22,7 @@ plugins {
     `creek-coverage-convention`
     `creek-publishing-convention` apply false
     `creek-sonatype-publishing-convention`
-    id("pl.allegro.tech.build.axion-release") version "1.18.7" // https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release
+    id("pl.allegro.tech.build.axion-release") version "1.18.9" // https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release
 }
 
 project.version = scmVersion.version
@@ -52,14 +52,14 @@ subprojects {
         // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
         set("spotBugsVersion", "4.8.6")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
-        set("classGraphVersion", "4.8.175")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
+        set("classGraphVersion", "4.8.176")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
 
-        set("log4jVersion", "2.23.1")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+        set("log4jVersion", "2.24.1")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
         set("guavaVersion", "33.3.1-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
 
-        set("junitVersion", "5.11.0")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+        set("junitVersion", "5.11.1")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
         set("junitPioneerVersion", "2.2.0")     // https://mvnrepository.com/artifact/org.junit-pioneer/junit-pioneer
-        set("mockitoVersion", "5.13.0")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+        set("mockitoVersion", "5.14.1")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
         set("hamcrestVersion", "3.0")           // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
     }
 
