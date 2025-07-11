@@ -67,7 +67,8 @@ class DefaultConformityTesterTest {
     @Test
     void shouldDetectUnnamedModule() {
         // Given:
-        final ConformityTester tester = ConformityTester.builder(EqualsTester.class);
+        final ConformityTester tester =
+                ConformityTester.builder(org.apache.commons.lang3.ArchUtils.class);
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
@@ -141,7 +142,7 @@ class DefaultConformityTesterTest {
     void shouldDisableChecks() {
         // Given:
         final ConformityTester tester =
-                ConformityTester.builder(EqualsTester.class)
+                ConformityTester.builder(org.apache.commons.lang3.ArchUtils.class)
                         .withDisabled("To allow testing!", CheckModule.builder());
 
         // When:

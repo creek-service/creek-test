@@ -24,4 +24,5 @@ dependencies {
     implementation("io.github.classgraph:classgraph:$classGraphVersion")
 
     testImplementation(project(":util"))
+    testImplementation("org.apache.commons:commons-lang3:3.8.1")
 }
