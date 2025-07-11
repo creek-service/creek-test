@@ -31,7 +31,7 @@ java {
 
 kotlin {
     jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(jvmTargetVer)
+        languageVersion.set(jvmTargetVer)
     }
 }
 
