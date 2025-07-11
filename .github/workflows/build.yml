@@ -101,14 +101,7 @@ jobs:
           gradle-home-cache-cleanup: true
       - name: Build
         run: ./gradlew.bat build -PexcludeContainerised
-      - name: Upload Checkstyle reports
-        if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: checkstyle-reports-win
-          path: '**/build/reports/checkstyle/*.xml'
-          retention-days: 5
-      - name: Upload Spotbugs reports
+      - name: Upload reports
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
