@@ -67,8 +67,7 @@ class DefaultConformityTesterTest {
     @Test
     void shouldDetectUnnamedModule() {
         // Given:
-        final ConformityTester tester =
-                ConformityTester.builder(org.apache.commons.lang3.ArchUtils.class);
+        final ConformityTester tester = ConformityTester.builder(org.hamcrest.Matchers.class);
 
         // When:
         final Error e = assertThrows(AssertionError.class, tester::check);
@@ -142,7 +141,7 @@ class DefaultConformityTesterTest {
     void shouldDisableChecks() {
         // Given:
         final ConformityTester tester =
-                ConformityTester.builder(org.apache.commons.lang3.ArchUtils.class)
+                ConformityTester.builder(org.hamcrest.Matchers.class)
                         .withDisabled("To allow testing!", CheckModule.builder());
 
         // When:
