@@ -1,8 +1,14 @@
 --add-modules
-  org.junitpioneer,org.hamcrest,creek.test.hamcrest,creek.test.conformity
+  org.junitpioneer,org.mockito.junit.jupiter,org.hamcrest,creek.test.hamcrest,creek.test.conformity
 
 --add-reads
-  creek.test.util=org.junitpioneer,org.hamcrest,creek.test.hamcrest,creek.test.conformity
+  creek.test.util=org.junitpioneer,org.mockito.junit.jupiter,org.hamcrest,creek.test.hamcrest,creek.test.conformity
+
+--add-reads
+  org.mockito=java.management
 
 --add-opens
   org.junitpioneer/org.junitpioneer.jupiter=org.junit.platform.commons
+
+ --add-exports
+   org.mockito/org.mockito.internal.creation.bytebuddy=creek.test.util
