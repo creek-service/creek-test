@@ -1,9 +1,14 @@
 --add-modules
-  org.junitpioneer,org.hamcrest,com.google.common.testlib,org.apache.commons.lang3,creek.test.util
+  org.junitpioneer,org.mockito.junit.jupiter,org.hamcrest,com.google.common.testlib,org.apache.commons.lang3,creek.test.util
 
 --add-reads
-  creek.test.conformity=org.junitpioneer,org.hamcrest,com.google.common.testlib,org.apache.commons.lang3,creek.test.util
+  creek.test.conformity=org.junitpioneer,org.mockito.junit.jupiter,org.hamcrest,com.google.common.testlib,org.apache.commons.lang3,creek.test.util
 
 --add-opens
   org.junitpioneer/org.junitpioneer.jupiter=org.junit.platform.commons
 
+--add-exports
+  org.mockito/org.mockito.internal.creation.bytebuddy=creek.test.conformity
+
+--add-exports
+  org.mockito/org.mockito.internal.creation.bytebuddy=creek.test.util
