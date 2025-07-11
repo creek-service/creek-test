@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -140,7 +139,6 @@ public final class PathMatchers {
 
         final FeatureMatcher<Path, List<String>> contentIsAsExpected =
                 new FeatureMatcher<>(childrenMatcher, "contents is", "content") {
-                    @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
                     @Override
                     protected List<String> featureValueOf(final Path path) {
                         try (Stream<Path> files = Files.list(path)) {

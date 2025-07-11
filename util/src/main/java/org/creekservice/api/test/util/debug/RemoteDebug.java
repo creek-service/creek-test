@@ -16,7 +16,6 @@
 
 package org.creekservice.api.test.util.debug;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.file.FileSystems;
@@ -144,7 +143,6 @@ public final class RemoteDebug {
                 .orElse(List.of());
     }
 
-    @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
     private static Optional<Path> findAttacheMeJar() {
         final Path dir = Paths.get(System.getProperty("user.home")).resolve(".attachme");
         if (Files.notExists(dir)) {
