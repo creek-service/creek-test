@@ -18,7 +18,6 @@ package org.creekservice.api.test.util;
 
 import static java.nio.file.Files.isDirectory;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -225,9 +224,6 @@ public final class TestPaths {
      * @param src what to copy
      * @param dest where to put it
      */
-    @SuppressFBWarnings(
-            value = "RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE",
-            justification = "false negative")
     public static void copy(final Path src, final Path dest) {
         final boolean incRoot = !(Files.isDirectory(src) && Files.isDirectory(dest));
 

@@ -32,7 +32,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.hamcrest.Matcher;
@@ -168,7 +167,6 @@ class PathMatchersTest {
         }
     }
 
-    @SuppressFBWarnings(value = "SIC_INNER_SHOULD_BE_STATIC", justification = "red herring")
     @Nested
     class DescriptionTest {
         private final org.hamcrest.Description description = new StringDescription();
