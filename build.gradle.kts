@@ -51,7 +51,7 @@ subprojects {
     extra.apply {
         // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-        set("spotBugsVersion", "4.9.4")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
+        set("spotBugsVersion", "4.9.6")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
         set("classGraphVersion", "4.8.181")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
 
         set("log4jVersion", "2.25.2")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
