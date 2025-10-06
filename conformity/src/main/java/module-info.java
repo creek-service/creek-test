@@ -6,7 +6,7 @@
  * <p>Intended for internal Creek use only
  */
 module creek.test.conformity {
-    requires classgraph;
+    requires io.github.classgraph;
 
     exports org.creekservice.api.test.conformity;
     exports org.creekservice.api.test.conformity.check;
