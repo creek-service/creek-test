@@ -17,13 +17,9 @@
 package org.creekservice.api.test.hamcrest;
 
 import static java.util.Objects.requireNonNull;
-import static org.hamcrest.Matchers.both;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 import org.creekservice.api.test.util.OSCheck;
 import org.hamcrest.Matcher;
-import org.hamcrest.core.CombinableMatcher;
 
 /** Cross-platform matcher for handling OS differences. */
 public final class OSMatchers {
@@ -33,32 +29,29 @@ public final class OSMatchers {
     /**
      * Check to use if running on Windows.
      *
-     * @param matcher the check to run.
+     * @param windows the check to run on Windows systems.
      * @return builder on which the non-windows check can be set.
      * @param <LHS> the type being matched.
      */
-    public static <LHS> CombinableOsMatcher<LHS> onWindows(final Matcher<? super LHS> matcher) {
-        return new CombinableOsMatcher<>(matcher);
+    public static <LHS> SelectiveOsMatcher<LHS> onWindows(final Matcher<? super LHS> windows) {
+        return new SelectiveOsMatcher<>(windows);
     }
 
-    public static final class CombinableOsMatcher<X> {
+    public static final class SelectiveOsMatcher<X> {
         private final Matcher<? super X> windows;
 
-        CombinableOsMatcher(final Matcher<? super X> matcher) {
-            this.windows = both(requireNonNull(matcher, "linux")).and(is(OSCheck.isWindows()));
+        SelectiveOsMatcher(final Matcher<? super X> matcher) {
+            this.windows = requireNonNull(matcher, "linux");
         }
 
         /**
          * Check to use if not running on Windows, i.e. Mac / Linux.
          *
-         * @param matcher the check to run.
+         * @param unix the check to run on *unix systems.
          * @return the combined matcher.
          */
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        public Matcher<X> onUnix(final Matcher<? super X> matcher) {
-            final Matcher<? super X> unix =
-                    both(requireNonNull(matcher, "matcher")).and(is(not(OSCheck.isWindows())));
-            return new CombinableMatcher(unix).or(windows);
+        public Matcher<? super X> onUnix(final Matcher<? super X> unix) {
+            return OSCheck.isWindows() ? windows : unix;
         }
     }
 }
