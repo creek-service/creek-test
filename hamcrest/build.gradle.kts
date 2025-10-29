@@ -24,6 +24,7 @@ var spotBugsVersion: String by extra
 dependencies {
     api("org.hamcrest:hamcrest-core:$hamcrestVersion")
     api("com.github.spotbugs:spotbugs-annotations:$spotBugsVersion")
+    implementation(project(":util"))
 
     testImplementation(project(":conformity"))
 }

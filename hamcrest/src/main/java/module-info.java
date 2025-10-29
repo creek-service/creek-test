@@ -6,6 +6,7 @@
 module creek.test.hamcrest {
     requires transitive org.hamcrest;
     requires transitive com.github.spotbugs.annotations;
+    requires creek.test.util;
 
     exports org.creekservice.api.test.hamcrest;
 }
