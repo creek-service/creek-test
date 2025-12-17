@@ -90,7 +90,7 @@ public final class ClassFinder implements ModuleTypes, AutoCloseable {
             if (fileName == null || !fileName.toString().endsWith(".jar")) {
                 throw new IllegalStateException(
                         "Code location not a jar file. See:"
-                            + " https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars");
+                                + " https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars");
             }
 
             return new String[] {fileName.toString()};
