@@ -63,7 +63,7 @@ class ModuleTest {
                 e.getMessage(),
                 containsString(
                         "Code location not a jar file. See:"
-                            + " https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars"));
+                                + " https://github.com/creek-service/creek-test/tree/main/conformity#testing-old-school-jars"));
     }
 
     @Test
