@@ -133,9 +133,9 @@ class CodeCoverageTest {
                 .thenReturn(
                         List.of(
                                 "-javaagent:build/tmp/expandedArchives/org.jacoco.agent-0.8.8.jar"
-                                    + "_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile=build/jacoco/test.exec,"
-                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
+                                        + "_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                        + "destfile=build/jacoco/test.exec,"
+                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
 
         // When:
         final Optional<String> result =
@@ -165,9 +165,9 @@ class CodeCoverageTest {
                 .thenReturn(
                         List.of(
                                 "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
-                                    + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile=build/jacoco/test.exec,"
-                                    + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
+                                        + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                        + "destfile=build/jacoco/test.exec,"
+                                        + "append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false"));
 
         // When:
         final Optional<String> result =
@@ -180,8 +180,8 @@ class CodeCoverageTest {
                 is(
                         Optional.of(
                                 "-javaagent:/home/runner/work/creek-system-test/executor/build/tmp/"
-                                    + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
-                                    + "destfile="
+                                        + ".cache/expanded/zip_a33b649e552c51298e5a242c2f0d0e3c/jacocoagent.jar="
+                                        + "destfile="
                                         + abs
                                         + File.separator
                                         + "jacoco/test.exec,"
