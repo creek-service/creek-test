@@ -94,7 +94,7 @@ tasks.test {
 
 spotless {
     java {
-        googleJavaFormat("1.15.0").aosp().reflowLongStrings()
+        googleJavaFormat("1.24.0").aosp()
         leadingTabsToSpaces()
         importOrder()
         removeUnusedImports()
