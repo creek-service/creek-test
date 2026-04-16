@@ -123,4 +123,15 @@ echo "ALL DONE" >> "$LOG_DIR/summary.log"
 # Print summary
 echo ""
 echo "=== Summary ==="
-grep -h "Merged successfully\|Merged after update\|Merge failed\|still failing\|TIMEOUT\|PR is" /tmp/creek_pr_logs/*.log 2>/dev/null | sort
+for f in "$LOG_DIR"/*.log; do
+  [[ "$f" == */summary.log ]] && continue
+  last=$(grep -E "Merged|failed|TIMEOUT|skipping" "$f" | tail -1)
+  [ -n "$last" ] && echo "$last"
+done | sort
+
+# Progress check (run separately while script is running):
+#   for f in /tmp/creek_pr_logs/*.log; do
+#     [[ "$f" == */summary.log ]] && continue
+#     echo "--- $(basename "$f") ---"
+#     grep -E "Merged|failed|Waiting|TIMEOUT|skipping|START" "$f" | tail -5
+#   done
