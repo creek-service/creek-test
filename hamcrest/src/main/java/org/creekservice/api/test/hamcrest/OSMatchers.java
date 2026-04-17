@@ -37,6 +37,7 @@ public final class OSMatchers {
         return new SelectiveOsMatcher<>(windows);
     }
 
+    /** Matcher that selects between Windows and Unix matchers based on the current OS. */
     public static final class SelectiveOsMatcher<X> {
         private final Matcher<? super X> windows;
 
