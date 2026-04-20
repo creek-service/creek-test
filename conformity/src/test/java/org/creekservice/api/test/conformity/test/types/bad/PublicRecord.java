@@ -14,31 +14,14 @@
  * limitations under the License.
  */
 
+package org.creekservice.api.test.conformity.test.types.bad;
+
 /**
- * Standard coverage configuration of Creek projects, utilising Jacoco and Codecov.
+ * A record type in the public API.
  *
- * <p>Versions:
- *  - 1.4: Switch from Coveralls to Codecov; remove multi-module report aggregation
- *  - 1.3: remove deprecated use of $buildDir
- *  - 1.2: Apply to root project only
+ * <p>Record types <i>must</i> have a public constructor. Therefore, their constructor does
+ * <i>not</i> cause a conformity failure.
+ *
+ * @param someValue some value
  */
-
-plugins {
-    java
-    jacoco
-}
-
-repositories {
-    mavenCentral()
-}
-
-allprojects {
-    apply(plugin = "java")
-
-    tasks.withType<JacocoReport>().configureEach {
-        dependsOn(tasks.test)
-        reports {
-            xml.required.set(true)
-        }
-    }
-}
+public record PublicRecord(int someValue) {}

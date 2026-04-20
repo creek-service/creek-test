@@ -58,6 +58,7 @@ public final class ConstructorsPrivateCheck implements CheckRunner {
                 target.types()
                         .apiClasses()
                         .filter(ClassInfo::isPublic)
+                        .filter(ci -> !ci.isRecord())
                         .filter(ci -> packageFilter.notExcluded(ci.getPackageName()))
                         .filter(ci -> classFilter.notExcluded(ci.loadClass()))
                         .filter(ci -> classPatternFilter.notExcluded(ci.loadClass()))

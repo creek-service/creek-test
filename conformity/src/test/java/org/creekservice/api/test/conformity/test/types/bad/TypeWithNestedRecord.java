@@ -14,31 +14,19 @@
  * limitations under the License.
  */
 
-/**
- * Standard coverage configuration of Creek projects, utilising Jacoco and Codecov.
- *
- * <p>Versions:
- *  - 1.4: Switch from Coveralls to Codecov; remove multi-module report aggregation
- *  - 1.3: remove deprecated use of $buildDir
- *  - 1.2: Apply to root project only
- */
+package org.creekservice.api.test.conformity.test.types.bad;
 
-plugins {
-    java
-    jacoco
-}
+public final class TypeWithNestedRecord {
 
-repositories {
-    mavenCentral()
-}
+    private TypeWithNestedRecord() {}
 
-allprojects {
-    apply(plugin = "java")
-
-    tasks.withType<JacocoReport>().configureEach {
-        dependsOn(tasks.test)
-        reports {
-            xml.required.set(true)
-        }
-    }
+    /**
+     * A nested record type in the public API.
+     *
+     * <p>Record types <i>must</i> have a public constructor. Therefore, their constructor does
+     * <i>not</i> cause a conformity failure.
+     *
+     * @param s some value
+     */
+    public record NestedRecord(String s) {}
 }
