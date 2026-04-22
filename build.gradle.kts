@@ -55,7 +55,7 @@ subprojects {
         set("classGraphVersion", "4.8.184")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
 
         set("log4jVersion", "2.25.4")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-        set("guavaVersion", "33.5.0-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
+        set("guavaVersion", "33.6.0-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
 
         set("junitVersion", "6.0.3")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
         set("junitPioneerVersion", "2.3.0")     // https://mvnrepository.com/artifact/org.junit-pioneer/junit-pioneer
