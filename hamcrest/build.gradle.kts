@@ -18,8 +18,8 @@ plugins {
     `java-library`
 }
 
-var hamcrestVersion: String by extra
-var spotBugsVersion: String by extra
+val hamcrestVersion: String by project
+val spotBugsVersion: String by project
 
 dependencies {
     api("org.hamcrest:hamcrest-core:$hamcrestVersion")
