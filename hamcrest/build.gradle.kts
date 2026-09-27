@@ -18,8 +18,8 @@ plugins {
     `java-library`
 }
 
-val hamcrestVersion: String by project
-val spotBugsVersion: String by project
+val hamcrestVersion = project.property("hamcrestVersion") as String
+val spotBugsVersion = project.property("spotBugsVersion") as String
 
 dependencies {
     api("org.hamcrest:hamcrest-core:$hamcrestVersion")
