@@ -50,21 +50,16 @@ subprojects {
 
     // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-    val guavaVersion = project.property("guavaVersion") as String
-    val log4jVersion = project.property("log4jVersion") as String
     val junitVersion = project.property("junitVersion") as String
-    val junitPioneerVersion = project.property("junitPioneerVersion") as String
-    val mockitoVersion = project.property("mockitoVersion") as String
-    val hamcrestVersion = project.property("hamcrestVersion") as String
 
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-        testImplementation("org.junit-pioneer:junit-pioneer:$junitPioneerVersion")
-        testImplementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
-        testImplementation("org.hamcrest:hamcrest-core:$hamcrestVersion")
-        testImplementation("com.google.guava:guava-testlib:$guavaVersion")
-        testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion")
+        testImplementation("org.junit-pioneer:junit-pioneer:${property("junitPioneerVersion")}")
+        testImplementation("org.mockito:mockito-junit-jupiter:${property("mockitoVersion")}")
+        testImplementation("org.hamcrest:hamcrest-core:${property("hamcrestVersion")}")
+        testImplementation("com.google.guava:guava-testlib:${property("guavaVersion")}")
+        testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:${property("log4jVersion")}")
         testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     }
 }

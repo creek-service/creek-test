@@ -18,12 +18,9 @@ plugins {
     `java-library`
 }
 
-val hamcrestVersion = project.property("hamcrestVersion") as String
-val spotBugsVersion = project.property("spotBugsVersion") as String
-
 dependencies {
-    api("org.hamcrest:hamcrest-core:$hamcrestVersion")
-    api("com.github.spotbugs:spotbugs-annotations:$spotBugsVersion")
+    api("org.hamcrest:hamcrest-core:${property("hamcrestVersion")}")
+    api("com.github.spotbugs:spotbugs-annotations:${property("spotBugsVersion")}")
     implementation(project(":util"))
 
     testImplementation(project(":conformity"))
