@@ -36,14 +36,14 @@ allprojects {
 subprojects {
     project.version = project.parent?.version!!
 
-    apply(plugin = "creek-common-convention")
-    apply(plugin = "jacoco")
+    pluginManager.apply("creek-common-convention")
+    pluginManager.apply("jacoco")
 
     if (name.startsWith("test-")) {
         tasks.javadoc { onlyIf { false } }
     } else {
-        apply(plugin = "creek-module-convention")
-        apply(plugin = "creek-publishing-convention")
+        pluginManager.apply("creek-module-convention")
+        pluginManager.apply("creek-publishing-convention")
     }
 
     project.version = project.parent?.version!!
