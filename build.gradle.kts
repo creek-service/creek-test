@@ -50,7 +50,7 @@ subprojects {
 
     // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-    val junitVersion = project.property("junitVersion") as String
+    val junitVersion = property("junitVersion") as String
 
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
