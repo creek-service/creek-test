@@ -18,10 +18,8 @@ plugins {
     `java-library`
 }
 
-val classGraphVersion : String by extra
-
 dependencies {
-    implementation("io.github.classgraph:classgraph:$classGraphVersion")
+    implementation("io.github.classgraph:classgraph:${property("classGraphVersion")}")
 
     testImplementation(project(":util"))
 }

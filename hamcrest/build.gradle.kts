@@ -18,12 +18,9 @@ plugins {
     `java-library`
 }
 
-var hamcrestVersion: String by extra
-var spotBugsVersion: String by extra
-
 dependencies {
-    api("org.hamcrest:hamcrest-core:$hamcrestVersion")
-    api("com.github.spotbugs:spotbugs-annotations:$spotBugsVersion")
+    api("org.hamcrest:hamcrest-core:${property("hamcrestVersion")}")
+    api("com.github.spotbugs:spotbugs-annotations:${property("spotBugsVersion")}")
     implementation(project(":util"))
 
     testImplementation(project(":conformity"))

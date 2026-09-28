@@ -36,48 +36,30 @@ allprojects {
 subprojects {
     project.version = project.parent?.version!!
 
-    apply(plugin = "creek-common-convention")
-    apply(plugin = "jacoco")
+    pluginManager.apply("creek-common-convention")
+    pluginManager.apply("jacoco")
 
     if (name.startsWith("test-")) {
         tasks.javadoc { onlyIf { false } }
     } else {
-        apply(plugin = "creek-module-convention")
-        apply(plugin = "creek-publishing-convention")
+        pluginManager.apply("creek-module-convention")
+        pluginManager.apply("creek-publishing-convention")
     }
 
     project.version = project.parent?.version!!
 
-    extra.apply {
-        // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
+    // Avoid Creek dependencies as it causes circular dependencies that make releasing tricky...
 
-        set("spotBugsVersion", "4.10.4")         // https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations
-        set("classGraphVersion", "4.8.194")     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
-
-        set("log4jVersion", "2.26.1")           // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-        set("guavaVersion", "33.7.1-jre")         // https://mvnrepository.com/artifact/com.google.guava/guava
-
-        set("junitVersion", "6.1.3")            // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-        set("junitPioneerVersion", "2.3.0")     // https://mvnrepository.com/artifact/org.junit-pioneer/junit-pioneer
-        set("mockitoVersion", "5.23.0")          // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
-        set("hamcrestVersion", "3.0")           // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
-    }
-
-    val guavaVersion : String by extra
-    val log4jVersion : String by extra
-    val junitVersion: String by extra
-    val junitPioneerVersion: String by extra
-    val mockitoVersion: String by extra
-    val hamcrestVersion : String by extra
+    val junitVersion = property("junitVersion") as String
 
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-        testImplementation("org.junit-pioneer:junit-pioneer:$junitPioneerVersion")
-        testImplementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
-        testImplementation("org.hamcrest:hamcrest-core:$hamcrestVersion")
-        testImplementation("com.google.guava:guava-testlib:$guavaVersion")
-        testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion")
+        testImplementation("org.junit-pioneer:junit-pioneer:${property("junitPioneerVersion")}")
+        testImplementation("org.mockito:mockito-junit-jupiter:${property("mockitoVersion")}")
+        testImplementation("org.hamcrest:hamcrest-core:${property("hamcrestVersion")}")
+        testImplementation("com.google.guava:guava-testlib:${property("guavaVersion")}")
+        testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j2-impl:${property("log4jVersion")}")
         testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     }
 }
