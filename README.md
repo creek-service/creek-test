@@ -20,4 +20,3 @@ See [CreekService.org](https://www.creekservice.org) for info on Creek Service.
 * **[conformity](conformity)** [[JavaDocs](https://javadoc.io/doc/org.creekservice/creek-test-conformity)]: tests helpers for checking projects conform to Creek standards, automating some of code review tasks.
 
 [1]: http://hamcrest.org/JavaHamcrest/index
-
